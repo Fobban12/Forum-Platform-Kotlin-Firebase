@@ -1,4 +1,4 @@
-package com.example.group10app
+package com.example.kotlin_application
 
 import org.junit.Test
 
