@@ -61,7 +61,7 @@ fun LoginScreen (navController: NavController, viewModel: AuthenticationViewMode
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
             Text(text = if (isLoginForm.value) "Log In Form" else "Register", modifier = Modifier.padding(10.dp), style = androidx.compose.ui.text.TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onBackground))
 
-            if (!isLoginForm.value) Text(text = "Please enter a valid email with min length 3 and password with min length 8!\nPassword must have one digit, one lowercase letter, one uppercase letter, one special character, and has no whitespace characters!", modifier = Modifier.padding(5.dp), style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.secondary)) else Text(
+            if (!isLoginForm.value) Text(text = "Please enter a valid email with min length 3 and password with min length 8!\nPassword must have one digit, one lowercase letter, one uppercase letter, one special character, and has no whitespace characters!", modifier = Modifier.padding(5.dp), style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onBackground)) else Text(
                 text = ""
             )
             if (isLoginForm.value)  UserForm(loading = false, isCreateAccount = false) {
@@ -74,7 +74,7 @@ fun LoginScreen (navController: NavController, viewModel: AuthenticationViewMode
             else {
                 UserForm(loading = false, isCreateAccount = true) {
                     email, password ->
-                    viewModel.createUserWithEmailAndPassword(email, password) {
+                    viewModel.createUserWithEmailAndPassword(email, password, context) {
                         isLoginForm.value = !isLoginForm.value
                     }
                     Log.d("Form", "Register Screen: $email @password")

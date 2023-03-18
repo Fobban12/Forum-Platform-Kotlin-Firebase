@@ -27,19 +27,23 @@ class AuthenticationViewModel: ViewModel()  {
 
 
 
-    fun createUserWithEmailAndPassword (email: String, password: String, home: () -> Unit) {
+    fun createUserWithEmailAndPassword (email: String, password: String, context: android.content.Context,home: () -> Unit) {
         if (_loading.value == false) {
             _loading.value = true
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d("Firebase", "Register successfully!")
+                        Toast.makeText(context, "Register successfully", Toast.LENGTH_SHORT).show();
                         home()
                     } else {
-                        Log.d("Firebase", "Register fail!")
+                        val exception = task.exception;
+                        Toast.makeText(context, "${exception?.message.toString()}", Toast.LENGTH_LONG).show();
+                        Log.d("Firebase", "${exception?.message.toString()}")
                     }
                     _loading.value = false
                 }
+
         }
     }
 
@@ -54,9 +58,10 @@ class AuthenticationViewModel: ViewModel()  {
                         Toast.makeText(context, "Log In Successfully", Toast.LENGTH_SHORT).show();
                         home()
                     } else {
-                        Log.d("Firebase", "Sign in with email and password fail!");
-                        Toast.makeText(context, "Log In Fail. Please try again!", Toast.LENGTH_SHORT).show();
 
+                        val exception = task.exception;
+                        Log.d("Firebase", "${exception?.message.toString()}");
+                        Toast.makeText(context, "${exception?.message.toString()}", Toast.LENGTH_SHORT).show();
                     }
                 }
 
