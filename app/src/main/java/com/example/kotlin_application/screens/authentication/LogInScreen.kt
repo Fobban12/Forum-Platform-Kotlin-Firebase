@@ -13,7 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -41,6 +41,7 @@ import com.google.firebase.ktx.Firebase
 import java.time.format.TextStyle
 
 
+
 @Composable
 @ExperimentalComposeUiApi
 fun LoginScreen (navController: NavController, viewModel: AuthenticationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
@@ -52,7 +53,7 @@ fun LoginScreen (navController: NavController, viewModel: AuthenticationViewMode
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
-            Text(text = if (isLoginForm.value) "Log In Form" else "Register", modifier = Modifier.padding(10.dp), style = androidx.compose.ui.text.TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold))
+            Text(text = if (isLoginForm.value) "Log In Form" else "Register", modifier = Modifier.padding(10.dp), style = androidx.compose.ui.text.TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onBackground))
 
             if (!isLoginForm.value) Text(text = "Please enter a valid email with min length 3 and password with min length 8!\nPassword must have one digit, one lowercase letter, one uppercase letter, one special character, and has no whitespace characters!", modifier = Modifier.padding(5.dp), style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.secondary)) else Text(
                 text = ""
@@ -80,14 +81,15 @@ fun LoginScreen (navController: NavController, viewModel: AuthenticationViewMode
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
                 ){
-                if (isLoginForm.value) Text(text = "Don't you have an account?") else Text(
-                    text = "Have an account already?"
+                if (isLoginForm.value) Text(text = "Don't you have an account?", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold)) else Text(
+                    text = "Have an account already?",
+                    style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold)
                 )
                 Text(text = if (isLoginForm.value) "Please register!" else "Please sign in", modifier = Modifier
                     .clickable {
                         isLoginForm.value = !isLoginForm.value
                     }
-                    .padding(2.dp), fontWeight = FontWeight.Bold, color = MaterialTheme.colors.secondary)
+                    .padding(2.dp), fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onBackground)
 
             }
         }
@@ -146,7 +148,7 @@ fun UserForm (
 
 
         passwordInput(modifier = Modifier.focusRequester(passwordFocusRequest), isSingleLine = true, passwordVisibility = passwordVisibility, passwordState = password, enabled = true, onAction = KeyboardActions (onDone = {
-            if (!valid) return@KeyboardActions
+            if (password.value.length == 0) return@KeyboardActions
             keyboardController?.hide()
             onDone(email.value.trim(), password.value.trim())
         }))
@@ -204,8 +206,10 @@ fun passwordInput (
 @Composable
 fun PasswordVisibility (passwordVisibility: MutableState<Boolean>) {
     val passwordVisibilityValue = passwordVisibility.value;
-
+    
+    val image = if (passwordVisibility.value) Icons.Filled.VisibilityOff else Icons.Filled.Visibility;
     IconButton(onClick = { passwordVisibility.value = !passwordVisibilityValue }) {
+        Icon(imageVector = image, contentDescription = if (passwordVisibility.value) "Hide Password" else "Show Password")
         Icons.Default.Close
     }
 }

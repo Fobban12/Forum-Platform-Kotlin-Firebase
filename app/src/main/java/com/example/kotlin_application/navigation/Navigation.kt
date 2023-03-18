@@ -1,5 +1,6 @@
 package com.example.kotlin_application.navigation
 
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
@@ -24,12 +25,12 @@ fun Navigation () {
         composable(Screens.LoginScreen.name) {
             LoginScreen(navController = navController)
         }
-        
+
         composable(Screens.MainScreen.name) {
             MainScreen(navController = navController)
         }
 
 
-
     }
+
 }
