@@ -39,6 +39,7 @@ import com.example.kotlin_application.viewmodel.AuthenticationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import java.time.format.TextStyle
+import androidx.compose.ui.platform.LocalContext
 
 
 
@@ -50,6 +51,11 @@ fun LoginScreen (navController: NavController, viewModel: AuthenticationViewMode
         mutableStateOf(true)
     }
 
+    val context = LocalContext.current;
+
+
+  
+
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
@@ -60,8 +66,8 @@ fun LoginScreen (navController: NavController, viewModel: AuthenticationViewMode
             )
             if (isLoginForm.value)  UserForm(loading = false, isCreateAccount = false) {
                 email, password ->
-                viewModel.signInWithEmailAndPassword(email = email, password = password) {
-                    navController.navigate(Screens.MainScreen.name)
+                viewModel.signInWithEmailAndPassword(email = email, password = password, context = context) {
+                    navController.navigate(Screens.MainScreen.name);
                 }
                 Log.d("Form", "Login Screen: $email $password")
             }

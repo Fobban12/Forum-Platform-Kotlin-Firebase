@@ -2,8 +2,10 @@ package com.example.kotlin_application.screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.runtime.Composable
@@ -39,8 +41,16 @@ fun MainScreen (navController: NavController) {
 
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
     
-    Scaffold(topBar = { renderTopAppBar(username, checkUserIsNull, navController)}) {
+    Scaffold(topBar = { renderTopAppBar(username, checkUserIsNull, navController)}, floatingActionButton = { renderFloatingButtonAction()}) {
         it
+    }
+}
+
+@ExperimentalComposeUiApi
+@Composable
+fun renderFloatingButtonAction () {
+    FloatingActionButton(onClick = { Log.d("Add item", "To Add Item Page") }, shape = RoundedCornerShape(50.dp), contentColor = MaterialTheme.colors.onSecondary, backgroundColor = MaterialTheme.colors.onBackground) {
+        Icon(imageVector = Icons.Filled.Add, contentDescription = "Add item")
     }
 }
 
@@ -66,7 +76,7 @@ fun renderTopAppBar (
             }
         }
 
-    })
+    },backgroundColor = MaterialTheme.colors.onBackground, contentColor = MaterialTheme.colors.onSecondary)
 }
 
 
