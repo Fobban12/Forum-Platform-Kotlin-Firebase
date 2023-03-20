@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Login
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -18,7 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kotlin_application.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.ui.res.stringResource
+import com.example.kotlin_application.data.MenuItem
+import com.example.kotlin_application.navigation.Drawer
+import com.example.kotlin_application.navigation.DrawerBody
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
@@ -34,6 +38,8 @@ fun MainScreen (navController: NavController) {
 //            Log.d("Firebase", FirebaseAuth.getInstance().currentUser?.email.toString());
 //        }
 //    }
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
 
     val checkUserIsNull = remember (FirebaseAuth.getInstance().currentUser?.email) {
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty();
@@ -41,7 +47,51 @@ fun MainScreen (navController: NavController) {
 
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
     
-    Scaffold(topBar = { renderTopAppBar(username, checkUserIsNull, navController)}, floatingActionButton = { renderFloatingButtonAction()}) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = { renderTopAppBar(username, checkUserIsNull, navController,
+            onNavigationIconClick ={
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            }
+        )
+                 },
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerContent = {
+                        Drawer()
+            DrawerBody(items = listOf(
+                MenuItem(
+                    id = "home",
+                    title = "Home",
+                    contentDescription = "Go to home screen",
+                    icon = Icons.Default.Home
+                ),
+                MenuItem(
+                    id = "settings",
+                    title = "Settings",
+                    contentDescription = "Go to settings screen",
+                    icon = Icons.Default.Settings
+                ),
+                MenuItem(
+                    id = "profile",
+                    title = "Profile",
+                    contentDescription = "Go to profile screen",
+                    icon = Icons.Default.Image
+                ),
+                MenuItem(
+                    id = "help",
+                    title = "Help",
+                    contentDescription = "Get help",
+                    icon = Icons.Default.Info
+                ),
+            ),
+                onItemClick = {
+                    // when(it.id){"home"->navigateToHomeScreen
+                    println("Clicked on ${it.title}")
+                })
+        },
+        floatingActionButton = { renderFloatingButtonAction()}) {
         it
     }
 }
@@ -59,9 +109,17 @@ fun renderFloatingButtonAction () {
 fun renderTopAppBar (
     username: String?,
     checkUserIsNull: Boolean,
-    navController: NavController
+    navController: NavController,
+    onNavigationIconClick: ()->Unit
 ) {
-    TopAppBar(title = { Row(modifier = Modifier
+    TopAppBar(
+        navigationIcon = {
+                         IconButton(onClick = onNavigationIconClick) {
+                             Icon(imageVector = Icons.Default.Menu, contentDescription = "Toggle drawer")
+                             
+                         }
+        },
+        title = { Row(modifier = Modifier
         .fillMaxWidth()) {
         if (!checkUserIsNull) {
             Text(text = "Hello ${username}")
@@ -76,7 +134,11 @@ fun renderTopAppBar (
             }
         }
 
-    },backgroundColor = MaterialTheme.colors.onBackground, contentColor = MaterialTheme.colors.onSecondary)
+    },
+
+        backgroundColor = MaterialTheme.colors.onBackground,
+        contentColor = MaterialTheme.colors.onSecondary)
+
 }
 
 
