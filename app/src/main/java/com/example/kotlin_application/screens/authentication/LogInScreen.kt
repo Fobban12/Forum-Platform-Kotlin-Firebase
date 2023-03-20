@@ -168,7 +168,7 @@ fun UserForm(
 //    has no whitespace characters
 //            and is at least 8 characters long.
 
-    val passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{8,}\$".toRegex()
+    val passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!?¤/@#\$%^&+=])(?=\\S+\$).{8,}\$".toRegex()
 
     val valid = remember(email.value, password.value) {
         email.value.trim().isNotEmpty() && email.value.trim().contains("@") && email.value.trim().length >= 3 && password.value.trim().isNotEmpty() && password.value.matches(
