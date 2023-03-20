@@ -1,6 +1,5 @@
 package com.example.kotlin_application.navigation
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,18 +14,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kotlin_application.data.MenuItem
 
-
 @Composable
-fun Drawer () {
+fun Drawer() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 64.dp),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Text(text = "Menu", fontSize = 40.sp)
     }
-
 }
 
 @Composable
@@ -36,26 +33,27 @@ fun DrawerBody(
     itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp),
     onItemClick: (MenuItem) -> Unit
 ) {
-    LazyColumn (modifier){
-         items(items) {item ->
-             Row(
-                 modifier = Modifier
-                     .fillMaxWidth()
-                     .clickable {
-                         onItemClick(item)
-                     }
-                     .padding(16.dp)
-             ) {
-                  Icon(imageVector = item.icon, contentDescription = item.contentDescription
-                  )
-                 Spacer(modifier = Modifier.width(16.dp))
-                 Text(
-                     text = item.title,
-                     style = itemTextStyle,
-                     modifier = Modifier.weight(1f)
-                 )
-             }
-         }
+    LazyColumn(modifier) {
+        items(items) { item ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onItemClick(item)
+                    }
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = item.contentDescription
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = item.title,
+                    style = itemTextStyle,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
     }
-
 }
