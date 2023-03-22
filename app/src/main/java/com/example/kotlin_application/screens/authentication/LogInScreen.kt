@@ -19,6 +19,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -132,6 +133,8 @@ fun LoginScreen(
                     color = MaterialTheme.colors.onBackground
                 )
             }
+            Spacer(modifier = Modifier.height(50.dp))
+            Text(text = "Go To Main Page", modifier = Modifier.clickable { navController.navigate(Screens.MainScreen.name)}, style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold))
         }
     }
 }
@@ -227,6 +230,10 @@ fun SubmitButton(
         modifier = Modifier
             .padding(3.dp)
             .fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.onBackground,
+            contentColor = Color.White
+        ),
         enabled = !loading && validInputs,
         shape = CircleShape
     ) {
@@ -258,12 +265,18 @@ fun passwordInput(
     OutlinedTextField(
         value = passwordState.value, onValueChange = { passwordState.value = it }, label = {
             Text(
-                text = "$labelId"
+                text = "$labelId",
+                color = MaterialTheme.colors.onBackground
             )
         }, enabled = enabled, singleLine = isSingleLine,
         textStyle = androidx.compose.ui.text.TextStyle(
             fontSize = 18.sp,
-            color = MaterialTheme.colors.secondary
+            color = MaterialTheme.colors.onBackground
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = Color.Gray,
+            disabledBorderColor = Color.LightGray
         ),
         modifier = Modifier
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
@@ -333,12 +346,18 @@ fun InputField(
         enabled = enabled,
         label = {
             Text(
-                text = "$labelId"
+                text = "$labelId",
+                color = MaterialTheme.colors.onBackground
             )
         },
         textStyle = androidx.compose.ui.text.TextStyle(
             fontSize = 18.sp,
-            color = MaterialTheme.colors.secondary
+            color = MaterialTheme.colors.onBackground
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = Color.Gray,
+            disabledBorderColor = Color.LightGray
         ),
         modifier = Modifier
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
