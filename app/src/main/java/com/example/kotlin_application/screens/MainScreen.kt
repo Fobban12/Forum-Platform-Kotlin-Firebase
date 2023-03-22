@@ -88,14 +88,24 @@ fun MainScreen(navController: NavController) {
                     ),
                     // Placeholder Login, Bao put this in the correct place later, or ask me to if you don't want to.
                     // Or delete this if you have idea where to place it.
-                    MenuItem(
-                        id = "Login",
-                        title = "Login",
-                        contentDescription = "LogIn",
-                        icon = Icons.Default.Build
-                    ),
+                    if(!checkUserIsNull){
+                        MenuItem(
+                            id = "Logout",
+                            title = "Logout",
+                            contentDescription = "Logout",
+                            icon = Icons.Default.ExitToApp
+                        )
+                    }
+                  else{
+                        MenuItem(
+                            id = "Login",
+                            title = "Login",
+                            contentDescription = "Logout",
+                            icon = Icons.Default.AccountBox
+                        )
+                    }
 
-                    )
+                ) as List<MenuItem>
 
             ) {
                 // when(it.id){"home"->navigateToHomeScreen
@@ -105,6 +115,11 @@ fun MainScreen(navController: NavController) {
                         Screens.LoginScreen.name
                     )
                 }
+                if (it.id == "Logout"){ FirebaseAuth.getInstance().signOut().run {
+                    navController.navigate(
+                        Screens.MainScreen.name
+                    )
+                }}
                 println("Clicked on ${it.title}")
             }
         },
@@ -192,22 +207,6 @@ fun renderTopAppBar(
                 }
             }
         },
-        actions = {
-            if (!checkUserIsNull) {
-                IconButton(
-                    onClick = {
-                        FirebaseAuth.getInstance().signOut().run {
-                            navController.navigate(
-                                Screens.LoginScreen.name
-                            )
-                        }
-                    }
-                ) {
-                    Icon(imageVector = Icons.Filled.Logout, contentDescription = "Log Out")
-                }
-            }
-        },
-
         backgroundColor = MaterialTheme.colors.onBackground,
         contentColor = MaterialTheme.colors.onSecondary
     )
