@@ -186,9 +186,9 @@ fun renderTopAppBar(
                     .fillMaxWidth()
             ) {
                 if (!checkUserIsNull) {
-                    Text(text = "Hello $username")
+                    Text(text = "Welcome $username to Agora")
                 } else {
-                    Text(text = "Not Logged In")
+                    Text(text = "Welcome to Agora (Not Logged In)")
                 }
             }
         },
