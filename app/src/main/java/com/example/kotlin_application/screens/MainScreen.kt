@@ -94,7 +94,12 @@ fun MainScreen(navController: NavController) {
                         contentDescription = "LogIn",
                         icon = Icons.Default.Build
                     ),
-
+                    MenuItem(
+                        id = "Forum",
+                        title = "Forum",
+                        contentDescription = "Forum",
+                        icon = Icons.Default.Forum
+                    ),
                     )
 
             ) {
@@ -103,6 +108,10 @@ fun MainScreen(navController: NavController) {
                 if (it.id == "Login") {
                     navController.navigate(
                         Screens.LoginScreen.name
+                    )
+                } else if (it.id == "Forum") {
+                    navController.navigate(
+                        Screens.ForumScreen.name
                     )
                 }
                 println("Clicked on ${it.title}")
@@ -176,7 +185,7 @@ fun renderTopAppBar(
             IconButton(onClick = onNavigationIconClick) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Toggle drawer"
+                    contentDescription = "Toggle drawer",
                 )
             }
         },
