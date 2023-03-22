@@ -1,11 +1,14 @@
 package com.example.kotlin_application.navigation
 
+import com.example.kotlin_application.screens.ForumScreen
+
 enum class Screens {
     GetStartedScreen,
     LoginScreen,
     MainScreen,
     ChatScreen,
-    SettingScreen;
+    SettingScreen,
+    ForumScreen;
 
     companion object {
         fun fromRoute(route: String): Screens =
@@ -15,6 +18,7 @@ enum class Screens {
                 MainScreen.name -> MainScreen
                 ChatScreen.name -> ChatScreen
                 SettingScreen.name -> SettingScreen
+                ForumScreen.name -> ForumScreen
 
                 else -> throw java.lang.IllegalArgumentException("Route $route is not recognized")
             }

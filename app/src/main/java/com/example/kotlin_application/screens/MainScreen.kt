@@ -85,15 +85,31 @@ fun MainScreen(navController: NavController) {
                         title = "Help",
                         contentDescription = "Get help",
                         icon = Icons.Default.Info
+                    ),
+                    // Placeholder Login, Bao put this in the correct place later, or ask me to if you don't want to.
+                    // Or delete this if you have idea where to place it.
+                    MenuItem(
+                        id = "Login",
+                        title = "Login",
+                        contentDescription = "LogIn",
+                        icon = Icons.Default.Build
+                    ),
+
                     )
-                ),
-                onItemClick = {
-                    // when(it.id){"home"->navigateToHomeScreen
-                    println("Clicked on ${it.title}")
+
+            ) {
+                // when(it.id){"home"->navigateToHomeScreen
+                //For going to the Login Page
+                if (it.id == "Login") {
+                    navController.navigate(
+                        Screens.LoginScreen.name
+                    )
                 }
-            )
+                println("Clicked on ${it.title}")
+            }
         },
-        floatingActionButton = { renderFloatingButtonAction() },
+
+        floatingActionButton = { renderFloatingButtonAction()},
         bottomBar = {
             BottomNavigationBar(
                 items = listOf(
@@ -114,9 +130,18 @@ fun MainScreen(navController: NavController) {
                         icon = Icons.Default.Search,
                         badgeCount = 0
                     ),
+                    //!!!!!This is just to see how the created Forum page would look like, remove this when done testing. Bao don't delete this yet.
+                    //!!!!!Remind me to delete it if I forget or delete it yourself if you are sure that we have done the forum page already
+                    BottomNavItem(
+                        name = "ForumTest",
+                        route = "Forum",
+                        icon = Icons.Default.Info,
+                        badgeCount = 0
+                    ),
                 ),
                 navController = navController,
                 onItemClick = {
+                    if(it.name == "ForumTest"){ navController.navigate(Screens.ForumScreen.name)}
                     println("Clicked on ${it.name}")
                 }
             )
@@ -138,7 +163,6 @@ fun renderFloatingButtonAction() {
         Icon(imageVector = Icons.Filled.Add, contentDescription = "Add item")
     }
 }
-
 @ExperimentalComposeUiApi
 @Composable
 fun renderTopAppBar(
@@ -164,7 +188,7 @@ fun renderTopAppBar(
                 if (!checkUserIsNull) {
                     Text(text = "Hello $username")
                 } else {
-                    Text(text = "")
+                    Text(text = "Not Logged In")
                 }
             }
         },
