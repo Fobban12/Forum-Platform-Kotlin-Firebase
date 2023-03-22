@@ -13,7 +13,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.kotlin_application.data.BottomNavItem
 import com.example.kotlin_application.data.MenuItem
+import com.example.kotlin_application.navigation.BottomNavigationBar
 import com.example.kotlin_application.navigation.Drawer
 import com.example.kotlin_application.navigation.DrawerBody
 import com.example.kotlin_application.navigation.Screens
@@ -91,7 +93,34 @@ fun MainScreen(navController: NavController) {
                 }
             )
         },
-        floatingActionButton = { renderFloatingButtonAction() }
+        floatingActionButton = { renderFloatingButtonAction() },
+        bottomBar = {
+            BottomNavigationBar(
+                items = listOf(
+                    BottomNavItem(
+                        name = "Home",
+                        route = "home",
+                        icon = Icons.Default.Home
+                    ),
+                    BottomNavItem(
+                        name = "Chat",
+                        route = "chat",
+                        icon = Icons.Default.Notifications,
+                        badgeCount = 23
+                    ),
+                    BottomNavItem(
+                        name = "Settings",
+                        route = "settings",
+                        icon = Icons.Default.Settings,
+                        badgeCount = 214
+                    ),
+                ),
+                navController = navController,
+                onItemClick = {
+                    navController.navigate(it.route)
+                }
+            )
+        }
     ) {
         it
     }

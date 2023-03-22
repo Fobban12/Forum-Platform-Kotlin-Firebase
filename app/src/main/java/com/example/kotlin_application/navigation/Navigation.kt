@@ -5,8 +5,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.kotlin_application.screens.ChatScreen
 import com.example.kotlin_application.screens.GetStartedScreen
 import com.example.kotlin_application.screens.MainScreen
+import com.example.kotlin_application.screens.SettingScreen
 import com.example.kotlin_application.screens.authentication.LoginScreen
 
 @ExperimentalComposeUiApi
@@ -25,6 +27,12 @@ fun Navigation() {
 
         composable(Screens.MainScreen.name) {
             MainScreen(navController = navController)
+        }
+        composable(Screens.ChatScreen.name) {
+            ChatScreen(navController = navController)
+        }
+        composable(Screens.ChatScreen.name) {
+            SettingScreen(navController=navController)
         }
     }
 }
