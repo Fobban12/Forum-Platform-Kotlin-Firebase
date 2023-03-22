@@ -109,15 +109,15 @@ fun MainScreen(navController: NavController) {
                         badgeCount = 23
                     ),
                     BottomNavItem(
-                        name = "Settings",
-                        route = "settings",
-                        icon = Icons.Default.Settings,
-                        badgeCount = 214
+                        name = "Search",
+                        route = "search",
+                        icon = Icons.Default.Search,
+                        badgeCount = 0
                     ),
                 ),
                 navController = navController,
                 onItemClick = {
-                    navController.navigate(it.route)
+                    println("Clicked on ${it.name}")
                 }
             )
         }
