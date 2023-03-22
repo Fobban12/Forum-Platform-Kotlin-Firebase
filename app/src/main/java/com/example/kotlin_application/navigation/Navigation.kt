@@ -30,8 +30,9 @@ fun Navigation() {
         composable(Screens.ChatScreen.name) {
             ChatScreen(navController = navController)
         }
-        composable(Screens.ChatScreen.name) {
-            SettingScreen(navController=navController)
+        composable(Screens.SettingScreen.name) {
+            SettingScreen(navController = navController)
         }
+
     }
 }
