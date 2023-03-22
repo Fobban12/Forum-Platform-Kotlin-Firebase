@@ -88,7 +88,7 @@ fun MainScreen(navController: NavController) {
                     ),
                     // Placeholder Login, Bao put this in the correct place later, or ask me to if you don't want to.
                     // Or delete this if you have idea where to place it.
-<<<<<<< HEAD
+
                     MenuItem(
                         id = "Login",
                         title = "Login",
@@ -101,8 +101,8 @@ fun MainScreen(navController: NavController) {
                         contentDescription = "Forum",
                         icon = Icons.Default.Forum
                     ),
-                    )
-=======
+
+
                     if(!checkUserIsNull){
                         MenuItem(
                             id = "Logout",
@@ -121,7 +121,7 @@ fun MainScreen(navController: NavController) {
                     }
 
                 ) as List<MenuItem>
->>>>>>> a284ecde409075fbeddce9d4ef116924167f605b
+
 
             ) {
                 // when(it.id){"home"->navigateToHomeScreen

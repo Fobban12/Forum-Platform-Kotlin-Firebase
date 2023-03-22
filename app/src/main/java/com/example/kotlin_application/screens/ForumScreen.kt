@@ -1,9 +1,4 @@
 package com.example.kotlin_application.screens
-
-<<<<<<< HEAD
-import android.icu.text.CaseMap.Title
-import android.util.Log
-import androidx.activity.ComponentDialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,18 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-=======
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
+
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
+
 import androidx.compose.runtime.rememberCoroutineScope
->>>>>>> a284ecde409075fbeddce9d4ef116924167f605b
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -47,39 +42,35 @@ import com.example.kotlin_application.navigation.DrawerBody
 import com.example.kotlin_application.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-<<<<<<< HEAD
+
 import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable
-fun ForumScreen(navController: NavController){
+fun ForumScreen(navController: NavController) {
+
+
+
+    Scaffold(
+        topBar = {
+            renderTopBar(
+                navController,
+                IconClick = {
+                    navController.navigate(Screens.MainScreen.name)
+                })
+        }
+    ){it}
+}
+
+@ExperimentalComposeUiApi
+@Composable
+fun renderTopBar(navController: NavController, IconClick: () -> Unit)
+{
     val scaffoldState = rememberScaffoldState();
     val showDialog = remember {
         mutableStateOf(false)
     };
-=======
 
-@ExperimentalComposeUiApi
-@Composable
-fun ForumScreen(navController: NavController)
-{
-    Scaffold(
-        topBar = {
-            renderTop(
-                navController,
-                IconClick = {
-                    navController.navigate(Screens.MainScreen.name)
-                    })
-                }
-            ){it}
-  
-}
-
-
-@ExperimentalComposeUiApi
-@Composable
-fun renderTop(navController: NavController, IconClick: () -> Unit)
-{
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = IconClick) {
@@ -100,7 +91,7 @@ fun renderTop(navController: NavController, IconClick: () -> Unit)
         backgroundColor = MaterialTheme.colors.onBackground,
         contentColor = MaterialTheme.colors.onSecondary
     )
->>>>>>> a284ecde409075fbeddce9d4ef116924167f605b
+
 
     val checkUserIsNull = FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty();
 
@@ -108,15 +99,14 @@ fun renderTop(navController: NavController, IconClick: () -> Unit)
         scaffoldState = scaffoldState,
         topBar = {
             renderTopAppBar(
-                title = "FORUM",
+                title = "Forum",
             ) {
                 navController.navigate(Screens.MainScreen.name)
             }
         },
         floatingActionButton = {
 
-            renderFloatingButtonActionForForumScreen(showDialog);
-
+            renderFloatingButtonActionForForumScreen(showDialog = showDialog);
 
         }
     ) {
