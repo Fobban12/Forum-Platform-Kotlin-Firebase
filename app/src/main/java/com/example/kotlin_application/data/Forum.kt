@@ -8,6 +8,7 @@ data class Forum(
     val title: String,
     val type: String,
     val description: String?,
+    val image: String?,
     @ServerTimestamp
     val createdAt : Date?,
     val userId: String?

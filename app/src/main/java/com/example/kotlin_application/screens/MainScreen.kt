@@ -1,9 +1,17 @@
 package com.example.kotlin_application.screens
 
+import android.content.ContentResolver
+import android.net.Uri
+import android.provider.MediaStore
+import android.provider.MediaStore.Audio.Media
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kotlin_application.data.BottomNavItem
@@ -24,7 +34,19 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import java.io.File
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
+import java.time.format.TextStyle
 
+@ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @Composable
 fun MainScreen(navController: NavController, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
@@ -172,13 +194,70 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
         LazyColumn(modifier = Modifier.padding(2.dp)) {
             items(state) {
                 item ->
-                Column(modifier = Modifier.padding(2.dp)) {
-                    Text(text = "${item.id}")
+
+                Spacer(modifier = Modifier.height(20.dp))
+                Box(
+                    modifier = Modifier
+                        .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
+                        .background(Color.White)
+                        .padding(20.dp)
+                        .fillMaxWidth()
+
+                ) {
+                    Row(modifier = Modifier
+                        .padding(2.dp)
+                        .fillMaxHeight()) {
+                        val painterState = rememberImagePainter(
+                            data = "${item.image}",
+                            builder = {})
+
+
+                            Image(
+                                painter = painterState,
+                                contentDescription = "Image for forum",
+                                modifier = Modifier.height(100.dp)
+                            )
+                        Column(modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth()) {
+                            Text(text = "Title: ${item.title}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "Description : ${item.description}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
+                            ), modifier = Modifier.fillMaxWidth())
+                            Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp).fillMaxWidth(), colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.onBackground,
+                                contentColor = Color.White
+                            )) {
+                                Text(text = "Click to see more details", style = androidx.compose.ui.text.TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 10.sp), modifier = Modifier.fillMaxWidth())
+                            }
+                        }
+
+                    }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
 
             }
         }
     }
+}
+
+@Composable
+fun getImageIdFromUri(contentResolver: ContentResolver, uri: Uri): Int {
+    val projection = arrayOf(MediaStore.Images.Media._ID)
+    val selection = "${MediaStore.Images.Media.DATA}=?"
+    val selectionArgs = arrayOf(uri.path)
+    val cursor = contentResolver.query(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        projection,
+        selection,
+        selectionArgs,
+        null
+    )
+    val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+    cursor?.moveToFirst()
+    val imageId = columnIndex?.let { cursor?.getInt(it) }
+    cursor?.close()
+    return imageId ?: 0
 }
 //Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
 //template. !!!PLACEHOLDER!!!

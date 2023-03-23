@@ -26,7 +26,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener {
                     val forums = mutableListOf<Forum>()
                     it.documents.forEach { doc ->
-                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getDate("createdAt"), doc.getString("userId"))
+                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getDate("createdAt"), doc.getString("userId"))
                         forums.add(forum)
                     }
                     forum.clear();

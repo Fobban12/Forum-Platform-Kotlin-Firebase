@@ -34,5 +34,9 @@ fun Navigation() {
             ForumPost(navController = navController)
         }
 
+        composable(Screens.SingleForumScreen.name) {
+
+        }
+
     }
 }

@@ -8,7 +8,9 @@ enum class Screens {
     ChatScreen,
     SettingScreen,
     ForumScreen,
-    ForumPost;
+    ForumPost,
+    SingleForumScreen;
+
     companion object {
         fun fromRoute(route: String): Screens =
             when (route?.substringBefore("/")) {
@@ -18,7 +20,7 @@ enum class Screens {
                 SettingScreen.name -> SettingScreen
                 ForumScreen.name -> ForumScreen
                 ForumPost.name -> ForumPost
-
+                SingleForumScreen.name -> SingleForumScreen
                 else -> throw java.lang.IllegalArgumentException("Route $route is not recognized")
             }
     }
