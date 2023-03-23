@@ -41,11 +41,12 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                 },
                 title = {
                     Text(text = "Forum Name: ${singleForum.value?.title}")
-                }
+                },
+                backgroundColor = MaterialTheme.colors.onBackground,
+                contentColor = MaterialTheme.colors.onSecondary
             )
         },
-        backgroundColor = MaterialTheme.colors.onBackground,
-        contentColor = MaterialTheme.colors.onSecondary
+
     ) {
         it
         Surface (
