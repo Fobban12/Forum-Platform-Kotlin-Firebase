@@ -86,15 +86,7 @@ fun MainScreen(navController: NavController) {
                         contentDescription = "Get help",
                         icon = Icons.Default.Info
                     ),
-                    // Placeholder Login, Bao put this in the correct place later, or ask me to if you don't want to.
-                    // Or delete this if you have idea where to place it.
 
-                    MenuItem(
-                        id = "Login",
-                        title = "Login",
-                        contentDescription = "LogIn",
-                        icon = Icons.Default.Build
-                    ),
                     MenuItem(
                         id = "Forum",
                         title = "Forum",
