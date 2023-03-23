@@ -224,7 +224,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                             Spacer(modifier = Modifier.height(5.dp))
                             Text(text = "Description : ${item.description}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
                             ), modifier = Modifier.fillMaxWidth())
-                            Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(10.dp).fillMaxWidth(), colors = ButtonDefaults.buttonColors(
+                            Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${item.id}") }, modifier = Modifier.padding(10.dp).fillMaxWidth(), colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.onBackground,
                                 contentColor = Color.White
                             )) {
