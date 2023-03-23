@@ -1,59 +1,35 @@
 package com.example.kotlin_application.screens
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.*
-
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-
-import androidx.compose.runtime.rememberCoroutineScope
-
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.kotlin_application.data.BottomNavItem
-import com.example.kotlin_application.data.MenuItem
-import com.example.kotlin_application.navigation.BottomNavigationBar
-import com.example.kotlin_application.navigation.Drawer
-import com.example.kotlin_application.navigation.DrawerBody
 import com.example.kotlin_application.navigation.Screens
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
-
-import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable
-fun ForumScreen(navController: NavController) {
+fun ForumPost(navController: NavController) {
 
 
 
     Scaffold(
         topBar = {
-            renderTopBarRead(
+            renderTopBar(
                 navController,
                 IconClick = {
                     navController.navigate(Screens.MainScreen.name)
@@ -64,7 +40,7 @@ fun ForumScreen(navController: NavController) {
 
 @ExperimentalComposeUiApi
 @Composable
-fun renderTopBarRead(navController: NavController, IconClick: () -> Unit)
+fun renderTopBar(navController: NavController, IconClick: () -> Unit)
 {
     val scaffoldState = rememberScaffoldState();
 
@@ -82,7 +58,7 @@ fun renderTopBarRead(navController: NavController, IconClick: () -> Unit)
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                    Text(text = "Forum Read")
+                Text(text = "Forum Post")
             }
         },
         backgroundColor = MaterialTheme.colors.onBackground,
@@ -100,7 +76,7 @@ fun renderTopBarRead(navController: NavController, IconClick: () -> Unit)
 
 @ExperimentalComposeUiApi
 @Composable
-fun InputField(
+fun Input(
     modifier: Modifier = Modifier,
     valueState: MutableState<String>,
     labelId: String,
@@ -122,7 +98,7 @@ fun InputField(
                 color = MaterialTheme.colors.onBackground
             )
         },
-        textStyle = androidx.compose.ui.text.TextStyle(
+        textStyle = TextStyle(
             fontSize = 18.sp,
             color = MaterialTheme.colors.onBackground
         ),
@@ -137,5 +113,3 @@ fun InputField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction)
     )
 }
-
-

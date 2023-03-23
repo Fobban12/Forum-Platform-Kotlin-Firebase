@@ -86,15 +86,6 @@ fun MainScreen(navController: NavController) {
                         contentDescription = "Get help",
                         icon = Icons.Default.Info
                     ),
-
-                    MenuItem(
-                        id = "Forum",
-                        title = "Forum",
-                        contentDescription = "Forum",
-                        icon = Icons.Default.Forum
-                    ),
-
-
                     if(!checkUserIsNull){
                         MenuItem(
                             id = "Logout",
@@ -122,10 +113,6 @@ fun MainScreen(navController: NavController) {
                     navController.navigate(
                         Screens.LoginScreen.name
                     )
-                } else if (it.id == "Forum") {
-                    navController.navigate(
-                        Screens.ForumScreen.name
-                    )
                 }
                 if (it.id == "Logout"){ FirebaseAuth.getInstance().signOut().run {
                     navController.navigate(
@@ -136,7 +123,7 @@ fun MainScreen(navController: NavController) {
             }
         },
 
-        floatingActionButton = { renderFloatingButtonAction()},
+        floatingActionButton = { renderFloatingButtonAction(navController)},
         bottomBar = {
             BottomNavigationBar(
                 items = listOf(
@@ -177,17 +164,18 @@ fun MainScreen(navController: NavController) {
         it
     }
 }
-
+//Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
+//template. !!!PLACEHOLDER!!!
 @ExperimentalComposeUiApi
 @Composable
-fun renderFloatingButtonAction() {
+fun renderFloatingButtonAction(navController: NavController) {
     FloatingActionButton(
-        onClick = { Log.d("Add item", "To Add Item Page") },
+        onClick = { navController.navigate(Screens.ForumPost.name) },
         shape = RoundedCornerShape(50.dp),
         contentColor = MaterialTheme.colors.onSecondary,
         backgroundColor = MaterialTheme.colors.onBackground
     ) {
-        Icon(imageVector = Icons.Filled.Add, contentDescription = "Add item")
+        Icon(imageVector = Icons.Filled.Add, contentDescription = "Go to ForumPost")
     }
 }
 @ExperimentalComposeUiApi
