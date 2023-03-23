@@ -2,6 +2,8 @@ package com.example.kotlin_application.screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -19,12 +21,13 @@ import com.example.kotlin_application.navigation.BottomNavigationBar
 import com.example.kotlin_application.navigation.Drawer
 import com.example.kotlin_application.navigation.DrawerBody
 import com.example.kotlin_application.navigation.Screens
+import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 //
 //    LaunchedEffect(key1 = true) {
 //        if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()) {
@@ -34,6 +37,9 @@ fun MainScreen(navController: NavController) {
 //            Log.d("Firebase", FirebaseAuth.getInstance().currentUser?.email.toString());
 //        }
 //    }
+    
+    val state = viewModel.forum;
+    
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
@@ -162,6 +168,16 @@ fun MainScreen(navController: NavController) {
         }
     ) {
         it
+        //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
+        LazyColumn(modifier = Modifier.padding(2.dp)) {
+            items(state) {
+                item ->
+                Column(modifier = Modifier.padding(2.dp)) {
+                    Text(text = "${item.id}")
+                }
+
+            }
+        }
     }
 }
 //Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
