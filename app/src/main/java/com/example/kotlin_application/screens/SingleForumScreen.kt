@@ -40,6 +40,7 @@ import coil.compose.rememberImagePainter
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 
 @ExperimentalComposeUiApi
@@ -60,6 +61,10 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
     //Single forum data
     val singleForum = viewModel.singleForum;
 
+    //Check user is logged in or not
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    }
 
     
     Scaffold(
@@ -79,7 +84,9 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
             )
         },
         floatingActionButton = {
-            renderFloatingButtonActionToAddComment(navController)
+            if (!checkUserIsNull) {
+                renderFloatingButtonActionToAddComment(navController, forumId)
+            }
         }
 
     ) {
@@ -190,10 +197,10 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
 
 
 @Composable
-fun renderFloatingButtonActionToAddComment (navController: NavController) {
+fun renderFloatingButtonActionToAddComment (navController: NavController, forumId: String) {
 
 
-    FloatingActionButton(onClick = { navController.navigate(Screens.AddCommentScreen.name) }, shape = CircleShape, backgroundColor = MaterialTheme.colors.onBackground) {
+    FloatingActionButton(onClick = { navController.navigate(Screens.AddCommentScreen.name + "/${forumId}") }, shape = CircleShape, backgroundColor = MaterialTheme.colors.onBackground) {
         Text(text = "Add New Comment", modifier = Modifier.padding(10.dp),style = TextStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold), textAlign = TextAlign.Center)
     }
 }

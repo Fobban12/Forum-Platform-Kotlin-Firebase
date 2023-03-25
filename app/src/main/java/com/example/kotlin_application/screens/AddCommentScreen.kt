@@ -23,6 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.kotlin_application.data.Comment
+import com.example.kotlin_application.data.CommentInput
+import com.example.kotlin_application.viewmodel.CommentViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -30,9 +34,11 @@ import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable
-fun AddCommentScreen (navController: NavController) {
+fun AddCommentScreen (navController: NavController, forumId : String, viewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 
     //On testing progressing with comments
+
+   
 
     //Set state for comment
     val comment = remember {
@@ -103,6 +109,9 @@ fun AddCommentScreen (navController: NavController) {
                     if (!commentIsValid || !commentLengthIsValid) {
                         Toast.makeText(context, "Comment is invalid and it must include at least 5 characters", Toast.LENGTH_LONG).show()
                     } else {
+                        val newComment = CommentInput(comment = comment.value.trim(), createdAt = Timestamp.now(), forumId = forumId, userId = uid, username = username)
+                        viewModel.saveComment(newComment, context);
+                        navController.popBackStack();
                         Log.d("Successfully", "Successfully!")
                     }
                     keyboardController.clearFocus()
