@@ -1,14 +1,11 @@
 package com.example.kotlin_application.screens.authentication
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -34,7 +31,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.AuthenticationViewModel
-import java.time.format.TextStyle
+import androidx.compose.material.TextFieldDefaults
+
 
 @Composable
 @ExperimentalComposeUiApi
@@ -42,10 +40,13 @@ fun LoginScreen(
     navController: NavController,
     viewModel: AuthenticationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
+
+    //Set state for log in form
     val isLoginForm = rememberSaveable {
         mutableStateOf(true)
     }
 
+    //Set context for toast
     val context = LocalContext.current
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -200,7 +201,7 @@ fun UserForm(
             passwordState = password,
             enabled = true,
             onAction = KeyboardActions(onDone = {
-                if (password.value.length == 0) return@KeyboardActions
+//                if (password.value.length == 0) return@KeyboardActions
                 keyboardController?.hide()
                 onDone(email.value.trim(), password.value.trim())
             })

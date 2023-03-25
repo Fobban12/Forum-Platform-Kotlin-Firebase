@@ -59,16 +59,22 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 //            Log.d("Firebase", FirebaseAuth.getInstance().currentUser?.email.toString());
 //        }
 //    }
-    
+
+
+    //List of forum data
     val state = viewModel.forum;
-    
+
+
+    //Scaffold
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
+    //Check user is logged in or not
     val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     }
 
+    //Get username from firebase
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
 
     Scaffold(
@@ -191,6 +197,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
     ) {
         it
         //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
+        //        Fetch single forum data with LazyColumn
         LazyColumn(modifier = Modifier.padding(2.dp)) {
             items(state) {
                 item ->
@@ -241,24 +248,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
     }
 }
 
-@Composable
-fun getImageIdFromUri(contentResolver: ContentResolver, uri: Uri): Int {
-    val projection = arrayOf(MediaStore.Images.Media._ID)
-    val selection = "${MediaStore.Images.Media.DATA}=?"
-    val selectionArgs = arrayOf(uri.path)
-    val cursor = contentResolver.query(
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-        projection,
-        selection,
-        selectionArgs,
-        null
-    )
-    val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-    cursor?.moveToFirst()
-    val imageId = columnIndex?.let { cursor?.getInt(it) }
-    cursor?.close()
-    return imageId ?: 0
-}
+
 //Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
 //template. !!!PLACEHOLDER!!!
 @ExperimentalComposeUiApi

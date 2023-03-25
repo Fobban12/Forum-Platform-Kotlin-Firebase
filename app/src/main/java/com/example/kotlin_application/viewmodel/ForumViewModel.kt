@@ -35,7 +35,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener { documentSnapshot ->
 
                     if (documentSnapshot.exists()) {
-                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getDate("createdAt"), documentSnapshot.getString("userId"));
+                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getDate("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
                         singleForum.value = forum;
                     }
 
@@ -55,7 +55,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener {
                     val forums = mutableListOf<Forum>()
                     it.documents.forEach { doc ->
-                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getDate("createdAt"), doc.getString("userId"))
+                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getDate("createdAt"), doc.getString("userId"), doc.getString("username"))
                         forums.add(forum)
                     }
                     forum.clear();

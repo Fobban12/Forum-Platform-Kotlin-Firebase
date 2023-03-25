@@ -45,5 +45,11 @@ fun Navigation() {
             }
         }
 
+        composable(Screens.AddCommentScreen.name) {
+            AddCommentScreen(navController = navController)
+        }
+
+
+
     }
 }
