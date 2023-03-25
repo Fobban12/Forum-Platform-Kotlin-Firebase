@@ -57,6 +57,15 @@ fun Navigation() {
             }
         }
 
+        val commentScreenName = Screens.CommentScreen.name
+        composable("$commentScreenName/{forumId}", arguments = listOf(navArgument("forumId") {
+            type = NavType.StringType
+        })) {backStackEntry ->
+            backStackEntry.arguments?.getString("forumId").let {
+                CommentScreen(navController = navController, forumId = it.toString())
+            }
+        }
+
 
 
     }

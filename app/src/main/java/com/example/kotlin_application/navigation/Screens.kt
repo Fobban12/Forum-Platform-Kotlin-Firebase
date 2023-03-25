@@ -11,6 +11,7 @@ enum class Screens {
     ForumPost,
     SingleForumScreen,
     AddCommentScreen,
+    CommentScreen,
     SearchScreen;
 
     companion object {
@@ -25,6 +26,7 @@ enum class Screens {
                 SingleForumScreen.name -> SingleForumScreen
                 AddCommentScreen.name -> AddCommentScreen
                 SearchScreen.name -> SearchScreen
+                CommentScreen.name ->CommentScreen
                 else -> throw java.lang.IllegalArgumentException("Route $route is not recognized")
             }
     }
