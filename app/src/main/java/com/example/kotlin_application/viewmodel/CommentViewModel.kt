@@ -3,6 +3,7 @@ package com.example.kotlin_application.viewmodel
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.Comment
@@ -20,16 +21,25 @@ class CommentViewModel : ViewModel() {
     val commentDB = FirebaseFirestore.getInstance().collection("comment")
 
     //State for lists of comments
-    var comments = mutableStateListOf<Comment?>()
+    val comments = mutableStateListOf<Comment?>();
 
 
-    fun listOfComments (forumId : String) {
+    fun fetchComments (forumId : String) {
         viewModelScope.launch {
-           Firebase.firestore.collection("comment").document(forumId).get().addOnSuccessListener {
+
+           commentDB.whereEqualTo("forumId", forumId).get().addOnSuccessListener { result ->
+               val commentList = mutableStateListOf<Comment?>();
+               result.documents.map { document ->
+                   val newComment = Comment(document.id, document.getString("comment").toString(), document.getTimestamp("createdAt"), document.getString("forumId").toString(), document.getString("userId").toString(), document.getString("username").toString())
+                   commentList.add(newComment);
+               }
+
+               comments.clear();
+               comments.addAll(commentList)
+
            }
         }
     }
-
 
     fun saveComment (commentInput: CommentInput, context: Context) {
         viewModelScope.launch {

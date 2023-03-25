@@ -7,6 +7,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,13 +41,14 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
+import com.example.kotlin_application.viewmodel.CommentViewModel
 import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 
 @ExperimentalComposeUiApi
 @Composable
-fun SingleForumScreen (navController: NavController, forumId: String, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun SingleForumScreen (navController: NavController, forumId: String, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 
     //Test with single forum screen based on dummy data
 
@@ -58,8 +61,16 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
         viewModel.getSingleForum(forumId);
     }
 
+    //Set effect to fetch list of comments
+    LaunchedEffect(forumId, commentViewModel) {
+        commentViewModel.fetchComments(forumId);
+    }
+
     //Single forum data
     val singleForum = viewModel.singleForum;
+
+    //List of comments of forum
+    val comments = commentViewModel.comments;
 
     //Check user is logged in or not
     val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
@@ -132,7 +143,13 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                 
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Comments: ", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(3.dp))
+                Spacer(modifier = Modifier.height(5.dp))
+                LazyColumn(modifier = Modifier.padding(2.dp)) {
+                    items(comments) {
+                        singleItem ->
 
+                    }
+                }
 
 
             }
