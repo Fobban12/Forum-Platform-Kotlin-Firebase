@@ -23,11 +23,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable
 fun AddCommentScreen (navController: NavController) {
+
+    //On testing progressing with comments
 
     //Set state for comment
     val comment = remember {
@@ -42,12 +47,17 @@ fun AddCommentScreen (navController: NavController) {
         comment.value.trim().length >=5;
     }
 
-
     //Set controller for keyboard
     val keyboardController = LocalFocusManager.current;
 
     //Set context for toast
     val context = LocalContext.current;
+
+    //Get username from firebase
+    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+
+    //Get uid from firebase
+    val uid = FirebaseAuth.getInstance().uid.toString();
 
     Scaffold(
         topBar = {
@@ -61,7 +71,7 @@ fun AddCommentScreen (navController: NavController) {
                     Text(text = "Add Comment Screen")
                 },
                 backgroundColor = MaterialTheme.colors.onBackground,
-                contentColor = MaterialTheme.colors.onSecondary
+                contentColor = Color.White
             ) 
         }
     ) {
@@ -97,7 +107,7 @@ fun AddCommentScreen (navController: NavController) {
                     }
                     keyboardController.clearFocus()
                 },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
-                    Text(text = "Add Comment", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    Text(text = "Add Comment", style = androidx.compose.ui.text.TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 }
             }
         }

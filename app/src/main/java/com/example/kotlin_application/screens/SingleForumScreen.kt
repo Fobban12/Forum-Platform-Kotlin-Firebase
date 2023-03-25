@@ -75,7 +75,7 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                     Text(text = "Forum Name: ${singleForum.value?.title}")
                 },
                 backgroundColor = MaterialTheme.colors.onBackground,
-                contentColor = MaterialTheme.colors.onSecondary
+                contentColor = Color.White
             )
         },
         floatingActionButton = {
@@ -113,9 +113,9 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                                 RoundedCornerShape(16.dp)
                             )) {
                             Column() {
-                                Text(text = "Title of forum: ${singleForum.value?.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
-                                Text(text = "Description: ${singleForum.value?.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
-                                Text(text = "Created by: ${singleForum.value?.username}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
+                                Text(text = "Title of forum: ${singleForum.value?.title}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
+                                Text(text = "Description: ${singleForum.value?.description}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
+                                Text(text = "Created by: ${singleForum.value?.username}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
 
                             }
 
@@ -124,7 +124,7 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                 }
                 
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Comments: ", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(3.dp))
+                Text(text = "Comments: ", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(3.dp))
 
 
 
@@ -194,6 +194,6 @@ fun renderFloatingButtonActionToAddComment (navController: NavController) {
 
 
     FloatingActionButton(onClick = { navController.navigate(Screens.AddCommentScreen.name) }, shape = CircleShape, backgroundColor = MaterialTheme.colors.onBackground) {
-        Text(text = "Add New Comment", modifier = Modifier.padding(10.dp),style = TextStyle(color = MaterialTheme.colors.onSecondary, fontSize = 16.sp, fontWeight = FontWeight.Bold), textAlign = TextAlign.Center)
+        Text(text = "Add New Comment", modifier = Modifier.padding(10.dp),style = TextStyle(color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold), textAlign = TextAlign.Center)
     }
 }
