@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -77,6 +78,10 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     }
 
+    //Get uid from firebase
+    val uid = FirebaseAuth.getInstance()?.uid;
+
+
     
     Scaffold(
         topBar = {
@@ -147,8 +152,23 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                 LazyColumn(modifier = Modifier.padding(2.dp)) {
                     items(comments) {
                         singleItem ->
-
-                    }
+                        Box(modifier = Modifier
+                            .padding(4.dp)
+                            .border(
+                                width = 2.dp,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .background(MaterialTheme.colors.onSurface)
+                            .padding(20.dp)
+                            .fillMaxWidth()) {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(text = "${singleItem?.comment}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp))
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Text(text = if (singleItem?.userId == uid) "Created by: You" else "Created by: ${singleItem?.username}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp))
+                            }
+                        }
+                     }
                 }
 
 

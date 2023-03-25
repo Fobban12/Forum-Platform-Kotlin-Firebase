@@ -207,7 +207,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 Box(
                     modifier = Modifier
                         .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
-                        .background(Color.LightGray)
+                        .background(MaterialTheme.colors.onSurface)
                         .padding(20.dp)
                         .fillMaxWidth()
 
