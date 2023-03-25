@@ -35,6 +35,9 @@ fun Navigation() {
         composable(Screens.ForumPost.name) {
             ForumPost(navController = navController)
         }
+        composable(Screens.SearchScreen.name) {
+            SearchScreen(navController = navController)
+        }
         
         val detailForumName = Screens.SingleForumScreen.name
         composable("$detailForumName/{forumId}", arguments = listOf(navArgument("forumId") {

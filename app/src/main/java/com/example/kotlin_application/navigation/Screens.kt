@@ -10,8 +10,8 @@ enum class Screens {
     ForumScreen,
     ForumPost,
     SingleForumScreen,
-    AddCommentScreen
-    ;
+    AddCommentScreen,
+    SearchScreen;
 
     companion object {
         fun fromRoute(route: String): Screens =
@@ -24,6 +24,7 @@ enum class Screens {
                 ForumPost.name -> ForumPost
                 SingleForumScreen.name -> SingleForumScreen
                 AddCommentScreen.name -> AddCommentScreen
+                SearchScreen.name -> SearchScreen
                 else -> throw java.lang.IllegalArgumentException("Route $route is not recognized")
             }
     }
