@@ -23,7 +23,16 @@ class CommentViewModel : ViewModel() {
     //State for lists of comments
     val comments = mutableStateListOf<Comment?>();
 
+    //Delete comment
+    fun deleteComment (commentId : String, context: Context) {
+        viewModelScope.launch {
+            commentDB.document(commentId).delete();
+            comments.removeIf { it?.id == commentId }
+            Toast.makeText(context, "Delete comment successfully!", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    //Fetch comments
     fun fetchComments (forumId : String) {
         viewModelScope.launch {
 
@@ -41,6 +50,7 @@ class CommentViewModel : ViewModel() {
         }
     }
 
+    //Save comment
     fun saveComment (commentInput: CommentInput, context: Context) {
         viewModelScope.launch {
             commentDB.add(commentInput).addOnCompleteListener { task ->
