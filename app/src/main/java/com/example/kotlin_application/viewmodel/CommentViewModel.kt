@@ -1,6 +1,7 @@
 package com.example.kotlin_application.viewmodel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +21,9 @@ class CommentViewModel : ViewModel() {
     //Comment DB
     val commentDB = FirebaseFirestore.getInstance().collection("comment")
 
+    //Like for comment DB
+    val likeForCommentDB = FirebaseFirestore.getInstance().collection("like_for_comment")
+
     //State for lists of comments
     val comments = mutableStateListOf<Comment?>();
 
@@ -27,7 +31,16 @@ class CommentViewModel : ViewModel() {
     fun deleteComment (commentId : String, context: Context) {
         viewModelScope.launch {
             commentDB.document(commentId).delete();
-            comments.removeIf { it?.id == commentId }
+            comments.removeIf { it?.id == commentId };
+            likeForCommentDB.whereEqualTo("commentId", commentId).get().addOnSuccessListener { snapShot ->
+                for (document in snapShot.documents) {
+                    document.reference.delete().addOnSuccessListener {
+                        Log.d("Delete like for comment", "Delete successfully!")
+                    }.addOnFailureListener {
+                        Log.d("Delete like for comment", "Delete fail!")
+                    }
+                }
+            }
             Toast.makeText(context, "Delete comment successfully!", Toast.LENGTH_LONG).show();
         }
     }

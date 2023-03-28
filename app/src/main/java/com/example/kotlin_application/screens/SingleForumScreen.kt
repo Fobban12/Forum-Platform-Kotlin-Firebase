@@ -99,10 +99,6 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
     val context = LocalContext.current;
 
     //Get like by forum id and userid
-
-
-
-
     
     Scaffold(
         topBar = {

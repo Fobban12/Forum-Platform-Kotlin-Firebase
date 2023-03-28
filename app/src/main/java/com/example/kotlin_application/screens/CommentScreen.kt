@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +28,7 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.CommentViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+@ExperimentalComposeUiApi
 @Composable
 fun CommentScreen (navController: NavController, forumId : String, commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     //Set effect to fetch list of comments
@@ -64,8 +66,11 @@ fun CommentScreen (navController: NavController, forumId : String, commentViewMo
         if (comments.size == 0) {
             Surface(modifier = Modifier
                 .padding(4.dp)
-                .fillMaxWidth().fillMaxSize()) {
-                Column(modifier = Modifier.fillMaxWidth().fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                .fillMaxWidth()
+                .fillMaxSize()) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                     Text(text = "There are no comments for this forum", style = TextStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onBackground, fontSize = 20.sp))
                 }
             }
@@ -73,34 +78,7 @@ fun CommentScreen (navController: NavController, forumId : String, commentViewMo
             LazyColumn(modifier = Modifier.padding(2.dp)) {
                 items(comments) {
                         singleItem ->
-
-                    Box(modifier = Modifier
-                        .padding(4.dp)
-                        .border(
-                            width = 2.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(MaterialTheme.colors.onSurface)
-                        .padding(20.dp)
-                        .fillMaxWidth()) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-
-                            Column() {
-                                Text(text = "Comment Content: ${singleItem?.comment}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.fillMaxWidth())
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Text(text = if (singleItem?.userId == uid) "Created by: You" else "Created by: ${singleItem?.username}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 16.sp))
-                            }
-                            Spacer(modifier = Modifier.height(20.dp))
-                            if (singleItem?.userId == uid) Row(modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))) {
-                                IconButton(onClick = { commentViewModel.deleteComment(singleItem?.id as String, context) },modifier = Modifier
-                                    .background(color = MaterialTheme.colors.onBackground)
-                                    .fillMaxWidth()) {
-                                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete comment", tint = Color.White)
-                                }
-                            }
-                        }
-                    }
+                    SingleCommentScreen(singleItem = singleItem, forumId = forumId)
                 }
             }
         }
