@@ -4,8 +4,8 @@ import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
 data class Forum(
-    val id: String?,
-    val title: String?,
+    val id: String? = null,
+    val title: String? = null,
     val type: String?,
     val description: String?,
     val image: String?,

@@ -191,6 +191,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 onItemClick = {
                     if(it.name == "ForumTest"){ navController.navigate(Screens.ForumScreen.name)}
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
+                    if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     println("Clicked on ${it.name}")
                 }
             )

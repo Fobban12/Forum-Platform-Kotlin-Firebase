@@ -26,18 +26,20 @@ fun Navigation() {
         composable(Screens.MainScreen.name) {
             MainScreen(navController = navController)
         }
-        composable(Screens.ChatScreen.name) {
-            ChatScreen(navController = navController)
-        }
-        composable(Screens.SettingScreen.name) {
-            SettingScreen(navController = navController)
-        }
+        
+
         composable(Screens.ForumPost.name) {
             ForumPost(navController = navController)
         }
         composable(Screens.SearchScreen.name) {
             SearchScreen(navController = navController)
         }
+        
+        composable(Screens.ChatScreen.name){
+            ChatScreen(navController = navController)
+        }
+        
+
         
         val detailForumName = Screens.SingleForumScreen.name
         composable("$detailForumName/{forumId}", arguments = listOf(navArgument("forumId") {
