@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.Media
 import android.util.Log
+import android.widget.ScrollView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,9 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -44,7 +44,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.kotlin_application.ui.theme.goldYellowHex
 import java.time.format.TextStyle
+
 
 @ExperimentalCoilApi
 @ExperimentalComposeUiApi
@@ -74,8 +76,14 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     }
 
+    //Get uid from firebase
+    val uid = FirebaseAuth.getInstance().uid;
+
     //Get username from firebase
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+
+
+
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -90,7 +98,8 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                     }
                 }
             )
-        },
+        }
+        ,
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
             Drawer()
@@ -156,7 +165,6 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 println("Clicked on ${it.title}")
             }
         },
-
         floatingActionButton = { renderFloatingButtonAction(navController)},
         bottomBar = {
             BottomNavigationBar(
@@ -198,57 +206,89 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
         }
     ) {
         it
+
         //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
         //        Fetch single forum data with LazyColumn
+
         LazyColumn(modifier = Modifier.padding(2.dp)) {
             items(state) {
-                item ->
-
-                Spacer(modifier = Modifier.height(20.dp))
-                Box(
-                    modifier = Modifier
-                        .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colors.onSurface)
-                        .padding(20.dp)
-                        .fillMaxWidth()
-
-                ) {
-                    Row(modifier = Modifier
-                        .padding(2.dp)
-                        .fillMaxHeight()) {
-                        val painterState = rememberImagePainter(
-                            data = "${item.image}",
-                            builder = {})
-
-
-                            Image(
-                                painter = painterState,
-                                contentDescription = "Image for forum",
-                                modifier = Modifier.height(100.dp)
-                            )
-                        Column(modifier = Modifier
-                            .padding(10.dp)
-                            .fillMaxWidth()) {
-                            Text(text = "Title: ${item.title}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
-                            Spacer(modifier = Modifier.height(5.dp))
-                            Text(text = "Description : ${item.description}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
-                            ), modifier = Modifier.fillMaxWidth())
-                            Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${item.id}") }, modifier = Modifier.padding(10.dp).fillMaxWidth(), colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.onBackground,
-                                contentColor = Color.White
-                            )) {
-                                Text(text = "Click to see more details", style = androidx.compose.ui.text.TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 10.sp), modifier = Modifier.fillMaxWidth())
-                            }
-                        }
-
-                    }
-                }
-                Spacer(modifier = Modifier.height(20.dp))
+                    item ->
+                SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
+//                Spacer(modifier = Modifier.height(10.dp))
+//                Box(
+//                    modifier = Modifier
+//                        .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
+//                        .background(MaterialTheme.colors.onSurface)
+//                        .padding(vertical = 20.dp, horizontal = 20.dp)
+//                        .fillMaxWidth()
+//
+//                ) {
+//                    Column() {
+//
+//                        if (uid == item.userId) {
+//                            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+//
+//                                        IconButton(
+//                                            onClick = {
+//
+//                                            },
+//                                            modifier = Modifier
+//                                                .background(
+//                                                    color = MaterialTheme.colors.onBackground,
+//                                                    CircleShape
+//                                                )
+//                                                .size(20.dp),
+//                                        ) {
+//                                            Icon(imageVector = Icons.Default.Remove, contentDescription = "Remove forum", tint = goldYellowHex)
+//                                        }
+//                            }
+//                        }
+//
+//
+//                        Spacer(modifier = Modifier.height(10.dp))
+//
+//                        Row(modifier = Modifier
+//                            .padding(2.dp)
+//                            .fillMaxHeight()) {
+//                            val painterState = rememberImagePainter(
+//                                data = "${item.image}",
+//                                builder = {})
+//
+//
+//                            Image(
+//                                painter = painterState,
+//                                contentDescription = "Image for forum",
+//                                modifier = Modifier.height(100.dp)
+//                            )
+//                            Column(modifier = Modifier
+//                                .padding(10.dp)
+//                                .fillMaxWidth()) {
+//                                Text(text = "Title: ${item.title}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
+//                                Spacer(modifier = Modifier.height(5.dp))
+//                                Text(text = "Description : ${item.description}", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
+//                                ), modifier = Modifier.fillMaxWidth())
+//                                Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${item.id}") }, modifier = Modifier
+//                                    .padding(10.dp)
+//                                    .fillMaxWidth(), colors = ButtonDefaults.buttonColors(
+//                                    backgroundColor = MaterialTheme.colors.onBackground,
+//                                    contentColor = Color.White
+//                                )) {
+//                                    Text(text = "Click to see more details", style = androidx.compose.ui.text.TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 10.sp), modifier = Modifier.fillMaxWidth())
+//                                }
+//
+//
+//                            }
+//
+//                        }
+//                    }
+//                    Spacer(modifier = Modifier.height(20.dp))
+//                }
 
             }
         }
     }
 }
+
 
 
 //Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general

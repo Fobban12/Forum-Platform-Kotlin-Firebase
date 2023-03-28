@@ -1,5 +1,8 @@
 package com.example.kotlin_application.viewmodel
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.Forum
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -23,6 +27,14 @@ class ForumViewModel : ViewModel() {
     private val _singleForum = MutableLiveData<Forum?>(null)
     val singleForum: MutableLiveData<Forum?> = _singleForum
 
+    //Like database from Firestore
+    val like = FirebaseFirestore.getInstance().collection("like");
+
+    //Comment database from Firestore
+    val comment = FirebaseFirestore.getInstance().collection("comment");
+
+    //Like for comment database from Firestore
+    val like_for_comment = FirebaseFirestore.getInstance().collection("like_for_comment");
 
     init {
         getForum()
@@ -62,6 +74,52 @@ class ForumViewModel : ViewModel() {
                     forum.addAll(forums)
                 }
                 .addOnFailureListener {  }
+        }
+    }
+
+    //Delete forum
+    fun deleteForum (forumId: String, context: Context) {
+        viewModelScope.launch {
+            Firebase.firestore.collection("forum").document(forumId).delete();
+            forum.removeIf { it.id == forumId };
+            Toast.makeText(context, "Remove forum successfully!", Toast.LENGTH_LONG).show()
+
+            //Delete like of forum
+            like.whereEqualTo("forumId", forumId).get().addOnSuccessListener { snapShot ->
+                for (document in snapShot.documents) {
+                    document.reference.delete().addOnSuccessListener {
+                        Log.d("Delete like of forum", "Delete like of forum successfully!")
+                    }
+                        .addOnFailureListener {
+                            Log.d("Delete like of forum", "Delete fail")
+                        }
+                }
+            }
+
+            //Delete comment of forum
+            comment.whereEqualTo("forumId", forumId).get().addOnSuccessListener { snapShot ->
+                for (document in snapShot.documents) {
+                    document.reference.delete().addOnSuccessListener {
+                        Log.d("Delete comment of forum", "Delete comment of forum successfully!")
+                    }
+                        .addOnFailureListener {
+                            Log.d("Delete comment of forum", "Delete fail")
+                        }
+                }
+            }
+
+            //Delete like for single comment of forum
+            like_for_comment.whereEqualTo("forumId", forumId).get().addOnSuccessListener { snapShot ->
+                for (document in snapShot.documents) {
+                    document.reference.delete().addOnSuccessListener {
+                        Log.d("Delete like  of forum", "Delete comment of forum successfully!")
+                    }
+                        .addOnFailureListener {
+                            Log.d("Delete comment of forum", "Delete fail")
+                        }
+                }
+            }
+
         }
     }
 
