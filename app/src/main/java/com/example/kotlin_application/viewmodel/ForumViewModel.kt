@@ -7,6 +7,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -120,6 +121,26 @@ class ForumViewModel : ViewModel() {
                 }
             }
 
+        }
+    }
+
+    //Search forum based on keywords
+    fun searchForums (keyword : String) {
+        viewModelScope.launch {
+            FirebaseFirestore.getInstance().collection("forum").get().addOnSuccessListener {
+                val forums = mutableListOf<Forum>()
+                it.documents.forEach { doc ->
+                    var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getDate("createdAt"), doc.getString("userId"), doc.getString("username"))
+                    forums.add(forum)
+                }
+
+                val filteredForums = forums.filter { it?.title?.trim()?.toLowerCase()?.contains(keyword.toString().trim().toLowerCase()) as Boolean || it?.description?.trim()?.toLowerCase()?.contains(keyword.toString().trim().toLowerCase()) as Boolean }
+                forum.clear();
+                forum.addAll(filteredForums);
+            }
+                .addOnFailureListener {
+
+                }
         }
     }
 

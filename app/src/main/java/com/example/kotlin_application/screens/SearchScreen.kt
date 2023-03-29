@@ -1,5 +1,6 @@
 package com.example.kotlin_application.screens
 
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,7 +44,6 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
 
     val state = viewModel.forum;
 
-
     //Scaffold
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -54,16 +54,82 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
     }
 
     //Get username from firebase
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
+
+    var text = remember {
+        mutableStateOf("")
+    }
+
+    var hint : String = "";
+    var isHintDisplayed = remember (hint) {
+        mutableStateOf(hint != "")
+    }
+
+    LaunchedEffect(text.value, viewModel) {
+        viewModel.searchForums(text.value);
+    }
 
 
     Scaffold(
         topBar = {
-            SearchTopBar(
-                navController,
-                IconClick = {
-                    navController.navigate(Screens.MainScreen.name)
-                })
+            TopAppBar(
+                navigationIcon = {
+
+                    //Thong: the thing I test, I keep Bao's things in comment as below
+                    IconButton(onClick = {navController.popBackStack()}) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Go Back"
+                        )
+                    }
+//                    SearchTopBar(
+//                        navController,
+//                        IconClick = {
+//                            navController.navigate(Screens.MainScreen.name)
+//                        })
+
+                },
+                title = {
+                    //Thong: the stuff I test, I keep Bao's things in the comment below
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                    ) {
+
+//                        SearchBar(
+//                            hint = " ",
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(start = 0.dp, end = 45.dp)
+//
+//                        ){
+//
+//                        }
+
+
+                        OutlinedTextField(
+                            value = text.value,
+                            onValueChange = {
+                                text.value = it
+
+                            },
+                            maxLines = 1,
+                            singleLine = true,
+                            textStyle = TextStyle(color = Color.Black),
+                            modifier = Modifier
+                                .background(Color.White, CircleShape)
+                                .padding(2.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Color.Transparent,
+                                unfocusedBorderColor = Color.Transparent,
+                                backgroundColor = Color.Transparent
+                            ));
+
+
+                },
+                backgroundColor = MaterialTheme.colors.onBackground,
+                contentColor = MaterialTheme.colors.onSecondary
+            )
         }
     )
 
@@ -154,7 +220,9 @@ fun SearchTopBar(navController: NavController, IconClick: () -> Unit) {
                         .fillMaxWidth()
                         .padding(start = 0.dp, end = 45.dp)
 
-                )
+                ){
+
+              }
             }
         },
         backgroundColor = MaterialTheme.colors.onBackground,
@@ -165,27 +233,25 @@ fun SearchTopBar(navController: NavController, IconClick: () -> Unit) {
 }
 
 
-
-
-
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
     hint: String = "",
     onSearch: (String) -> Unit = {},
 ) {
-    var text by remember {
+    var text = remember {
         mutableStateOf("")
     }
+
     var isHintDisplayed by remember {
         mutableStateOf(hint != "")
     }
 
     Box(modifier = modifier) {
-        BasicTextField(
-            value = text,
+        OutlinedTextField(
+            value = text.value,
             onValueChange = {
-                text = it
+                text.value = it
                 onSearch(it)
             },
             maxLines = 1,

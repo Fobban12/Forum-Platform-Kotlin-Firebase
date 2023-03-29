@@ -72,8 +72,6 @@ fun UpdateCommentScreen (navController: NavController, commentId : String, comme
         }
     } ?: false;
 
-
-
     Scaffold(
         topBar = {
             TopAppBar(
