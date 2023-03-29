@@ -1,32 +1,39 @@
 package com.example.kotlin_application.screens
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import android.util.Log
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.kotlin_application.navigation.Screens
+import com.example.kotlin_application.screens.authentication.UserForm
+import com.google.protobuf.DescriptorProtos.FieldDescriptorProto.Label
 
+
+//This is for the screen to make a forum post and push the data to the database.
 @ExperimentalComposeUiApi
 @Composable
-fun ForumPost(navController: NavController) {
+fun ForumPost(
+    navController: NavController,
+) {
 
-
-
+//Top Bar
     Scaffold(
         topBar = {
             renderTopBar(
@@ -35,14 +42,39 @@ fun ForumPost(navController: NavController) {
                     navController.navigate(Screens.MainScreen.name)
                 })
         }
-    ){it}
+    )
+    {it
+    Surface(modifier = Modifier
+        .fillMaxSize())
+      {
+        Box()
+        {
+
+            Column(modifier = Modifier
+                .padding(10.dp))
+
+            {
+                Text(text = "Topic Title:", modifier = Modifier.padding(bottom = 10.dp))
+                TestField()
+            }
+
+        }
+
+      }
+    }
+
+
+
+
+
+
 }
 
+//For rendering the top bar.
 @ExperimentalComposeUiApi
 @Composable
 fun renderTopBar(navController: NavController, IconClick: () -> Unit)
 {
-    val scaffoldState = rememberScaffoldState();
 
     TopAppBar(
         navigationIcon = {
@@ -57,59 +89,24 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+
             ) {
-                Text(text = "Forum Post")
+                Text(text = "Create Forum")
+
             }
         },
         backgroundColor = MaterialTheme.colors.onBackground,
         contentColor = MaterialTheme.colors.onSecondary
     )
 
-
-
-
-
-
-
-}
-
-
-@ExperimentalComposeUiApi
+}//Here would be the text field for the title
 @Composable
-fun Input(
-    modifier: Modifier = Modifier,
-    valueState: MutableState<String>,
-    labelId: String,
-    enabled: Boolean,
-    isSingleLine: Boolean = true,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    imeAction: ImeAction = ImeAction.Next,
-    onAction: KeyboardActions = KeyboardActions.Default
+fun TestField() {
+    var text by remember { mutableStateOf("") }
 
-) {
-    OutlinedTextField(
-        value = valueState.value,
-        onValueChange = { valueState.value = it },
-        singleLine = isSingleLine,
-        enabled = enabled,
-        label = {
-            Text(
-                text = "$labelId",
-                color = MaterialTheme.colors.onBackground
-            )
-        },
-        textStyle = TextStyle(
-            fontSize = 18.sp,
-            color = MaterialTheme.colors.onBackground
-        ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colors.onBackground,
-            unfocusedBorderColor = Color.Gray,
-            disabledBorderColor = Color.LightGray
-        ),
-        modifier = Modifier
-            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            .fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction)
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        label = { Text("Title") }
     )
 }

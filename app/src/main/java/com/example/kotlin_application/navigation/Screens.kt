@@ -5,7 +5,6 @@ package com.example.kotlin_application.navigation
 enum class Screens {
     LoginScreen,
     MainScreen,
-    ForumScreen,
     ForumPost,
     SingleForumScreen,
     AddCommentScreen,
@@ -22,7 +21,6 @@ enum class Screens {
             when (route?.substringBefore("/")) {
                 LoginScreen.name -> LoginScreen
                 MainScreen.name -> MainScreen
-                ForumScreen.name -> ForumScreen
                 ForumPost.name -> ForumPost
                 SingleForumScreen.name -> SingleForumScreen
                 AddCommentScreen.name -> AddCommentScreen
