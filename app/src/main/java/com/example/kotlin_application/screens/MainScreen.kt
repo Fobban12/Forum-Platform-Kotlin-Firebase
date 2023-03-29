@@ -150,7 +150,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 
 
             ) {
-                // when(it.id){"home"->navigateToHomeScreen
+
                 //For going to the Login Page
                 if (it.id == "Login") {
                     navController.navigate(
@@ -186,18 +186,9 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         icon = Icons.Default.Search,
                         badgeCount = 0
                     ),
-                    //!!!!!This is just to see how the created Forum page would look like, remove this when done testing. Bao don't delete this yet.
-                    //!!!!!Remind me to delete it if I forget or delete it yourself if you are sure that we have done the forum page already
-                    BottomNavItem(
-                        name = "ForumTest",
-                        route = "Forum",
-                        icon = Icons.Default.Info,
-                        badgeCount = 0
-                    ),
                 ),
                 navController = navController,
                 onItemClick = {
-                    if(it.name == "ForumTest"){ navController.navigate(Screens.ForumScreen.name)}
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     println("Clicked on ${it.name}")

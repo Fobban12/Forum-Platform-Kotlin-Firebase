@@ -19,10 +19,6 @@ fun Navigation() {
         composable(Screens.LoginScreen.name) {
             LoginScreen(navController = navController)
         }
-        composable(Screens.ForumScreen.name) {
-            ForumScreen(navController = navController)
-        }
-
         composable(Screens.MainScreen.name) {
             MainScreen(navController = navController)
         }
