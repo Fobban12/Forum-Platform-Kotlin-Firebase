@@ -26,7 +26,6 @@ fun Navigation() {
         composable(Screens.MainScreen.name) {
             MainScreen(navController = navController)
         }
-        
 
         composable(Screens.ForumPost.name) {
             ForumPost(navController = navController)
@@ -38,9 +37,17 @@ fun Navigation() {
         composable(Screens.ChatScreen.name){
             ChatScreen(navController = navController)
         }
-        
 
-        
+        val updateCommentScreenName = Screens.UpdateCommentScreen.name;
+        composable("$updateCommentScreenName/{commentId}", arguments = listOf(navArgument("commentId") {
+            type = NavType.StringType
+            nullable = true
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("commentId").let {
+                UpdateCommentScreen(navController = navController, commentId = it.toString())
+            }
+        }
+
         val detailForumName = Screens.SingleForumScreen.name
         composable("$detailForumName/{forumId}", arguments = listOf(navArgument("forumId") {
             type = NavType.StringType

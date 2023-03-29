@@ -78,7 +78,7 @@ fun CommentScreen (navController: NavController, forumId : String, commentViewMo
             LazyColumn(modifier = Modifier.padding(2.dp)) {
                 items(comments) {
                         singleItem ->
-                    SingleCommentScreen(singleItem = singleItem, forumId = forumId)
+                    SingleCommentScreen(singleItem = singleItem, forumId = forumId, navController = navController)
                 }
             }
         }

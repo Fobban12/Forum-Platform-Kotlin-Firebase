@@ -11,6 +11,7 @@ enum class Screens {
     AddCommentScreen,
     CommentScreen,
     SearchScreen,
+    UpdateCommentScreen,
     ChatScreen;
 
 
@@ -28,6 +29,7 @@ enum class Screens {
                 SearchScreen.name -> SearchScreen
                 CommentScreen.name ->CommentScreen
                 ChatScreen.name -> ChatScreen
+                UpdateCommentScreen.name -> UpdateCommentScreen
                 else -> throw java.lang.IllegalArgumentException("Route $route is not recognized")
             }
     }

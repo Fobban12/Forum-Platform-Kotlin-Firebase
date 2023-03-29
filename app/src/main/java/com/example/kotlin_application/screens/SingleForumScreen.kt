@@ -189,8 +189,7 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                     }
                 } else if (likeOrDislike && !checkUserIsNull) {
                     val singleLike = likes.filter { it?.forumId == forumId && it?.userId == uid }?.get(0);
-                        
-                        
+
 
                      Button(onClick = { likeViewModel.deleteLike(singleLike?.id as String, context = context) }, colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.onBackground,

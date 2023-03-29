@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.Comment
@@ -26,6 +27,28 @@ class CommentViewModel : ViewModel() {
 
     //State for lists of comments
     val comments = mutableStateListOf<Comment?>();
+
+    private val _singleComment = MutableLiveData<Comment?>(null)
+    val singleComment: MutableLiveData<Comment?> = _singleComment;
+
+    //Fetch single comment
+    fun getSingleForum (forumId : String) {
+        viewModelScope.launch {
+            commentDB.document(forumId).get()
+                .addOnSuccessListener { documentSnapshot ->
+
+                    if (documentSnapshot.exists()) {
+                        var single_comment = Comment(documentSnapshot.id, documentSnapshot.getString("comment").toString(), documentSnapshot.getTimestamp("createdAt"), documentSnapshot.getString("forumId").toString(), documentSnapshot.getString("userId").toString(), documentSnapshot.getString("username").toString());
+                        singleComment.value = single_comment;
+                    }
+
+
+                }
+                .addOnFailureListener {
+
+                }
+        }
+    }
 
     //Delete comment
     fun deleteComment (commentId : String, context: Context) {
