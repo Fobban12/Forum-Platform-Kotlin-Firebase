@@ -52,7 +52,7 @@ fun UpdateCommentScreen (navController: NavController, commentId : String, comme
 
     //Set effect to get single comment
     LaunchedEffect(commentId, commentViewModel) {
-        commentViewModel.getSingleForum(commentId);
+        commentViewModel.getSingleComment(commentId);
     }
 
     val singleComment = commentViewModel?.singleComment?.value;
@@ -70,7 +70,8 @@ fun UpdateCommentScreen (navController: NavController, commentId : String, comme
         comment.value?.trim()?.length?.let {
             it >= 5 // Set the minimum and maximum length of the comment
         }
-    } ?: false
+    } ?: false;
+
 
 
     Scaffold(
@@ -118,7 +119,7 @@ fun UpdateCommentScreen (navController: NavController, commentId : String, comme
                     if (!commentIsValid!! || !commentLengthIsValid) {
                         Toast.makeText(context, "Comment is invalid and it must include at least 5 characters", Toast.LENGTH_LONG).show()
                     } else {
-
+                        commentViewModel.updateComment(commentId, comment?.value?.trim().toString(), context = context);
                         navController.popBackStack();
                         Log.d("Successfully", "Successfully!")
                     }
