@@ -32,9 +32,9 @@ class CommentViewModel : ViewModel() {
     val singleComment: MutableLiveData<Comment?> = _singleComment;
 
     //Fetch single comment
-    fun getSingleForum (forumId : String) {
+    fun getSingleComment (commentId : String) {
         viewModelScope.launch {
-            commentDB.document(forumId).get()
+            commentDB.document(commentId).get()
                 .addOnSuccessListener { documentSnapshot ->
 
                     if (documentSnapshot.exists()) {
@@ -50,7 +50,22 @@ class CommentViewModel : ViewModel() {
         }
     }
 
-    //Delete comment
+    //Update comment
+    fun updateComment (commentId: String, commentInput : String, context: Context) {
+        viewModelScope.launch {
+            commentDB.document(commentId).get().addOnSuccessListener { querySnapShot ->
+                var updateComment = Comment(querySnapShot.id, commentInput, querySnapShot.getTimestamp("createdAt"), querySnapShot.getString("forumId").toString(), querySnapShot.getString("userId").toString(), querySnapShot.getString("username").toString());
+
+                comments.map { if (it?.id == updateComment.id) updateComment else it};
+
+                commentDB.document(commentId).set(updateComment).addOnCompleteListener {
+                    Toast.makeText(context, "Update comment successfully", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+//   Delete comment
     fun deleteComment (commentId : String, context: Context) {
         viewModelScope.launch {
             commentDB.document(commentId).delete();
