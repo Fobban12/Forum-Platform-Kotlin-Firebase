@@ -57,6 +57,42 @@ fun ChatScreen(
                 IconClick = {
                     navController.navigate(Screens.MainScreen.name)
                 })
+        },
+        bottomBar = {
+            OutlinedTextField(
+                value = message,
+                onValueChange = {
+                    chatVIewModel.updateMessage(it)
+                },
+                label = {
+                    Text(
+                        "Type Your Message"
+                    )
+                },
+                maxLines = 1,
+                modifier = Modifier
+                    .padding(horizontal = 15.dp, vertical = 1.dp)
+                    .fillMaxWidth(),
+                //.weight(weight = 0.09f,fill = true ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                singleLine = true,
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            chatVIewModel.addMessage()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = "Send Button"
+                        )
+                    }
+
+                }
+            )
+
         }
     ){it
         LazyColumn(
@@ -77,39 +113,7 @@ fun ChatScreen(
                 )
             }
         }
-        OutlinedTextField(
-            value = message,
-            onValueChange = {
-                chatVIewModel.updateMessage(it)
-            },
-            label = {
-                Text(
-                    "Type Your Message"
-                )
-            },
-            maxLines = 1,
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 1.dp)
-                .fillMaxWidth(),
-                //.weight(weight = 0.09f,fill = true ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            singleLine = true,
-            trailingIcon = {
-                IconButton(
-                    onClick = {
-                        chatVIewModel.addMessage()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = "Send Button"
-                    )
-                }
 
-            }
-        )
 
     }
 
