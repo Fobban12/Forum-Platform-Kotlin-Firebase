@@ -18,9 +18,18 @@ fun Navigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screens.MainScreen.name) {
-        composable(Screens.LoginScreen.name) {
-            LoginScreen(navController = navController)
+        val loginScreen = Screens.LoginScreen.name;
+        composable("$loginScreen/{isRegister}", arguments = listOf(navArgument("isRegister") {
+            type = NavType.StringType
+            nullable = true
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("isRegister").let {
+                LoginScreen(navController = navController, isRegister = it.toString())
+            }
         }
+//        composable(Screens.LoginScreen.name) {
+//            LoginScreen(navController = navController)
+//        }
         composable(Screens.MainScreen.name) {
             MainScreen(navController = navController)
         }

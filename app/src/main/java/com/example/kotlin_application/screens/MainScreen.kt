@@ -117,12 +117,22 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         contentDescription = "Go to settings screen",
                         icon = Icons.Default.Settings
                     ),
+
                     MenuItem(
-                        id = "profile",
-                        title = "Profile",
-                        contentDescription = "Go to profile screen",
-                        icon = Icons.Default.Image
-                    ),
+                            id = "profile",
+                            title = "Profile",
+                            contentDescription = "Go to profile screen",
+                            icon = Icons.Default.Image
+                        )
+                    ,
+                    MenuItem(
+                        id = "register",
+                        title = "Register",
+                        contentDescription = "Go to register screen",
+                        icon = Icons.Default.AppRegistration
+                    )
+                    ,
+
                     MenuItem(
                         id = "help",
                         title = "Help",
@@ -154,7 +164,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 //For going to the Login Page
                 if (it.id == "Login") {
                     navController.navigate(
-                        Screens.LoginScreen.name
+                        Screens.LoginScreen.name + "/false"
                     )
                 }
                 if (it.id == "Logout"){ FirebaseAuth.getInstance().signOut().run {
@@ -165,6 +175,11 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 if (it.id == "profile") {
                     navController.navigate(
                         Screens.ProfileScreen.name
+                    )
+                }
+                if (it.id == "register") {
+                    navController.navigate(
+                        Screens.LoginScreen.name + "/true"
                     )
                 }
                 println("Clicked on ${it.title}")

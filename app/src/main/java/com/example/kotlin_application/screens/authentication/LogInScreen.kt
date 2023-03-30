@@ -1,6 +1,7 @@
 package com.example.kotlin_application.screens.authentication
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -32,22 +33,39 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.AuthenticationViewModel
 import androidx.compose.material.TextFieldDefaults
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
 @ExperimentalComposeUiApi
 fun LoginScreen(
     navController: NavController,
-    viewModel: AuthenticationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: AuthenticationViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    isRegister: String
 ) {
+
+    //Check user is null
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    }
 
     //Set state for log in form
     val isLoginForm = rememberSaveable {
-        mutableStateOf(true)
+        mutableStateOf(if (isRegister == "true") false else true)
     }
 
     //Set context for toast
     val context = LocalContext.current
+
+
+    //Set effect to check user is logged in and now allowed to access log in page
+    LaunchedEffect(checkUserIsNull, isLoginForm.value) {
+        if (!checkUserIsNull && isLoginForm.value == true) {
+            navController.navigate(Screens.MainScreen.name);
+            Toast.makeText(context, "You are logged in already!", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
