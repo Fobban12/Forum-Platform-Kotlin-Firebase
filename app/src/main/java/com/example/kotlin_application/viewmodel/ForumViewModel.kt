@@ -134,7 +134,21 @@ class ForumViewModel : ViewModel() {
                     forums.add(forum)
                 }
 
-                val filteredForums = forums.filter { it?.title?.trim()?.toLowerCase()?.contains(keyword.toString().trim().toLowerCase()) as Boolean || it?.description?.trim()?.toLowerCase()?.contains(keyword.toString().trim().toLowerCase()) as Boolean }
+                val subKeywords : List<String> = keyword.split(" ").map { it.trim() };
+                Log.d("size", "${subKeywords.size}")
+                val filteredForums = forums.filter {
+                        it ->
+
+                    var check : Boolean = false;
+
+                    subKeywords.forEach { item ->
+                        if (it?.title?.trim()?.toLowerCase()?.contains(item.toString().trim().toLowerCase()) as Boolean || it?.description?.trim()?.toLowerCase()?.contains(item.toString().trim().toLowerCase()) as Boolean) {
+                            check = true;
+                        }}
+                    check;
+                }
+
+
                 forum.clear();
                 forum.addAll(filteredForums);
             }

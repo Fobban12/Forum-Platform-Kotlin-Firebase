@@ -162,6 +162,11 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         Screens.MainScreen.name
                     )
                 }}
+                if (it.id == "profile") {
+                    navController.navigate(
+                        Screens.ProfileScreen.name
+                    )
+                }
                 println("Clicked on ${it.title}")
             }
         },

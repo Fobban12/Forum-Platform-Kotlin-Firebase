@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Navigation
 import com.example.kotlin_application.ui.theme.KotlinApplicationTheme
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +54,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Composable
 fun Group10App() {
@@ -74,6 +77,7 @@ fun Group10App() {
     }
 }
 
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable

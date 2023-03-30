@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kotlin_application.screens.*
 import com.example.kotlin_application.screens.authentication.LoginScreen
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Composable
 fun Navigation() {
@@ -32,6 +34,10 @@ fun Navigation() {
         
         composable(Screens.ChatScreen.name){
             ChatScreen(navController = navController)
+        }
+
+        composable(Screens.ProfileScreen.name) {
+            ProfileScreen(navController = navController)
         }
 
         val updateCommentScreenName = Screens.UpdateCommentScreen.name;
