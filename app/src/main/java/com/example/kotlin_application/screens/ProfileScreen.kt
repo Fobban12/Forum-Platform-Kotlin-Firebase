@@ -82,7 +82,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
 
                 Column(
                         modifier = Modifier.fillMaxSize(),
-                        back
+
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                 ) {
