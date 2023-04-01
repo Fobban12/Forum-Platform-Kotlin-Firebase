@@ -6,10 +6,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,10 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.kotlin_application.navigation.Screens
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.example.kotlin_application.ui.theme.CameraXComposeTheme
 import com.example.kotlin_application.ui.theme.goldYellowHex
-import com.example.kotlin_application.ui.theme.lightGray
+import com.example.kotlin_application.ui.theme.neonGreen
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,6 +62,11 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
         //Set confid for screen
         val configuration = LocalConfiguration.current
 
+        //Expanded for top bar drop down
+        var expanded = remember {
+                mutableStateOf(false)
+        };
+
         val screenWidth = configuration.screenWidthDp.dp
         val displayMetrics = context.resources.displayMetrics
         val screenWidthInPixels = displayMetrics.widthPixels.toFloat()
@@ -72,17 +81,43 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
 
         //Set effect to fetch single user id
 
-        LaunchedEffect(uid, userProfileViewModel) {
+        LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
                 userProfileViewModel.fetchSingleUserProfile(uid as String);
         }
 
         //Get state from user profile from view model
         val single_user = userProfileViewModel.singleUserProfile;
 
+        Scaffold(
+                topBar = {
+                        TopAppBar(
+                                navigationIcon = {
+                                        IconButton(onClick = { navController.popBackStack() }) {
+                                                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Go Back")
+                                        }
+                                },
+                                title = {
+                                        Text(text = "User Profile Screen")
+                                },
+                                backgroundColor = MaterialTheme.colors.onBackground,
+                                contentColor = Color.White,
+                                actions = {
+                                        IconButton(onClick = { expanded.value = !expanded.value }) {
+                                                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null)
+                                        }
+                                        DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
+                                                DropdownMenuItem(onClick = { expanded.value = false; navController.navigate(Screens.UpdateUsernameScreen.name + "/${single_user.value?.id}")}) {
+                                                        Text("Update username")
+                                                }
 
+                                        }
+                                }
+                        )
+                },
+        ) {
+                it
                 Column(
                         modifier = Modifier.fillMaxSize(),
-
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                 ) {
@@ -91,11 +126,11 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                 modifier = Modifier
                                         .height(boxHeight)
                                         .width(boxHeight)
-                                        .padding(5.dp)
+                                        .padding(10.dp)
                                         .clip(shape = CircleShape)
                                         .border(
                                                 width = 1.dp,
-                                                color = Color.Gray,
+                                                color = MaterialTheme.colors.onBackground,
                                                 shape = CircleShape
                                         )
                         ) {
@@ -107,9 +142,9 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
 
                                         Column() {
                                                 Column(
-                                                        modifier = Modifier.fillMaxWidth().background(color = lightGray),
                                                         verticalArrangement = Arrangement.Center,
-                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                                        modifier = Modifier.fillMaxWidth()
                                                 ) {
                                                         if (single_user.value?.image != null) {
                                                                 Text(
@@ -135,6 +170,8 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         )
                 }
+        }
+
 
 
 }

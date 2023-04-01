@@ -2,6 +2,7 @@ package com.example.kotlin_application.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,6 +50,16 @@ fun Navigation() {
             ProfileScreen(navController = navController)
         }
 
+        val updateUserNameScreen = Screens.UpdateUsernameScreen.name
+        composable("$updateUserNameScreen/{userProfileId}", arguments = listOf(navArgument("userProfileId") {
+            type = NavType.StringType
+            nullable = true
+        })) { NavBackStackEntry ->
+            NavBackStackEntry.arguments?.getString("userProfileId").let {
+                UpdateUsernameScreen(navController = navController, userProfileId = it.toString())
+            }
+        }
+
         val updateCommentScreenName = Screens.UpdateCommentScreen.name;
         composable("$updateCommentScreenName/{commentId}", arguments = listOf(navArgument("commentId") {
             type = NavType.StringType
@@ -85,6 +96,8 @@ fun Navigation() {
                 CommentScreen(navController = navController, forumId = it.toString())
             }
         }
+
+
 
 
 
