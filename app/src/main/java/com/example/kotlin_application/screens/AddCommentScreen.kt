@@ -34,7 +34,11 @@ import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable
-fun AddCommentScreen (navController: NavController, forumId : String, viewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun AddCommentScreen (
+    navController: NavController,
+    forumId : String,
+    viewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel())
+{
 
     //On testing progressing with comments
 
@@ -85,14 +89,21 @@ fun AddCommentScreen (navController: NavController, forumId : String, viewModel:
                 modifier = Modifier.fillMaxWidth()
                     ) {
                 Spacer(modifier = Modifier.height(20.dp))
+
                 Text(text = "Add Comment", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground, fontSize = 35.sp, fontWeight = FontWeight.Bold), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+
                 Spacer(modifier = Modifier.height(20.dp))
-                OutlinedTextField(value = comment.value, onValueChange = {comment.value = it}, label = { Text(
-                    text = "Comment",
-                    color = MaterialTheme.colors.onBackground
-                )}, enabled = true, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done), keyboardActions = KeyboardActions(onDone = {
-                    keyboardController.clearFocus();
-                    Log.d("Comment value: ", "${comment.value}")
+
+                OutlinedTextField(
+                    value = comment.value,
+                    onValueChange = {comment.value = it},
+                    label = { Text(text = "Comment",
+                        color = MaterialTheme.colors.onBackground)},
+
+                    enabled = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { keyboardController.clearFocus();
+                    Log.d("Comment value: ", comment.value)
                 }), singleLine = false, modifier = Modifier.fillMaxWidth(), textStyle = androidx.compose.ui.text.TextStyle(
                     fontSize = 18.sp,
                     color = MaterialTheme.colors.onBackground
@@ -102,7 +113,9 @@ fun AddCommentScreen (navController: NavController, forumId : String, viewModel:
                         unfocusedBorderColor = Color.Gray,
                         disabledBorderColor = Color.LightGray
                     ))
+
                 Spacer(modifier = Modifier.height(50.dp))
+
                 Button(onClick = {
                     if (!commentIsValid || !commentLengthIsValid) {
                         Toast.makeText(context, "Comment is invalid and it must include at least 5 characters", Toast.LENGTH_LONG).show()

@@ -3,12 +3,7 @@ package com.example.kotlin_application.viewmodel
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.toLowerCase
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,12 +12,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class ForumViewModel : ViewModel() {
 
 
     //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
+
+    val forumDB = FirebaseFirestore.getInstance().collection("forum")
 
     var forum = mutableStateListOf<Forum>()
     private val _singleForum = MutableLiveData<Forum?>(null)
@@ -48,7 +44,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener { documentSnapshot ->
 
                     if (documentSnapshot.exists()) {
-                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getDate("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
+                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getTimestamp("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
                         singleForum.value = forum;
                     }
 
@@ -68,7 +64,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener {
                     val forums = mutableListOf<Forum>()
                     it.documents.forEach { doc ->
-                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getDate("createdAt"), doc.getString("userId"), doc.getString("username"))
+                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
                         forums.add(forum)
                     }
                     forum.clear();
@@ -130,7 +126,7 @@ class ForumViewModel : ViewModel() {
             FirebaseFirestore.getInstance().collection("forum").get().addOnSuccessListener {
                 val forums = mutableListOf<Forum>()
                 it.documents.forEach { doc ->
-                    var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getDate("createdAt"), doc.getString("userId"), doc.getString("username"))
+                    var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
                     forums.add(forum)
                 }
 
@@ -158,4 +154,20 @@ class ForumViewModel : ViewModel() {
         }
     }
 
-}
+    //For sending data to the database when a forum page is created by the User
+    fun createForum(forum:Forum, context: Context){
+        viewModelScope.launch {
+            forumDB.add(forum).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(context, "Added a new Forum!", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Failed to make a Forum", Toast.LENGTH_LONG).show()
+                }
+            }.addOnFailureListener {
+                Toast.makeText(context, "Failed to make a Forum!", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    }
+

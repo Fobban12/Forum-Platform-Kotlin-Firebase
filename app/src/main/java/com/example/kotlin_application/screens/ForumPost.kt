@@ -6,10 +6,10 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,23 +17,25 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
-import com.example.kotlin_application.screens.authentication.UserForm
-import com.google.protobuf.DescriptorProtos.FieldDescriptorProto.Label
+import com.example.kotlin_application.viewmodel.ForumViewModel
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 
 
 //This is for the screen to make a forum post and push the data to the database.
@@ -65,7 +67,7 @@ fun ForumPost(
 
             {
                 Text(text = "Topic Title:", modifier = Modifier.padding(bottom = 10.dp))
-                TestField()
+                TestField(navController)
                 TestImage()
             }
 
@@ -111,15 +113,59 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
     )
 
 }//Here would be the text field for the title
-@Composable
-fun TestField() {
-    var text by remember { mutableStateOf("") }
 
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text("Title") }
+@Composable
+fun TestField(
+    navController: NavController,
+    viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+
+    var title by remember { mutableStateOf("") }
+
+    val titleIsValid = remember(title){title.trim().isNotEmpty()}
+    val titleLengthIsValid = remember(title){title.trim().length >= 6}
+
+    val keyboardController = LocalFocusManager.current;
+
+    val context = LocalContext.current;
+
+    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+
+    val uid = FirebaseAuth.getInstance().uid.toString();
+
+    OutlinedTextField(
+        value = title,
+        onValueChange = { title = it },
+        label = { Text(text = "Title", color = MaterialTheme.colors.onBackground) },
+        enabled = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController.clearFocus();
+            Log.d("Title: ", title)
+        }), singleLine = false, modifier = Modifier.fillMaxWidth(), textStyle = TextStyle(
+            fontSize = 18.sp,
+            color = MaterialTheme.colors.onBackground
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = Color.Gray,
+            disabledBorderColor = Color.LightGray
+        )
+
     )
+
+    Button(onClick = {
+        if (!titleIsValid || !titleLengthIsValid) {
+            Toast.makeText(context, "Forum Title invalid", Toast.LENGTH_LONG).show()
+        } else {
+            val newForumPost = Forum(title = title.trim(), createdAt = Timestamp.now(), userId = uid, username = username)
+            viewModel.createForum(newForumPost, context);
+            navController.popBackStack();
+            Log.d("Successfully", "Successfully!")
+        }
+        keyboardController.clearFocus()
+    },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
+        Text(text = "Post", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+    }
 }
 
 @Composable
@@ -133,9 +179,7 @@ fun TestImage()
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
-
     Column(
-
     ) {
 
         imageUri?.let {

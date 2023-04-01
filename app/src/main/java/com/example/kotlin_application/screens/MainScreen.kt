@@ -186,6 +186,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
             }
         },
         floatingActionButton = { renderFloatingButtonAction(navController)},
+
         bottomBar = {
             BottomNavigationBar(
                 items = listOf(
@@ -228,7 +229,9 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 
             }
         }
+
     }
+
 }
 
 
@@ -238,6 +241,10 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 @ExperimentalComposeUiApi
 @Composable
 fun renderFloatingButtonAction(navController: NavController) {
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    }
+    if(!checkUserIsNull){
     FloatingActionButton(
         onClick = { navController.navigate(Screens.ForumPost.name) },
         shape = RoundedCornerShape(50.dp),
@@ -245,7 +252,8 @@ fun renderFloatingButtonAction(navController: NavController) {
         backgroundColor = MaterialTheme.colors.onBackground
     ) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = "Go to ForumPost")
-    }
+    }}
+
 }
 @ExperimentalComposeUiApi
 @Composable

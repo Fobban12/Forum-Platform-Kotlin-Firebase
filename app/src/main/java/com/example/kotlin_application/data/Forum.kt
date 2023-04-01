@@ -1,16 +1,16 @@
 package com.example.kotlin_application.data
 
 import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
+import com.google.firebase.Timestamp
 
 data class Forum(
     val id: String? = null,
     val title: String? = null,
-    val type: String?,
-    val description: String?,
-    val image: String?,
+    val type: String? = null,
+    val description: String? = null,
+    val image: String? = null,
     @ServerTimestamp
-    val createdAt : Date?,
+    val createdAt: Timestamp?,
     val userId: String?,
     val username: String?
     )
