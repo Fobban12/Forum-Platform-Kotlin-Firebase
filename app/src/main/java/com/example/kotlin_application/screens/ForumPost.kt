@@ -36,6 +36,9 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.util.*
 
 
 //This is for the screen to make a forum post and push the data to the database.
@@ -68,7 +71,6 @@ fun ForumPost(
             {
                 Text(text = "Topic Title:", modifier = Modifier.padding(bottom = 10.dp))
                 PostingForum(navController)
-                TestImage()
             }
 
         }
@@ -137,6 +139,17 @@ fun PostingForum(
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
     val uid = FirebaseAuth.getInstance().uid.toString();
 
+    //Image stuff
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            imageUri = uri
+        }
+
+    val ref: StorageReference = FirebaseStorage.getInstance().reference.child(UUID.randomUUID().toString())
+
+
 
     //Title Text field
     OutlinedTextField(
@@ -178,38 +191,8 @@ fun PostingForum(
         )
 
     )
-    Button(onClick = {
-        if (!titleIsValid || !titleLengthIsValid) {
-            Toast.makeText(context, "Forum Title invalid", Toast.LENGTH_LONG).show()
-        } else {
-            val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg", createdAt = Timestamp.now(), userId = uid, username = username)
-            viewModel.createForum(newForumPost, context);
-            navController.navigate(Screens.MainScreen.name);
-            Log.d("Successfully", "Successfully!")
-        }
-        keyboardController.clearFocus()
-    },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
-        Text(text = "Post", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-    }
-}
 
-@Composable
-fun TestImage()
-{
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val context = LocalContext.current
-    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-
-    val launcher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            imageUri = uri
-        }
-
-
-
-
-
-
+    //Image picker
     Column(
     ) {
 
@@ -226,18 +209,40 @@ fun TestImage()
                 Image(
                     bitmap = btm.asImageBitmap(),
                     contentDescription = "Added image",
-
-                )
+                    modifier = Modifier.size(200.dp)
+                    )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Button(onClick = { launcher.launch("image/*"); println(imageUri) }) {
+        Button(onClick = { launcher.launch("image/*");
+        }) {
             Text(text = "Pick Image")
         }
 
 
     }
-
+    Button(onClick = {imageUri?.let {
+        ref.putFile(it).addOnSuccessListener {
+            Toast.makeText(context, "Image Uploaded..", Toast.LENGTH_SHORT).show()
+        }
+            .addOnFailureListener {
+                Toast.makeText(context, "Fail to Upload Image..", Toast.LENGTH_SHORT)
+                    .show() }
+    }
+        if (!titleIsValid || !titleLengthIsValid || !descriptionIsValid || !descriptionLengthIsValid) {
+            Toast.makeText(context, "Forum Title invalid", Toast.LENGTH_LONG).show()
+        } else {
+            val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = imageUri.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
+            viewModel.createForum(newForumPost, context);
+            navController.navigate(Screens.MainScreen.name);
+            Log.d("Successfully", "Successfully!")
+        }
+        keyboardController.clearFocus()
+    },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
+        Text(text = "Post", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+    }
 }
+
+

@@ -11,7 +11,12 @@ import com.example.kotlin_application.data.Forum
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.launch
+import java.lang.ref.Reference
+import java.util.*
+
 
 class ForumViewModel : ViewModel() {
 
@@ -75,9 +80,12 @@ class ForumViewModel : ViewModel() {
     }
 
     //Delete forum
-    fun deleteForum (forumId: String, context: Context) {
+    fun deleteForum (forumId: String, context: Context, image: String?) {
+        var getImageString = image?.substringAfterLast("/")
+        println(getImageString)
         viewModelScope.launch {
             Firebase.firestore.collection("forum").document(forumId).delete();
+
             forum.removeIf { it.id == forumId };
             Toast.makeText(context, "Remove forum successfully!", Toast.LENGTH_LONG).show()
 
