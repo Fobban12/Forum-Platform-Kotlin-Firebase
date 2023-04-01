@@ -48,7 +48,7 @@ fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavCon
                 Text(text = "Are you sure you want to delete your forum with title ${item.title} you created?", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
             },
             confirmButton = {
-                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context) }, colors = ButtonDefaults.buttonColors(
+                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context, image = item?.image) }, colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
                     Text(text = "Yes, sure")
