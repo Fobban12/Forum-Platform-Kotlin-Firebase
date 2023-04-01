@@ -114,8 +114,17 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
         contentColor = MaterialTheme.colors.onSecondary
     )
 
-}//Here would be the text field for the title
 
+
+
+
+
+
+
+
+
+
+}//The function that is used to post the forum
 @Composable
 fun PostingForum(
     navController: NavController,
@@ -147,7 +156,7 @@ fun PostingForum(
             imageUri = uri
         }
 
-    val ref: StorageReference = FirebaseStorage.getInstance().reference.child(UUID.randomUUID().toString())
+    val ref: StorageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
 
 
 
@@ -196,7 +205,7 @@ fun PostingForum(
     Column(
     ) {
 
-        imageUri?.let {
+         imageUri?.let {
             if (Build.VERSION.SDK_INT < 28) {
                 bitmap.value = MediaStore.Images
                     .Media.getBitmap(context.contentResolver, it)
@@ -223,21 +232,24 @@ fun PostingForum(
 
 
     }
-    Button(onClick = {imageUri?.let {
-        ref.putFile(it).addOnSuccessListener {
-            Toast.makeText(context, "Image Uploaded..", Toast.LENGTH_SHORT).show()
-        }
-            .addOnFailureListener {
-                Toast.makeText(context, "Fail to Upload Image..", Toast.LENGTH_SHORT)
-                    .show() }
-    }
+    Button(onClick = {
+
+
         if (!titleIsValid || !titleLengthIsValid || !descriptionIsValid || !descriptionLengthIsValid) {
             Toast.makeText(context, "Forum Title invalid", Toast.LENGTH_LONG).show()
         } else {
-            val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = imageUri.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
-            viewModel.createForum(newForumPost, context);
-            navController.navigate(Screens.MainScreen.name);
-            Log.d("Successfully", "Successfully!")
+            imageUri?.let {
+                ref.putFile(it).addOnSuccessListener {
+                    val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = "https://firebasestorage.googleapis.com/v0/b/group10app-d57c0.appspot.com/o/images%2F8cbe5b23-51ae-4475-877d-908cc6ea41cc?alt=media&token=bf622d86-a2f4-48d4-b4d4-738b966ab1aa", createdAt = Timestamp.now(), userId = uid, username = username)
+                    viewModel.createForum(newForumPost, context);
+                    navController.navigate(Screens.MainScreen.name);
+                    Log.d("Successfully", "Successfully!")
+                }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Fail to Upload Image..", Toast.LENGTH_SHORT)
+                            .show() }
+            }
+
         }
         keyboardController.clearFocus()
     },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
