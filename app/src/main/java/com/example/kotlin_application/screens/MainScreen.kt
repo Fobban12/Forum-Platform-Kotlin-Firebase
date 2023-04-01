@@ -253,7 +253,6 @@ fun renderFloatingButtonAction(navController: NavController) {
     ) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = "Go to ForumPost")
     }}
-
 }
 @ExperimentalComposeUiApi
 @Composable

@@ -67,7 +67,7 @@ fun ForumPost(
 
             {
                 Text(text = "Topic Title:", modifier = Modifier.padding(bottom = 10.dp))
-                TestField(navController)
+                PostingForum(navController)
                 TestImage()
             }
 
@@ -115,24 +115,30 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
 }//Here would be the text field for the title
 
 @Composable
-fun TestField(
+fun PostingForum(
     navController: NavController,
     viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
+   //For the Title Text field
     var title by remember { mutableStateOf("") }
-
     val titleIsValid = remember(title){title.trim().isNotEmpty()}
     val titleLengthIsValid = remember(title){title.trim().length >= 6}
 
-    val keyboardController = LocalFocusManager.current;
+    //For the description Text field
+    var description by remember { mutableStateOf("") }
+    val descriptionIsValid = remember(title){title.trim().isNotEmpty()}
+    val descriptionLengthIsValid = remember(title){title.trim().length >= 3}
 
+
+    val keyboardController = LocalFocusManager.current;
     val context = LocalContext.current;
 
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
-
     val uid = FirebaseAuth.getInstance().uid.toString();
 
+
+    //Title Text field
     OutlinedTextField(
         value = title,
         onValueChange = { title = it },
@@ -152,14 +158,33 @@ fun TestField(
         )
 
     )
+    //Description Text field
+    OutlinedTextField(
+        value = description,
+        onValueChange = { description = it },
+        label = { Text(text = "Description", color = MaterialTheme.colors.onBackground) },
+        enabled = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController.clearFocus();
+            Log.d("Description: ", description)
+        }), singleLine = false, modifier = Modifier.fillMaxWidth(), textStyle = TextStyle(
+            fontSize = 18.sp,
+            color = MaterialTheme.colors.onBackground
+        ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = Color.Gray,
+            disabledBorderColor = Color.LightGray
+        )
 
+    )
     Button(onClick = {
         if (!titleIsValid || !titleLengthIsValid) {
             Toast.makeText(context, "Forum Title invalid", Toast.LENGTH_LONG).show()
         } else {
-            val newForumPost = Forum(title = title.trim(), createdAt = Timestamp.now(), userId = uid, username = username)
+            val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg", createdAt = Timestamp.now(), userId = uid, username = username)
             viewModel.createForum(newForumPost, context);
-            navController.popBackStack();
+            navController.navigate(Screens.MainScreen.name);
             Log.d("Successfully", "Successfully!")
         }
         keyboardController.clearFocus()
@@ -179,6 +204,12 @@ fun TestImage()
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
+
+
+
+
+
+
     Column(
     ) {
 
@@ -202,9 +233,11 @@ fun TestImage()
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Button(onClick = { launcher.launch("image/*") }) {
+        Button(onClick = { launcher.launch("image/*"); println(imageUri) }) {
             Text(text = "Pick Image")
         }
+
+
     }
 
 }
