@@ -129,6 +129,11 @@ fun MainScreen(navController: NavController,
             ) {
 
                 //For going to the Login Page
+                if (it.id == "home") {
+                    navController.navigate(
+                        Screens.MainScreen.name
+                    )
+                }
                 if (it.id == "Login") {
                     navController.navigate(
                         Screens.LoginScreen.name + "/false"
@@ -165,8 +170,8 @@ fun MainScreen(navController: NavController,
                     BottomNavItem(
                         name = "Chat",
                         route = "chat",
-                        icon = Icons.Default.Notifications,
-                        badgeCount = 23
+                        icon = Icons.Default.Chat,
+                        badgeCount = 0
                     ),
                     BottomNavItem(
                         name = "Search",
@@ -179,6 +184,7 @@ fun MainScreen(navController: NavController,
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
+                    if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
 
                 }
             )
