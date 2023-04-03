@@ -43,16 +43,20 @@ fun DrawerBody(
                     }
                     .padding(16.dp)
             ) {
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = item.contentDescription
-                )
+                item.icon?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = item.contentDescription
+                    )
+                }
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = item.title,
-                    style = itemTextStyle,
-                    modifier = Modifier.weight(1f)
-                )
+                item.title?.let {
+                    Text(
+                        text = it,
+                        style = itemTextStyle,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
     }
