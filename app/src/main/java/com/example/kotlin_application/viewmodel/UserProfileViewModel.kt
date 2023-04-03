@@ -44,7 +44,7 @@ class UserProfileViewModel : ViewModel() {
         }
     }
 
-    //Update new username profile based on single user profile id
+    //Update new username profile based on single user profile id to update username
     fun updateUsername (userProfileId: String, usernameInput : String, context: Context) {
         viewModelScope.launch {
             userProfileDB.document(userProfileId).get().addOnSuccessListener { querySnapshot ->
@@ -57,6 +57,22 @@ class UserProfileViewModel : ViewModel() {
             }
         }
     }
+
+    //Update new username profile based on single user profile id to update username
+    fun updateImage (userProfileId: String, imageUrl : String, context: Context) {
+        viewModelScope.launch {
+            userProfileDB.document(userProfileId).get().addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.exists()) {
+                    val updatedUsername = UserProfile(querySnapshot.id, querySnapshot.getString("username").toString(), image = imageUrl, querySnapshot.getString("userId").toString());
+                    userProfileDB.document(userProfileId).set(updatedUsername).addOnSuccessListener {
+                        Toast.makeText(context, "Update image for user profile successfully", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+
 
 
 }

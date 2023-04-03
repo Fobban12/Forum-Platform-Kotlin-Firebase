@@ -132,6 +132,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         icon = Icons.Default.AppRegistration
                     )
                     ,
+                    //Testing location
 
                     MenuItem(
                         id = "help",
@@ -182,6 +183,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         Screens.LoginScreen.name + "/true"
                     )
                 }
+
                 println("Clicked on ${it.title}")
             }
         },

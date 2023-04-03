@@ -139,4 +139,12 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.4.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.4.0")
     implementation("androidx.compose.runtime:runtime-rxjava2:1.4.0")
+    implementation 'com.google.maps.android:maps-compose:2.11.2'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // KTX for the Maps SDK for Android
+    implementation 'com.google.maps.android:maps-ktx:3.2.1'
+
+    // (Optional) KTX for the Maps SDK for Android Utility Library
+    implementation 'com.google.maps.android:maps-utils-ktx:3.2.1'
 }

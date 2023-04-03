@@ -49,6 +49,7 @@ fun Navigation() {
         composable(Screens.ProfileScreen.name) {
             ProfileScreen(navController = navController)
         }
+        
 
         val updateUserNameScreen = Screens.UpdateUsernameScreen.name
         composable("$updateUserNameScreen/{userProfileId}", arguments = listOf(navArgument("userProfileId") {
@@ -59,6 +60,8 @@ fun Navigation() {
                 UpdateUsernameScreen(navController = navController, userProfileId = it.toString())
             }
         }
+
+        
 
         val updateCommentScreenName = Screens.UpdateCommentScreen.name;
         composable("$updateCommentScreenName/{commentId}", arguments = listOf(navArgument("commentId") {
