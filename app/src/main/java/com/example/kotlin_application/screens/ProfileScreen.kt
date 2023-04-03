@@ -76,7 +76,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
         //Set current for Toast
         val context = LocalContext.current;
 
-        //Set confid for screen
+        //Set config for screen
         val configuration = LocalConfiguration.current
 
         //Expanded for top bar drop down
@@ -89,17 +89,6 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
         val displayMetrics = context.resources.displayMetrics
         val screenWidthInPixels = displayMetrics.widthPixels.toFloat()
 
-        //Set effect to check only user is allowed
-        LaunchedEffect(checkUserIsNull, navController) {
-                if (checkUserIsNull) {
-                        navController.popBackStack();
-                        Toast.makeText(
-                                context,
-                                "You are not logged in! So you cannot check your profile",
-                                Toast.LENGTH_LONG
-                        ).show();
-                }
-        }
 
         //Set effect to fetch single user id
 
@@ -159,7 +148,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                 topBar = {
                         TopAppBar(
                                 navigationIcon = {
-                                        IconButton(onClick = { navController.popBackStack() }) {
+                                        IconButton(onClick = {  navController.navigate(Screens.MainScreen.name) }) {
                                                 Icon(
                                                         imageVector = Icons.Default.ArrowBack,
                                                         contentDescription = "Go Back"
@@ -233,7 +222,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                                         horizontalAlignment = Alignment.CenterHorizontally,
                                                         modifier = Modifier.fillMaxWidth()
                                                 ) {
-                                                        if (single_user.value?.image != null || single_user.value?.image.toString().length != 0) {
+                                                        if (single_user.value?.image != null || single_user.value?.image.toString().isNotEmpty()) {
 
 
                                                                 val painterState = rememberImagePainter(
