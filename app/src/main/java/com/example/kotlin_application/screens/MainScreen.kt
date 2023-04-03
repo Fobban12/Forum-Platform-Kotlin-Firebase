@@ -162,6 +162,11 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
             ) {
 
                 //For going to the Login Page
+                if (it.id == "home") {
+                    navController.navigate(
+                        Screens.MainScreen.name
+                    )
+                }
                 if (it.id == "Login") {
                     navController.navigate(
                         Screens.LoginScreen.name + "/false"
