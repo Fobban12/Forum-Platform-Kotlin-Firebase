@@ -112,34 +112,20 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         contentDescription = "Go to home screen",
                         icon = Icons.Default.Home
                     ),
-                    MenuItem(
-                        id = "settings",
-                        title = "Settings",
-                        contentDescription = "Go to settings screen",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
-                        id = "register",
-                        title = "Register",
-                        contentDescription = "Go to register screen",
-                        icon = Icons.Default.AppRegistration
-                    )
-                    ,
-                    //Testing location
-                MenuItem(
+
+                    if(!checkUserIsNull){ MenuItem(
+
                         id = "profile",
                         title = "Profile",
                         contentDescription = "Go to profile screen",
                         icon = Icons.Default.Image
-                    ),
-
-
-                    MenuItem(
-                        id = "about",
-                        title = "About Us",
-                        contentDescription = "Get help",
-                        icon = Icons.Default.Info
-                    ),
+                    )} else (
+                            MenuItem(
+                                id = "register",
+                                title = "Register",
+                                contentDescription = "Register",
+                                icon = Icons.Default.AppRegistration
+                            )),
 
                     if(!checkUserIsNull){
                         MenuItem(
@@ -157,27 +143,30 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         )
 
                     },
-                    if(checkUserIsNull){
-                        MenuItem(
-                        id = "register",
-                        title = "Register",
-                        contentDescription = "Register",
-                        icon = Icons.Default.AppRegistration
-                    )} else {
-                        MenuItem(
-                            id = "",
-                            title = "",
-                            contentDescription = "Placeholder",
-                        )
+                    MenuItem(
+                        id = "settings",
+                        title = "Settings",
+                        contentDescription = "Go to settings screen",
+                        icon = Icons.Default.Settings
+                    ),
+                    MenuItem(
+                        id = "about",
+                        title = "About Us",
+                        contentDescription = "Get help",
+                        icon = Icons.Default.Info
+                    ),
 
-                    }
-
-                )
+                    ) as List<MenuItem>
 
 
             ) {
 
                 //For going to the Login Page
+                if (it.id == "home") {
+                    navController.navigate(
+                        Screens.MainScreen.name
+                    )
+                }
                 if (it.id == "Login") {
                     navController.navigate(
                         Screens.LoginScreen.name + "/false"
@@ -199,7 +188,6 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                     )
                 }
 
-                println("Clicked on ${it.title}")
             }
         },
         floatingActionButton = { renderFloatingButtonAction(navController)},
@@ -215,8 +203,8 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                     BottomNavItem(
                         name = "Chat",
                         route = "chat",
-                        icon = Icons.Default.Notifications,
-                        badgeCount = 23
+                        icon = Icons.Default.Chat,
+                        badgeCount = 0
                     ),
                     BottomNavItem(
                         name = "Search",
@@ -229,7 +217,8 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
-                    println("Clicked on ${it.name}")
+                    if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
+
                 }
             )
         }
