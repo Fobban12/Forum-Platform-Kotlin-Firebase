@@ -126,13 +126,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                             icon = Icons.Default.Image
                         )
                     ,
-                    MenuItem(
-                        id = "register",
-                        title = "Register",
-                        contentDescription = "Go to register screen",
-                        icon = Icons.Default.AppRegistration
-                    )
-                    ,
+
                     //Testing location
                 MenuItem(
                         id = "profile",

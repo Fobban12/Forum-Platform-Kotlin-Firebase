@@ -124,7 +124,6 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
         //Set launch effect
         LaunchedEffect(imageUri, single_user.value?.id) {
                 imageUri?.let {
-                        var randomUID = UUID.randomUUID()
                         ref.child("/users/$username/profile/profilePic/image")
                                 .putFile(it).addOnSuccessListener {
                                         val urlDownload =

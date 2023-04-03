@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.size.Size
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
@@ -181,6 +183,9 @@ fun PostingForum(
         )
 
     )
+
+    Spacer(modifier = Modifier.height(10.dp))
+
     //Description Text field
     OutlinedTextField(
         value = description,
@@ -188,7 +193,8 @@ fun PostingForum(
         label = { Text(text = "Description", color = MaterialTheme.colors.onBackground) },
         enabled = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController.clearFocus();
+        keyboardActions = KeyboardActions(onDone = { keyboardController.clearFocus()
+
             Log.d("Description: ", description)
         }), singleLine = false, modifier = Modifier.fillMaxWidth(), textStyle = TextStyle(
             fontSize = 18.sp,
@@ -204,6 +210,7 @@ fun PostingForum(
 
     //Image picker
     Column(
+
     ) {
 
          imageUri?.let {
@@ -233,6 +240,7 @@ fun PostingForum(
 
 
     }
+    Spacer(modifier = Modifier.height(12.dp))
     Button(onClick = {
 
         if (!titleIsValid || !titleLengthIsValid ) {
