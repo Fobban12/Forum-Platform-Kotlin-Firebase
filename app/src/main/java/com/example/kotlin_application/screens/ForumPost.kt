@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -155,8 +156,8 @@ fun PostingForum(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
-
-    val ref: StorageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
+    //Get storage reference
+    val ref: StorageReference = FirebaseStorage.getInstance().reference
 
 
 
@@ -234,21 +235,31 @@ fun PostingForum(
     }
     Button(onClick = {
 
-
-        if (!titleIsValid || !titleLengthIsValid || !descriptionIsValid || !descriptionLengthIsValid) {
+        if (!titleIsValid || !titleLengthIsValid ) {
             Toast.makeText(context, "Forum Title invalid", Toast.LENGTH_LONG).show()
-        } else {
-            imageUri?.let {
-                ref.putFile(it).addOnSuccessListener {
-                    val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = "https://firebasestorage.googleapis.com/v0/b/group10app-d57c0.appspot.com/o/images%2F8cbe5b23-51ae-4475-877d-908cc6ea41cc?alt=media&token=bf622d86-a2f4-48d4-b4d4-738b966ab1aa", createdAt = Timestamp.now(), userId = uid, username = username)
-                    viewModel.createForum(newForumPost, context);
-                    navController.navigate(Screens.MainScreen.name);
-                    Log.d("Successfully", "Successfully!")
-                }
+        }
+        else if (!descriptionIsValid || !descriptionLengthIsValid){
+            Toast.makeText(context, "Description is invalid", Toast.LENGTH_LONG).show()
+       }
+        else {
+             imageUri?.let {
+                 var randomUID = UUID.randomUUID()
+                 ref.child("/users/$username/forum/$randomUID/image").putFile(it).addOnSuccessListener {
+                     val urlDownload = ref.child("/users/$username/forum/$randomUID/image").downloadUrl
+                     urlDownload.addOnSuccessListener {
+                         val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = it.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
+                         viewModel.createForum(newForumPost, context);
+                         navController.navigate(Screens.MainScreen.name);
+                         Log.d("Success", "Success!") }
                     .addOnFailureListener {
-                        Toast.makeText(context, "Fail to Upload Image..", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, "Fail to post forum", Toast.LENGTH_SHORT)
                             .show() }
+
+
+                 }
+
             }
+
 
         }
         keyboardController.clearFocus()

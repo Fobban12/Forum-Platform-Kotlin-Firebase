@@ -80,9 +80,8 @@ class ForumViewModel : ViewModel() {
     }
 
     //Delete forum
-    fun deleteForum (forumId: String, context: Context, image: String?) {
-        var getImageString = image?.substringAfterLast("/")
-        println(getImageString)
+    fun deleteForum (forumId: String, context: Context) {
+
         viewModelScope.launch {
             Firebase.firestore.collection("forum").document(forumId).delete();
 
