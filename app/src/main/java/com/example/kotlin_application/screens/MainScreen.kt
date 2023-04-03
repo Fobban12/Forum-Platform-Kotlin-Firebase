@@ -45,6 +45,7 @@ import androidx.core.net.toUri
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.kotlin_application.ui.theme.goldYellowHex
+import com.example.kotlin_application.ui.theme.neonGreen
 import java.time.format.TextStyle
 
 
@@ -118,6 +119,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         icon = Icons.Default.Settings
                     ),
 
+
                     MenuItem(
 
                             id = "profile",
@@ -126,15 +128,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                             icon = Icons.Default.Image
                         )
                     ,
-
-                    //Testing location
-                MenuItem(
-                        id = "profile",
-                        title = "Profile",
-                        contentDescription = "Go to profile screen",
-                        icon = Icons.Default.Image
-                    ),
-
+                    
 
                     MenuItem(
                         id = "about",
@@ -241,13 +235,16 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
         //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
         //        Fetch single forum data with LazyColumn
 
-        LazyColumn(modifier = Modifier.padding(2.dp)) {
-            items(state) {
-                    item ->
-                SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
 
+            LazyColumn(modifier = Modifier.padding(2.dp)) {
+                items(state) {
+                        item ->
+                    SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
+
+                }
             }
-        }
+
+
 
     }
 
