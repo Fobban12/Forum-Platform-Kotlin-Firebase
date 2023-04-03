@@ -198,8 +198,8 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                     BottomNavItem(
                         name = "Chat",
                         route = "chat",
-                        icon = Icons.Default.Notifications,
-                        badgeCount = 23
+                        icon = Icons.Default.Chat,
+                        badgeCount = 0
                     ),
                     BottomNavItem(
                         name = "Search",
@@ -212,6 +212,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
+                    if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
 
                 }
             )

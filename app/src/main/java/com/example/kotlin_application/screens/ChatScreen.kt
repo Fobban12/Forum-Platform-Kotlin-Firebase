@@ -141,7 +141,7 @@ fun ChatScreenTopBar(navController: NavController, IconClick: () -> Unit)
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Text(text = "Chat Screen")
+                Text(text = "Chat Room")
             }
         },
         backgroundColor = MaterialTheme.colors.onBackground,
