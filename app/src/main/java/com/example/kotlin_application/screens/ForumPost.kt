@@ -247,7 +247,7 @@ fun PostingForum(
                  ref.child("/users/$username/forum/$randomUID/image").putFile(it).addOnSuccessListener {
                      val urlDownload = ref.child("/users/$username/forum/$randomUID/image").downloadUrl
                      urlDownload.addOnSuccessListener {
-                         val newForumPost = Forum(title = title.trim(), description = description.trim(), type = "Marketplace", image = it.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
+                         val newForumPost = Forum(title = title.trim(), description = description.trim(), id = randomUID.toString(), type = "Marketplace", image = it.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
                          viewModel.createForum(newForumPost, context);
                          navController.navigate(Screens.MainScreen.name);
                          Log.d("Success", "Success!") }
