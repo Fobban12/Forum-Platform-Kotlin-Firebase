@@ -119,26 +119,19 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                     ),
 
                     MenuItem(
-                            id = "profile",
-                            title = "Profile",
-                            contentDescription = "Go to profile screen",
-                            icon = Icons.Default.Image
-                        )
-                    ,
-                    MenuItem(
-                        id = "register",
-                        title = "Register",
-                        contentDescription = "Go to register screen",
-                        icon = Icons.Default.AppRegistration
-                    )
-                    ,
+                        id = "profile",
+                        title = "Profile",
+                        contentDescription = "Go to profile screen",
+                        icon = Icons.Default.Image
+                    ),
 
                     MenuItem(
-                        id = "help",
-                        title = "Help",
+                        id = "about",
+                        title = "About Us",
                         contentDescription = "Get help",
                         icon = Icons.Default.Info
                     ),
+
                     if(!checkUserIsNull){
                         MenuItem(
                             id = "Logout",
@@ -146,17 +139,31 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                             contentDescription = "Logout",
                             icon = Icons.Default.ExitToApp
                         )
-                    }
-                  else{
+                    } else {
                         MenuItem(
                             id = "Login",
                             title = "Login",
                             contentDescription = "Logout",
                             icon = Icons.Default.AccountBox
                         )
+
+                    },
+                    if(checkUserIsNull){
+                        MenuItem(
+                        id = "register",
+                        title = "Register",
+                        contentDescription = "Register",
+                        icon = Icons.Default.AppRegistration
+                    )} else {
+                        MenuItem(
+                            id = "",
+                            title = "",
+                            contentDescription = "Placeholder",
+                        )
+
                     }
 
-                ) as List<MenuItem>
+                )
 
 
             ) {
