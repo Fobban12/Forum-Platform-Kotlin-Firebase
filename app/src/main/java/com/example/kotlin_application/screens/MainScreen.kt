@@ -178,13 +178,7 @@ fun MainScreen(navController: NavController,
                         route = "search",
                         icon = Icons.Default.Search,
                         badgeCount = 0
-                    ),
-                    BottomNavItem(
-                        name = "Forum",
-                        route = "forum",
-                        icon = Icons.Default.Forum,
-                        badgeCount = 0
-                    ),
+                    )
                 ),
                 navController = navController,
                 onItemClick = {
