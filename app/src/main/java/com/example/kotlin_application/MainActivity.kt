@@ -3,6 +3,7 @@ package com.example.kotlin_application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Navigation
 import com.example.kotlin_application.ui.theme.KotlinApplicationTheme
+import com.example.kotlin_application.ui.theme.neonGreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @ExperimentalPermissionsApi
@@ -45,7 +47,8 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colors.background,
+                    contentColor = MaterialTheme.colors.background
                 ) {
                     Group10App()
                 }
@@ -67,7 +70,8 @@ fun Group10App() {
         Column(
             modifier = Modifier
                 .padding(2.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+            ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
 
