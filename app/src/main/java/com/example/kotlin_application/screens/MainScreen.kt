@@ -10,6 +10,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kotlin_application.data.BottomNavItem
@@ -160,6 +162,7 @@ fun MainScreen(navController: NavController,
 
         floatingActionButton = { renderFloatingButtonAction(navController)},
         bottomBar = {
+            Modifier.padding(top = 100.dp)
             BottomNavigationBar(
                 items = listOf(
                     BottomNavItem(
@@ -185,14 +188,14 @@ fun MainScreen(navController: NavController,
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
-                    if(it.name == "Forum"){ navController.navigate(Screens.ForumPost.name)}
                 }
             )
         }
     ) {
         it
-        //        Fetch single forum data with LazyColumn
-            LazyColumn(modifier = Modifier.padding(2.dp)) {
+
+        //Fetch single forum data with LazyColumn
+            LazyColumn(modifier = Modifier.padding(2.dp).padding(it)) {
                 items(state) {
                         item ->
                     SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
@@ -208,7 +211,8 @@ fun MainScreen(navController: NavController,
 }
 
 //Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
-//template. !!!PLACEHOLDER!!!
+//Marketplace is done but Forum template still needs to be done.
+//Two buttons will be done when the other template is.
 @ExperimentalComposeUiApi
 @Composable
 fun renderFloatingButtonAction(navController: NavController) {
