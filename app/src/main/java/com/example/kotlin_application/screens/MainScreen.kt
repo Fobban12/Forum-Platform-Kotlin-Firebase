@@ -179,13 +179,19 @@ fun MainScreen(navController: NavController,
                         icon = Icons.Default.Search,
                         badgeCount = 0
                     ),
+                    BottomNavItem(
+                        name = "Forum",
+                        route = "forum",
+                        icon = Icons.Default.Forum,
+                        badgeCount = 0
+                    ),
                 ),
                 navController = navController,
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
-
+                    if(it.name == "Forum"){ navController.navigate(Screens.ForumPost.name)}
                 }
             )
         }
