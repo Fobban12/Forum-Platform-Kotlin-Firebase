@@ -24,6 +24,10 @@ import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import coil.annotation.ExperimentalCoilApi
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 
 
 @ExperimentalCoilApi
@@ -31,7 +35,7 @@ import coil.annotation.ExperimentalCoilApi
 @Composable
 fun MainScreen(navController: NavController,
                viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-
+               userProfileViewModel: UserProfileViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 
 ) {
 
@@ -48,10 +52,22 @@ fun MainScreen(navController: NavController,
     }
 
     //Get uid from firebase
-    val uid = FirebaseAuth.getInstance().uid;
+    val uid = FirebaseAuth.getInstance().uid.toString();
 
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+
+
+
+    //Set effect to set username for title bar
+    //Set effect to fetch single user id
+
+    LaunchedEffect(uid, userProfileViewModel, checkUserIsNull) {
+        userProfileViewModel.fetchSingleUserProfile(uid);
+    }
+
+    //Get state from user profile from view model
+//    val single_user = userProfileViewModel.singleUserProfile;
+
+    val single_user = userProfileViewModel.singleUserProfile.observeAsState();
 
 
 
@@ -59,7 +75,7 @@ fun MainScreen(navController: NavController,
         scaffoldState = scaffoldState,
         topBar = {
             renderTopAppBar(
-                username,
+                single_user.value?.username,
                 checkUserIsNull,
                 navController,
                 onNavigationIconClick = {
@@ -195,7 +211,9 @@ fun MainScreen(navController: NavController,
         it
 
         //Fetch single forum data with LazyColumn
-            LazyColumn(modifier = Modifier.padding(2.dp).padding(it)) {
+            LazyColumn(modifier = Modifier
+                .padding(2.dp)
+                .padding(it)) {
                 items(state) {
                         item ->
                     SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
@@ -203,6 +221,8 @@ fun MainScreen(navController: NavController,
 
                 }
             }
+        
+
 
 
 

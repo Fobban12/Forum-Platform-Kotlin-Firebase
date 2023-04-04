@@ -109,7 +109,7 @@ fun UpdateUsernameScreen (navController: NavController, userProfileId : String, 
                     }
                     keyboardController.clearFocus()
                 },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
-                    Text(text = "Update Comment", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    Text(text = "Update Username", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 }
             }
         }

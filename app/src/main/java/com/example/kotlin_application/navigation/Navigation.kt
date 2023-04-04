@@ -1,7 +1,9 @@
 package com.example.kotlin_application.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,13 +12,17 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.kotlin_application.screens.*
 import com.example.kotlin_application.screens.authentication.LoginScreen
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Composable
-fun Navigation() {
+fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
     val navController = rememberNavController()
+
+    val uid = FirebaseAuth.getInstance().uid.toString();
 
     NavHost(navController = navController, startDestination = Screens.MainScreen.name) {
         val loginScreen = Screens.LoginScreen.name;
@@ -32,6 +38,10 @@ fun Navigation() {
 //            LoginScreen(navController = navController)
 //        }
         composable(Screens.MainScreen.name) {
+
+            LaunchedEffect(uid, userProfileViewModel) {
+                userProfileViewModel.fetchSingleUserProfile(uid)
+            }
             MainScreen(navController = navController)
         }
 
