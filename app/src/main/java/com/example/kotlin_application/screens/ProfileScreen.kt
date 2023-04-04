@@ -239,7 +239,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                                                 )
 
 
-                                                        } 
+                                                        }
                                                 }
 
 
@@ -248,7 +248,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                 }
                         }
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(text = "No avatar upload yet or want to upload new image! Please click on the circle", modifier = Modifier.padding(10.dp),  style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Center))
+                        Text(text = "No avatar uploaded yet? Or do you want to upload a new image? Please click on the circle", modifier = Modifier.padding(10.dp),  style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Center))
                         Spacer(modifier = Modifier.height(30.dp))
                         Text(
                                 text = "Username: ${single_user.value?.username}",

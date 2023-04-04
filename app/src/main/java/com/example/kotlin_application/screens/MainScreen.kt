@@ -1,28 +1,17 @@
 package com.example.kotlin_application.screens
 
-import android.content.ContentResolver
-import android.net.Uri
-import android.provider.MediaStore
-import android.provider.MediaStore.Audio.Media
-import android.util.Log
-import android.widget.ScrollView
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kotlin_application.data.BottomNavItem
@@ -34,39 +23,20 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-import java.io.File
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import com.example.kotlin_application.ui.theme.goldYellowHex
-import com.example.kotlin_application.ui.theme.neonGreen
-import java.time.format.TextStyle
 
 
 @ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @Composable
-fun MainScreen(navController: NavController, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-//
-//    LaunchedEffect(key1 = true) {
-//        if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()) {
-//            navController.navigate(Screens.LoginScreen.name)
-//        } else {
-//            navController.navigate(Screens.MainScreen.name)
-//            Log.d("Firebase", FirebaseAuth.getInstance().currentUser?.email.toString());
-//        }
-//    }
+fun MainScreen(navController: NavController,
+               viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 
+
+) {
 
     //List of forum data
     val state = viewModel.forum;
-
 
     //Scaffold
     val scaffoldState = rememberScaffoldState()
@@ -82,7 +52,6 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 
     //Get username from firebase
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
-
 
 
 
@@ -156,7 +125,7 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         icon = Icons.Default.Info
                     ),
 
-                    ) as List<MenuItem>
+                    )
 
 
             ) {
@@ -190,9 +159,10 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 
             }
         },
-        floatingActionButton = { renderFloatingButtonAction(navController)},
 
+        floatingActionButton = { renderFloatingButtonAction(navController)},
         bottomBar = {
+            Modifier.padding(top = 100.dp)
             BottomNavigationBar(
                 items = listOf(
                     BottomNavItem(
@@ -211,28 +181,25 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
                         route = "search",
                         icon = Icons.Default.Search,
                         badgeCount = 0
-                    ),
+                    )
                 ),
                 navController = navController,
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
-
                 }
             )
         }
     ) {
         it
 
-        //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
-        //        Fetch single forum data with LazyColumn
-
-
-            LazyColumn(modifier = Modifier.padding(2.dp)) {
+        //Fetch single forum data with LazyColumn
+            LazyColumn(modifier = Modifier.padding(2.dp).padding(it)) {
                 items(state) {
                         item ->
                     SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
+                    Spacer(modifier = Modifier.height(20.dp))
 
                 }
             }
@@ -243,10 +210,9 @@ fun MainScreen(navController: NavController, viewModel: ForumViewModel = android
 
 }
 
-
-
 //Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
-//template. !!!PLACEHOLDER!!!
+//Marketplace is done but Forum template still needs to be done.
+//Two buttons will be done when the other template is.
 @ExperimentalComposeUiApi
 @Composable
 fun renderFloatingButtonAction(navController: NavController) {
