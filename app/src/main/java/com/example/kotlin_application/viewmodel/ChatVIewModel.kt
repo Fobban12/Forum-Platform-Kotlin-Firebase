@@ -1,15 +1,21 @@
 package com.example.kotlin_application.viewmodel
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.kotlin_application.data.ChatInput
 import com.example.kotlin_application.data.Constants
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.lang.IllegalArgumentException
+import kotlin.collections.*
 
 class ChatVIewModel: ViewModel(){
     init {
@@ -18,8 +24,14 @@ class ChatVIewModel: ViewModel(){
     private val _message = MutableLiveData("")
     val message: LiveData<String> = _message
 
+    //Chat collection from Firestore
+    val chatDB = Firebase.firestore.collection("chat");
+
     private var _messages = MutableLiveData(emptyList<Map<String, Any>>().toMutableList())
     val messages: LiveData<MutableList<Map<String, Any>>> = _messages
+
+    //Chat collection from firestore
+
 
     //Update the message value as user types
 
@@ -28,8 +40,49 @@ class ChatVIewModel: ViewModel(){
 }
 
 
-//send message
+    //Create room or add message to created room
+    fun createOrUpdateRoom (userIds: List<String>, context: Context) {
 
+        chatDB.get().addOnSuccessListener { querySnapShot ->
+            var check : Boolean = false;
+            querySnapShot.documents.forEach { document ->
+                val arrayUserIds : List<String> = document.get("userIds") as ArrayList<String>;
+                Log.d("arrayOfUserIds", "${arrayUserIds} and ${userIds}")
+                if (userIds.all { it -> arrayUserIds.contains(it) }) {
+                    check = true
+
+                }
+            }
+
+            var newText : String = "";
+            userIds.forEachIndexed { index, it ->
+                if (index == userIds.size - 1) {
+                    newText += "user with id: " + it + "";
+                } else {
+                    newText += "user with id: " + it + " and "
+                }
+            }
+
+
+            if (!check) {
+                val newChatRoom = ChatInput(userIds = userIds, messages = listOf(), Timestamp.now());
+                chatDB.add(newChatRoom).addOnSuccessListener {
+                    Log.d("Create new room", "Create a new room successfully!");
+                    Toast.makeText(context, "Room not yet created! Create new room! Move to a single chat screen of ${newText}", Toast.LENGTH_LONG).show();
+                }
+            } else {
+
+                Toast.makeText(context, "Move to a single chat screen of ${newText}", Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+
+    }
+
+
+
+//send message
 
 fun addMessage() {
     val message: String = _message.value ?: throw IllegalArgumentException("message empty")

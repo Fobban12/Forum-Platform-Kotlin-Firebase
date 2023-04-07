@@ -1,5 +1,8 @@
 package com.example.kotlin_application.navigation
 
+import android.net.Uri
+import android.os.Parcelable
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -10,11 +13,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.versionedparcelable.VersionedParcelize
 import com.example.kotlin_application.screens.*
 import com.example.kotlin_application.screens.authentication.LoginScreen
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.firebase.auth.FirebaseAuth
+
+
 
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
@@ -58,6 +64,24 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
 
         composable(Screens.ProfileScreen.name) {
             ProfileScreen(navController = navController)
+        }
+
+        val contactScreen = Screens.ContactScreen.name;
+        composable("$contactScreen/{chatId}/{userIds}", arguments = listOf(navArgument("userIds") {
+            type = NavType.StringType
+            nullable = true
+            defaultValue = null
+        }, navArgument("chatId") {
+            type = NavType.StringType
+            nullable = true
+            defaultValue = null
+        }
+        )) { backStackEntry ->
+
+            val strings = backStackEntry.arguments?.getString("userIds")?.split(",")?.toMutableList();
+            Log.d("Size", "${strings}")
+            val chatId = backStackEntry.arguments?.getString("chatId");
+            ContactScreen(navController = navController, userIds = strings, chatId = chatId);
         }
         
 

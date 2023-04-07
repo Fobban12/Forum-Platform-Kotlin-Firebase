@@ -48,6 +48,7 @@ import com.example.kotlin_application.data.Like
 import com.example.kotlin_application.data.LikeInput
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
+import com.example.kotlin_application.viewmodel.ChatVIewModel
 import com.example.kotlin_application.viewmodel.CommentViewModel
 import com.example.kotlin_application.viewmodel.ForumViewModel
 import com.example.kotlin_application.viewmodel.LikeViewModel
@@ -56,7 +57,7 @@ import com.google.firebase.firestore.QuerySnapshot
 
 @ExperimentalComposeUiApi
 @Composable
-fun SingleForumScreen (navController: NavController, forumId: String, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), likeViewModel: LikeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun SingleForumScreen (navController: NavController, forumId: String, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), likeViewModel: LikeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), chatVIewModel: ChatVIewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 
     //Test with single forum screen based on dummy data
 
@@ -73,6 +74,10 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
     LaunchedEffect(forumId, likeViewModel ) {
         likeViewModel.fetchLikes(forumId);
     }
+
+    //Set image height based on screen height
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val buttonWidth = with(LocalDensity.current) { screenHeight * 0.3f }
 
 
     //Single forum data
@@ -211,6 +216,26 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
                     Text(text = "Click to see comments", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp), textAlign = TextAlign.Center)
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+
+                if (uid != singleForum.value?.userId) {
+                    Row(horizontalArrangement = Arrangement.Start) {
+                        Button(onClick = {
+                                         val userIds = mutableListOf<String>();
+                            userIds.add(uid.toString());
+                            userIds.add(singleForum.value?.userId as String);
+                            chatVIewModel.createOrUpdateRoom(userIds, context = context);
+
+                            val navArgs = listOf(userIds.joinToString(","))
+                            Log.d("navArgs", "${navArgs}")
+                            navController.navigate(Screens.ContactScreen.name + "/null/${navArgs}")
+                        }, modifier = Modifier.width(buttonWidth), colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.onBackground,
+                            contentColor = Color.White)) {
+                            Text(text = "Click to contact", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp), textAlign = TextAlign.Center)
+                        }
+                    }
                 }
 
 
