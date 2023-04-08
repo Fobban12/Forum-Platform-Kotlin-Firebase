@@ -78,8 +78,8 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
         }
         )) { backStackEntry ->
 
-            val strings = backStackEntry.arguments?.getString("userIds")?.split(",")?.toMutableList();
-            Log.d("Size", "${strings}")
+            val strings = backStackEntry.arguments?.getString("userIds")?.replace("[", "")?.replace("]", "")?.split(",");
+
             val chatId = backStackEntry.arguments?.getString("chatId");
             ContactScreen(navController = navController, userIds = strings, chatId = chatId);
         }

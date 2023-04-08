@@ -229,7 +229,9 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
 
                             val navArgs = listOf(userIds.joinToString(","))
                             Log.d("navArgs", "${navArgs}")
-                            navController.navigate(Screens.ContactScreen.name + "/null/${navArgs}")
+//                            navController.navigate(Screens.ContactScreen.name + "/1/null")
+                            navController.navigate(Screens.ContactScreen.name + "/null/${navArgs}");
+//                            navController.navigate(Screens.ContactScreen.name + "/1/null")
                         }, modifier = Modifier.width(buttonWidth), colors = ButtonDefaults.buttonColors(
                             backgroundColor = MaterialTheme.colors.onBackground,
                             contentColor = Color.White)) {

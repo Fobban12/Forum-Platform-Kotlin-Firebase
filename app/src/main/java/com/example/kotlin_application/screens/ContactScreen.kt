@@ -1,5 +1,9 @@
 package com.example.kotlin_application.screens
 
+import android.content.Context
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,29 +14,45 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
 
-@ExperimentalComposeUiApi
+
 @Composable
-fun ContactScreen (navController: NavController, userIds : List<String>?, chatId : String?) {
+fun ContactScreen (navController: NavController, userIds: List<String>?, chatId : String?) {
+
+
+
     val chatViewModel : ChatVIewModel = viewModel();
     val message = remember {
         mutableStateOf("");
     }
-    Log.d("userIds", "${userIds}")
+
+    //Set context for Toast
+    val context = LocalContext.current;
+
+    LaunchedEffect(chatId) {
+        if (chatId != "null") {
+            chatViewModel.fetchRoomWithRoomId(chatId as String);
+        } else {
+            chatViewModel.fetchRoomBasedOnUserIds(userIds as List<String>, context);
+            Log.d("user ids::", "${userIds}")
+        }
+    }
+    Log.d("user ids::", "${userIds}")
+    val single_chat = chatViewModel.singleChatroom;
 
     Scaffold(
         topBar = {
@@ -61,7 +81,7 @@ fun ContactScreen (navController: NavController, userIds : List<String>?, chatId
             OutlinedTextField(
                 value = message.value,
                 onValueChange = {
-                                message.value = it
+                    message.value = it
                 },
                 label = {
                     Text(
@@ -77,7 +97,7 @@ fun ContactScreen (navController: NavController, userIds : List<String>?, chatId
                     keyboardType = KeyboardType.Text
                 ),
                 placeholder = {
-                       Text(text = "Enter your message...!", style = TextStyle(color = goldYellowHex))
+                    Text(text = "Enter your message...!", style = TextStyle(color = goldYellowHex))
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = MaterialTheme.colors.onBackground,
@@ -104,8 +124,6 @@ fun ContactScreen (navController: NavController, userIds : List<String>?, chatId
         }
     ) {
         it
+        Text(text = "${chatId} and ${single_chat.value}")
     }
-
 }
-
-
