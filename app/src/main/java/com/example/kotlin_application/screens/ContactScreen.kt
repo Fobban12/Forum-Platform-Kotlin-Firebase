@@ -27,6 +27,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kotlin_application.data.Chat
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
@@ -54,11 +55,10 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
             Log.d("user ids::", "${userIds}")
         }
     };
+    
+    //Set state for that single chat room
 
-
-
-
-
+    val single_chat_room: Chat? = chatViewModel.chatRooms.firstOrNull()
 
 
 
@@ -132,10 +132,9 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
         }
     ) {
         it
-        LazyColumn() {
-            items(chatViewModel.chatRooms) {
-                item -> Text(text = "${item?.id} and ${item?.createdAt}")
-            }
-        }
+
+
+        Text(text = "${single_chat_room?.id}")
+       
     }
 }
