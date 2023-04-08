@@ -24,13 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_application.data.Chat
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -132,9 +135,33 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
         }
     ) {
         it
+        
+        Column(modifier = Modifier
+            .padding(4.dp)
+            .fillMaxWidth()) {
 
+            single_chat_room?.let { room ->
+                if (room.messages?.isEmpty() as Boolean) {
+                    Text(
+                        text = "There are no messages yet",
+                        modifier = Modifier.fillMaxWidth(),
+                        style = TextStyle(
+                            color = MaterialTheme.colors.onBackground,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            fontSize = 20.sp
+                        )
+                    )
+                } else {
+                    LazyColumn() {
+                        items(room.messages) { message ->
+                            SingleMessage(messageId = message)
+                        }
+                    }
+                }
+            }
 
-        Text(text = "${single_chat_room?.id}")
+        }
        
     }
 }
