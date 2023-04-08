@@ -86,9 +86,10 @@ class ChatVIewModel: ViewModel(){
     //Fetch room based on userIds array string
     fun fetchRoomBasedOnUserIds (userIds: List<String>, context: Context) {
         viewModelScope.launch {
-            Log.d("Fetch Room", "Based Room")
 
-            chatDB.whereIn("userIds", userIds).get().addOnSuccessListener { querySnapshot ->
+            var list = listOf(userIds);
+
+            chatDB.whereIn("userIds", list).get().addOnSuccessListener { querySnapshot ->
                 val documents = querySnapshot.documents;
 
                 val getChatRooms = mutableStateListOf<Chat?>();

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -43,6 +45,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
     //Set context for Toast
     val context = LocalContext.current;
 
+    //Set effect to get chat room
     LaunchedEffect(chatId) {
         if (chatId != "null") {
             chatViewModel.fetchRoomWithRoomId(chatId as String);
@@ -50,9 +53,14 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
             chatViewModel.fetchRoomBasedOnUserIds(userIds as List<String>, context);
             Log.d("user ids::", "${userIds}")
         }
-    }
-    Log.d("user ids::", "${userIds}")
-    val single_chat = chatViewModel.singleChatroom;
+    };
+
+
+
+
+
+
+
 
     Scaffold(
         topBar = {
@@ -124,6 +132,10 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
         }
     ) {
         it
-        Text(text = "${chatId} and ${single_chat.value}")
+        LazyColumn() {
+            items(chatViewModel.chatRooms) {
+                item -> Text(text = "${item?.id} and ${item?.createdAt}")
+            }
+        }
     }
 }
