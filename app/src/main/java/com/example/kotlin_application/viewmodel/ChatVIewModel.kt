@@ -65,6 +65,11 @@ class ChatVIewModel: ViewModel(){
                     val stringArray = arrayMessages?.toTypedArray()
                     stringArray?.let { it + createdMessage.id }?.let { updatedStringArray ->
                         Toast.makeText(context, "${updatedStringArray}", Toast.LENGTH_LONG).show();
+                        val newChatRooms = mutableStateListOf<Chat?>()
+                        val updatedChatRoom = Chat(chatId, it.get("userIds") as List<String>, updatedStringArray.toList(), it.getTimestamp("createdAt"));
+                        newChatRooms.add(updatedChatRoom)
+                        chatRooms.clear();
+                        chatRooms.addAll(newChatRooms);
                         chatDB.document(chatId).update("messages", updatedStringArray?.toList()).addOnCompleteListener { it ->
                             if (it.isSuccessful) {
                                 Toast.makeText(context, "Add messages succesfully", Toast.LENGTH_LONG).show();
