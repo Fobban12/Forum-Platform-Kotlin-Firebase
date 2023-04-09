@@ -36,9 +36,6 @@ class ChatVIewModel: ViewModel(){
     private var _messages = MutableLiveData(emptyList<Map<String, Any>>().toMutableList())
     val messages: LiveData<MutableList<Map<String, Any>>> = _messages
 
-    //Set value for single chat room
-    private val _singleChatroom = MutableLiveData<Chat?>(null)
-    val singleChatroom: MutableLiveData<Chat?> = _singleChatroom;
 
     //Set value for single message
     private val _singleMessage = MutableLiveData<Message?>(null)
@@ -81,6 +78,8 @@ class ChatVIewModel: ViewModel(){
             }
         }
     }
+
+
 
     //Fetch single message based on message id
     fun fetchSingleMessage (messageId : String , context: Context) {
