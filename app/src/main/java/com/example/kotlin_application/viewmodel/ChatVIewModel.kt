@@ -72,16 +72,6 @@ class ChatVIewModel: ViewModel(){
                         }
 
                     }
-//                    singleChatroom.value?.messages?.plus(createdMessage.id);
-//                    chatRooms.map { room -> if (room?.id == it.id) room.messages?.plus(createdMessage.id) else room }
-
-//                    val newChatUpdateWithMessages = Chat(it.id, it.get("userIds") as List<String>, stringArray?.toList(), it.getTimestamp("createdAt"));
-
-//                    chatDB.document(chatId).set(newChatUpdateWithMessages).addOnCompleteListener { it ->
-//                        if (it.isSuccessful) {
-//                            Toast.makeText(context, "Add message successfully", Toast.LENGTH_LONG).show();
-//                        }
-//                    }
                 }
             }
         }
