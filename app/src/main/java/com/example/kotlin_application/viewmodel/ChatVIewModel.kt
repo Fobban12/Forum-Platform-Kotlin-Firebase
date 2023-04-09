@@ -56,18 +56,32 @@ class ChatVIewModel: ViewModel(){
     fun addMessagesToChatRoom (messageInput: MessageInput, chatId: String, context: Context) {
 
         viewModelScope.launch {
+
             messageDB.add(messageInput).addOnSuccessListener { it ->
                 val createdMessage = Message(it.id, messageInput.content, messageInput.senderId, messageInput.createdAt);
+
                 chatDB.document(chatId).get().addOnSuccessListener { it ->
-                    val arrayMessages = it.get("messages") as List<String>;
-                    arrayMessages.plus(createdMessage.id);
-                    singleChatroom.value?.messages?.plus(createdMessage.id);
-                    val newChatUpdateWithMessages = Chat(it.id, it.get("userIds") as List<String>, arrayMessages, it.getTimestamp("createdAt"));
-                    chatDB.document(chatId).set(newChatUpdateWithMessages).addOnCompleteListener { it ->
-                        if (it.isSuccessful) {
-                            Toast.makeText(context, "Add message successfully", Toast.LENGTH_LONG).show();
+                    val arrayMessages = it.get("messages") as? ArrayList<String>;
+                    val stringArray = arrayMessages?.toTypedArray()
+                    stringArray?.let { it + createdMessage.id }?.let { updatedStringArray ->
+                        Toast.makeText(context, "${updatedStringArray}", Toast.LENGTH_LONG).show();
+                        chatDB.document(chatId).update("messages", updatedStringArray?.toList()).addOnCompleteListener { it ->
+                            if (it.isSuccessful) {
+                                Toast.makeText(context, "Add messages succesfully", Toast.LENGTH_LONG).show();
+                            }
                         }
+
                     }
+//                    singleChatroom.value?.messages?.plus(createdMessage.id);
+//                    chatRooms.map { room -> if (room?.id == it.id) room.messages?.plus(createdMessage.id) else room }
+
+//                    val newChatUpdateWithMessages = Chat(it.id, it.get("userIds") as List<String>, stringArray?.toList(), it.getTimestamp("createdAt"));
+
+//                    chatDB.document(chatId).set(newChatUpdateWithMessages).addOnCompleteListener { it ->
+//                        if (it.isSuccessful) {
+//                            Toast.makeText(context, "Add message successfully", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
                 }
             }
         }

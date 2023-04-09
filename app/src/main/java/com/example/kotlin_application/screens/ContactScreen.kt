@@ -5,12 +5,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,6 +25,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,17 +38,30 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
 import androidx.compose.ui.unit.sp
+import com.example.kotlin_application.data.MessageInput
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 
-
+@ExperimentalComposeUiApi
 @Composable
 fun ContactScreen (navController: NavController, userIds: List<String>?, chatId : String?) {
 
 
-
+    //Set view model for chat
     val chatViewModel : ChatVIewModel = viewModel();
+
+    //Set state for message
     val message = remember {
         mutableStateOf("");
     }
+
+    //Set message valid
+    val messageIsValid = remember (message.value) {
+        message.value.trim().isNotEmpty()
+    }
+
+    //Get id of current user
+    val uid = FirebaseAuth.getInstance().uid.toString();
 
     //Set context for Toast
     val context = LocalContext.current;
@@ -63,7 +80,8 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
 
     val single_chat_room: Chat? = chatViewModel.chatRooms.firstOrNull()
 
-
+    //Set controller for keyboard
+    val keyboardController = LocalSoftwareKeyboardController.current;
 
     Scaffold(
         topBar = {
@@ -107,6 +125,13 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
                 ),
+                keyboardActions = KeyboardActions(onDone = {
+
+
+                        keyboardController?.hide();
+
+
+                }),
                 placeholder = {
                     Text(text = "Enter your message...!", style = TextStyle(color = goldYellowHex))
                 },
@@ -119,7 +144,17 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
                 trailingIcon = {
                     IconButton(
                         onClick = {
-                            Log.d("Send", "Send successfully!")
+
+                            if (!messageIsValid) {
+                                Toast.makeText(context, "Cannot send empty message", Toast.LENGTH_LONG).show();
+                            } else {
+                                Log.d("Send", "Send successfully!")
+                                val messageInput = MessageInput(message.value, uid, Timestamp.now());
+                                chatViewModel.addMessagesToChatRoom(messageInput, single_chat_room?.id as String, context = context);
+                                Toast.makeText(context, "Send message", Toast.LENGTH_LONG).show();
+                                keyboardController?.hide()
+                                message.value = ""
+                            }
                         }
                     ) {
                         Icon(
