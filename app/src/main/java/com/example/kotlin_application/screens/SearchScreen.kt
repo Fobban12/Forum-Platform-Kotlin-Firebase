@@ -13,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -81,9 +83,44 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                         OutlinedTextField(
                             value = text.value,
                             onValueChange = {
+
+
                                 text.value = it
 
+
                             },
+                            placeholder = {
+                                Text(
+                                    text = "Search...",
+                                    color = Color.DarkGray.copy(alpha = ContentAlpha.medium)
+                                )
+                            },
+                            leadingIcon = {
+                                          Icon(imageVector = Icons.Filled.Search,
+                                              contentDescription = "Search Icon",
+                                              tint = Color.DarkGray.copy(
+                                                  alpha = ContentAlpha.medium
+                                              )
+                                          )
+                            },
+
+                            trailingIcon = {
+                                IconButton(
+                                    onClick = {
+                                        if (text.value.isNotEmpty()) {
+                                        } else {
+
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = "Close Icon",
+                                        tint = Color.DarkGray
+                                    )
+                                }
+                            },
+
                             maxLines = 1,
                             singleLine = true,
                             textStyle = TextStyle(color = Color.Black),
