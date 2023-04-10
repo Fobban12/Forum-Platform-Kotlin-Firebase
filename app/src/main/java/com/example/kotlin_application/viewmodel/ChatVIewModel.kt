@@ -44,6 +44,7 @@ class ChatVIewModel: ViewModel(){
     //Set state for chat room array
     val chatRooms = mutableStateListOf<Chat?>();
 
+
     //Update the message value as user types
 
     fun updateMessage(message: String) {
@@ -61,9 +62,9 @@ class ChatVIewModel: ViewModel(){
                     val arrayMessages = it.get("messages") as? ArrayList<String>;
                     val stringArray = arrayMessages?.toTypedArray()
                     stringArray?.let { it + createdMessage.id }?.let { updatedStringArray ->
-                        Toast.makeText(context, "${updatedStringArray}", Toast.LENGTH_LONG).show();
                         val newChatRooms = mutableStateListOf<Chat?>()
                         val updatedChatRoom = Chat(chatId, it.get("userIds") as List<String>, updatedStringArray.toList(), it.getTimestamp("createdAt"));
+
                         newChatRooms.add(updatedChatRoom)
                         chatRooms.clear();
                         chatRooms.addAll(newChatRooms);
@@ -80,14 +81,23 @@ class ChatVIewModel: ViewModel(){
     }
 
 
-
     //Fetch single message based on message id
-    fun fetchSingleMessage (messageId : String , context: Context) {
-        viewModelScope.launch {
-            messageDB.document(messageId).get().addOnSuccessListener { it ->
-                val message = Message(it.id, it.getString("content") as String, it.getString("senderId") as String, it.getTimestamp("createdAt") as Timestamp);
-                singleMessage.value = message;
-            }
+    suspend fun fetchSingleMessage(messageId: String, context: Context): Message? {
+
+        // Create a reference to the message document using the provided ID
+        val messageDocRef = messageDB.document(messageId)
+
+        // Fetch the message document from Firestore
+        val messageDoc = messageDocRef.get().await()
+
+        // If the document exists, create a Message object from it and return it
+        return if (messageDoc.exists()) {
+            val content = messageDoc.getString("content") ?: ""
+            val senderId = messageDoc.getString("senderId") ?: ""
+            val timestamp = messageDoc.getTimestamp("createdAt") ?: Timestamp.now()
+            Message(messageDoc.id, content, senderId, timestamp)
+        } else {
+            null
         }
     }
 
@@ -98,16 +108,25 @@ class ChatVIewModel: ViewModel(){
             var list = listOf(userIds);
 
             chatDB.whereIn("userIds", list).get().addOnSuccessListener { querySnapshot ->
+
                 val documents = querySnapshot.documents;
 
                 val getChatRooms = mutableStateListOf<Chat?>();
+
+
                 for (document in documents) {
                     val chat = Chat(document.id, document.get("userIds") as List<String>, document.get("messages") as List<String>, document.getTimestamp("createdAt"));
+
                     getChatRooms.add(chat);
+
                 }
 
                 chatRooms.clear();
                 chatRooms.addAll(getChatRooms);
+
+
+
+
             }
         }
 
@@ -120,6 +139,7 @@ class ChatVIewModel: ViewModel(){
                 val chat = Chat(it.id, it.get("userIds") as List<String>, it.get("messages") as List<String>, it.getTimestamp("createdAt"));
                 chatRooms.clear();
                 chatRooms.add(chat);
+
             }
         }
     }

@@ -38,6 +38,8 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
 import androidx.compose.ui.unit.sp
+import com.example.kotlin_application.data.ChatObject
+import com.example.kotlin_application.data.Message
 import com.example.kotlin_application.data.MessageInput
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -78,10 +80,12 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
     
     //Set state for that single chat room
 
-    val single_chat_room: Chat? = chatViewModel.chatRooms.firstOrNull()
+    val single_chat_room : Chat? = chatViewModel.chatRooms.firstOrNull();
 
     //Set controller for keyboard
     val keyboardController = LocalSoftwareKeyboardController.current;
+
+
 
     Scaffold(
         topBar = {
@@ -188,9 +192,10 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
                         )
                     )
                 } else {
+
                     LazyColumn() {
-                        items(room.messages) { message ->
-                            SingleMessage(messageId = message)
+                        items(room.messages.reversed()) {
+                            item -> SingleMessage(messageId = "${item}")
                         }
                     }
                 }
