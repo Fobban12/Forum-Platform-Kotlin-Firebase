@@ -76,10 +76,8 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                     }
 
                 },
+
                 title = {
-
-
-
                         OutlinedTextField(
                             value = text.value,
                             onValueChange = {
@@ -92,13 +90,13 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                             placeholder = {
                                 Text(
                                     text = "Search...",
-                                    color = Color.DarkGray.copy(alpha = ContentAlpha.medium)
+                                    color = Color.Black.copy(alpha = ContentAlpha.medium)
                                 )
                             },
                             leadingIcon = {
                                           Icon(imageVector = Icons.Filled.Search,
                                               contentDescription = "Search Icon",
-                                              tint = Color.DarkGray.copy(
+                                              tint = Color.Black.copy(
                                                   alpha = ContentAlpha.medium
                                               )
                                           )
@@ -108,30 +106,28 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                                 IconButton(
                                     onClick = {
                                         if (text.value.isNotEmpty()) {
-                                        } else {
-
+                                            text.value = ""
                                         }
                                     }
                                 ) {
                                     Icon(
                                         imageVector = Icons.Filled.Close,
                                         contentDescription = "Close Icon",
-                                        tint = Color.DarkGray
+                                        tint = Color.Black
                                     )
                                 }
                             },
 
                             maxLines = 1,
                             singleLine = true,
+                            modifier = Modifier.size(330.dp),
                             textStyle = TextStyle(color = Color.Black),
-                            modifier = Modifier
-                                .background(Color.White, CircleShape)
-                                .padding(2.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = Color.Transparent,
                                 unfocusedBorderColor = Color.Transparent,
-                                backgroundColor = Color.Transparent
-                            ));
+                                backgroundColor = Color.Transparent,
+                            ))
+
 
 
                 },
@@ -143,8 +139,6 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
 
     {
         it
-        //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
-        //        Fetch single forum data with LazyColumn
         LazyColumn(modifier = Modifier.padding(2.dp)) {
             items(state) {
                     item ->
@@ -164,7 +158,6 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                         val painterState = rememberImagePainter(
                             data = "${item.image}",
                             builder = {})
-
 
                         Image(
                             painter = painterState,
