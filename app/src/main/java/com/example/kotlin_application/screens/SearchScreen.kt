@@ -46,8 +46,6 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     }
 
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
 
     var text = remember {
         mutableStateOf("")

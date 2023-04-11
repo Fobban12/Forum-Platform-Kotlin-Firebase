@@ -192,7 +192,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
                     )
                 } else {
 
-                    LazyColumn() {
+                    LazyColumn(modifier = Modifier.padding(bottom = 50.dp)) {
                         items(room.messages) {
                             item -> SingleMessage(messageId = "${item}")
                         }
