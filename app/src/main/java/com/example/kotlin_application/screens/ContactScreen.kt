@@ -86,7 +86,6 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
     val keyboardController = LocalSoftwareKeyboardController.current;
 
 
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -194,7 +193,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
                 } else {
 
                     LazyColumn() {
-                        items(room.messages.reversed()) {
+                        items(room.messages) {
                             item -> SingleMessage(messageId = "${item}")
                         }
                     }
