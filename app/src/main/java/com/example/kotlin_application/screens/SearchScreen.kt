@@ -13,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -74,27 +76,58 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                     }
 
                 },
+
                 title = {
-
-
-
                         OutlinedTextField(
                             value = text.value,
                             onValueChange = {
+
+
                                 text.value = it
 
+
                             },
+                            placeholder = {
+                                Text(
+                                    text = "Search...",
+                                    color = Color.Black.copy(alpha = ContentAlpha.medium)
+                                )
+                            },
+                            leadingIcon = {
+                                          Icon(imageVector = Icons.Filled.Search,
+                                              contentDescription = "Search Icon",
+                                              tint = Color.Black.copy(
+                                                  alpha = ContentAlpha.medium
+                                              )
+                                          )
+                            },
+
+                            trailingIcon = {
+                                IconButton(
+                                    onClick = {
+                                        if (text.value.isNotEmpty()) {
+                                            text.value = ""
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = "Close Icon",
+                                        tint = Color.Black
+                                    )
+                                }
+                            },
+
                             maxLines = 1,
                             singleLine = true,
+                            modifier = Modifier.size(330.dp),
                             textStyle = TextStyle(color = Color.Black),
-                            modifier = Modifier
-                                .background(Color.White, CircleShape)
-                                .padding(2.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = Color.Transparent,
                                 unfocusedBorderColor = Color.Transparent,
-                                backgroundColor = Color.Transparent
-                            ));
+                                backgroundColor = Color.Transparent,
+                            ))
+
 
 
                 },
@@ -106,8 +139,6 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
 
     {
         it
-        //Test with dummy data from firestore. Will complete when Jere completes Post for Forum
-        //        Fetch single forum data with LazyColumn
         LazyColumn(modifier = Modifier.padding(2.dp)) {
             items(state) {
                     item ->
@@ -127,7 +158,6 @@ fun SearchScreen(navController: NavController ,viewModel: ForumViewModel = andro
                         val painterState = rememberImagePainter(
                             data = "${item.image}",
                             builder = {})
-
 
                         Image(
                             painter = painterState,

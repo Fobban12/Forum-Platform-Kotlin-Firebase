@@ -28,6 +28,7 @@ import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 
 
 @ExperimentalCoilApi
@@ -213,7 +214,9 @@ fun MainScreen(navController: NavController,
         //Fetch single forum data with LazyColumn
             LazyColumn(modifier = Modifier
                 .padding(2.dp)
-                .padding(it)) {
+                .padding(it)
+
+            ) {
                 items(state) {
                         item ->
                     SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
