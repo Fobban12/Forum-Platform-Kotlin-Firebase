@@ -102,6 +102,8 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation "io.coil-kt:coil-compose:1.4.0"
+    implementation "io.coil-kt:coil-compose:1.3.0"
 
     //  Camerax dependencies
     implementation "androidx.camera:camera-core:1.0.2"

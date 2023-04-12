@@ -65,6 +65,10 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
         composable(Screens.ProfileScreen.name) {
             ProfileScreen(navController = navController)
         }
+        
+        composable(Screens.ChatListScreen.name) {
+            ChatListScreen(navController = navController)
+        }
 
         val contactScreen = Screens.ContactScreen.name;
         composable("$contactScreen/{chatId}/{userIds}", arguments = listOf(navArgument("userIds") {

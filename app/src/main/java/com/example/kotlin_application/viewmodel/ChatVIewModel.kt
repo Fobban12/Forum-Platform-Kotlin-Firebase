@@ -44,12 +44,32 @@ class ChatVIewModel: ViewModel(){
     //Set state for chat room array
     val chatRooms = mutableStateListOf<Chat?>();
 
+    //Set state for all single rooms for the chat list screen
+    val allSingleChatsByUserId = mutableStateListOf<Chat?>();
 
     //Update the message value as user types
 
     fun updateMessage(message: String) {
         _message.value = message
-}
+    }
+
+
+    //Fetch chats by single user id
+    fun fetchAllChatsByUserId (userId: String) {
+        viewModelScope.launch {
+            chatDB.whereArrayContains("userIds", userId).get().addOnSuccessListener { querySnapshot ->
+                val documents = querySnapshot.documents;
+                val allSingleChats = mutableStateListOf<Chat?>()
+                for (document in documents) {
+                    val chat = Chat(document.id, document.get("userIds") as List<String>, document.get("messages") as List<String>, document.getTimestamp("createdAt"));
+                    allSingleChats.add(chat);
+                }
+                allSingleChatsByUserId.clear();
+                allSingleChatsByUserId.addAll(allSingleChats);
+            }
+        }
+    }
+
     //Add messages to a single specific chat room
     fun addMessagesToChatRoom (messageInput: MessageInput, chatId: String, context: Context) {
 

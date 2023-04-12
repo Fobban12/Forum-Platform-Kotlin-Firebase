@@ -7,9 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.Forum
+import com.example.kotlin_application.data.Message
 import com.example.kotlin_application.data.UserProfile
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.util.concurrent.Flow
 
 
 class UserProfileViewModel : ViewModel() {
@@ -29,6 +36,21 @@ class UserProfileViewModel : ViewModel() {
                 singleUserProfile.value = singleUser;
             }
         }
+    }
+
+    //Fetch single user profile with promise yield
+     suspend fun fetchSingleUserProfileWithPromiseYield (userId: String) : UserProfile ?= withContext(Dispatchers.IO) {
+        var singleUserProfile: UserProfile? = null // initialize singleUserProfile to null
+        val querySnapshot = userProfileDB.whereEqualTo("userId", userId).get().await()
+        querySnapshot.documents.mapNotNull { documentSnapshot ->
+            UserProfile(
+                documentSnapshot.id,
+                documentSnapshot.getString("username").orEmpty(),
+                documentSnapshot.getString("image").orEmpty(),
+                documentSnapshot.getString("userId").orEmpty()
+            )
+        }.singleOrNull()
+
     }
 
     //Fetch single user profile based on single user profile id

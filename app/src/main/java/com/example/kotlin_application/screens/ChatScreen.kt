@@ -42,6 +42,7 @@ fun ChatScreen(
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     }
 
+
     //Get username from firebase
     val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
 

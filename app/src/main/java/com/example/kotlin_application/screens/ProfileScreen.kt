@@ -255,6 +255,9 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                 modifier = Modifier.padding(10.dp),
                                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         )
+                        Button(onClick = { navController.navigate(Screens.ChatListScreen.name) }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground)) {
+                                Text(text = "Click to move to chat list!", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold, fontSize = 18.sp))
+                        }
                 }
         }
 
