@@ -70,6 +70,16 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
             ChatListScreen(navController = navController)
         }
 
+        val cameraScreen = Screens.CameraScreen.name;
+        composable("$cameraScreen/{userProfileId}", arguments = listOf(navArgument("userProfileId") {
+            type = NavType.StringType
+        })) { backStackEntry ->
+            backStackEntry.arguments?.getString("userProfileId").let {
+                CameraScreen(navController = navController, userProfileId = it.toString())
+            }
+        }
+
+
         val contactScreen = Screens.ContactScreen.name;
         composable("$contactScreen/{chatId}/{userIds}", arguments = listOf(navArgument("userIds") {
             type = NavType.StringType

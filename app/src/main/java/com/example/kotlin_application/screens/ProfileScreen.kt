@@ -55,10 +55,39 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.*
+import android.Manifest
+import android.content.ContentValues
+import android.provider.MediaStore.Audio.Media
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.sharp.ArrowForward
+import androidx.compose.material.icons.sharp.CheckCircle
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.permissions.*
 
 @ExperimentalPermissionsApi
 @Composable
-fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfileViewModel = viewModel()) {
+fun ProfileScreen (navController: NavController) {
+
+        //Get user profile view model
+        val userProfileViewModel: UserProfileViewModel = viewModel();
 
         //Set image height based on screen height
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -110,6 +139,9 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                 }
         //Get storage reference
         val ref: StorageReference = FirebaseStorage.getInstance().reference;
+
+        //Set dialog boolean
+        var showDialog = remember { mutableStateOf(false) }
 
 
         //Set launch effect
@@ -209,8 +241,8 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                         )
                                         .clickable {
 
-
-                                                launcher.launch("image/*")
+                                                showDialog.value = true;
+//                                                launcher.launch("image/*")
 
 
                                         }
@@ -250,7 +282,7 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                                 }
                         }
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(text = "No avatar uploaded yet? Or do you want to upload a new image? Please click on the circle", modifier = Modifier.padding(10.dp),  style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Center))
+                        Text(text = "No avatar uploaded yet? Click on the circle to add or update", modifier = Modifier.padding(10.dp),  style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Center))
                         Spacer(modifier = Modifier.height(30.dp))
                         Text(
                                 text = "Username: ${single_user.value?.username}",
@@ -260,10 +292,46 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                         Button(onClick = { navController.navigate(Screens.ChatListScreen.name) }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground)) {
                                 Text(text = "Click to move to chat list!", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold, fontSize = 18.sp))
                         }
+
                 }
         }
 
+        if (showDialog.value) {
+                AlertDialog(
+                        onDismissRequest = { showDialog.value = false },
+                        title = { Text(text = "Choose an option", style = TextStyle(fontWeight = FontWeight.Bold)) },
+                        text = { Text(text = "Select one of the following options", style = TextStyle(fontWeight = FontWeight.Bold)) },
+                        buttons = {
+                                Column(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 12.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Button(onClick = { showDialog.value = false }, colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = MaterialTheme.colors.onBackground,
+                                                contentColor = Color.White)) {
+                                                Text(text = "Cancel", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold))
+                                        }
+                                        Button(onClick = { showDialog.value = false;  launcher.launch("image/*"); }, colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = MaterialTheme.colors.onBackground,
+                                                contentColor = Color.White)) {
+                                                Text(text = "Upload Image", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold))
+                                        }
+                                        Button(onClick = { showDialog.value = false;
+                                                navController.navigate(Screens.CameraScreen.name + "/${single_user.value?.id}")
+                                                 }, colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = MaterialTheme.colors.onBackground,
+                                                contentColor = Color.White)) {
+                                                Text(text = "Take a photo", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold))
+                                        }
+                                }
+
+                        }
+                )
+        }
 
 
 }
+
+
+
 
