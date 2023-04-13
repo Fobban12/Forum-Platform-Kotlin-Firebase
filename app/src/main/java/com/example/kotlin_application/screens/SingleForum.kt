@@ -74,7 +74,7 @@ fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavCon
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.onSurface)
             .padding(vertical = 20.dp, horizontal = 20.dp)
-            .heightIn(180.dp)
+            .height(150.dp)
 
     ) {
         Column() {
