@@ -53,6 +53,7 @@ class ChatVIewModel: ViewModel(){
         _message.value = message
     }
 
+    //
 
     //Fetch chats by single user id
     fun fetchAllChatsByUserId (userId: String) {

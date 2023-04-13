@@ -84,10 +84,12 @@ fun ProfileScreen (navController: NavController, userProfileViewModel: UserProfi
                 mutableStateOf(false)
         };
 
-
-        val screenWidth = configuration.screenWidthDp.dp
-        val displayMetrics = context.resources.displayMetrics
-        val screenWidthInPixels = displayMetrics.widthPixels.toFloat()
+        //Set effect to check user logged in to access this screen
+        LaunchedEffect(checkUserIsNull) {
+                if (checkUserIsNull) {
+                        navController.navigate(Screens.MainScreen.name)
+                }
+        }
 
 
         //Set effect to fetch single user id

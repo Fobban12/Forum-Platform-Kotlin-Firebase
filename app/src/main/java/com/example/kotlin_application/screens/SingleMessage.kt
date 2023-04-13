@@ -49,6 +49,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.maps.android.compose.Circle
 import androidx.compose.ui.res.*;
+import androidx.compose.ui.unit.sp;
 
 
 @OptIn(ExperimentalCoilApi::class)
@@ -93,6 +94,7 @@ fun SingleMessage (messageId : String) {
         }
     };
 
+    //Set effect to fetch user profile of that person created the message
     LaunchedEffect(singleMessage.value) {
 
         if (singleMessage.value != null) {
@@ -164,7 +166,7 @@ fun SingleMessage (messageId : String) {
                             }
 
                         if (singleUserProfile.value?.image == null || singleUserProfile.value?.image.toString().isEmpty()) {
-                            Text(text = "No Avatar", textAlign = TextAlign.Center, modifier = Modifier.padding(5.dp).fillMaxWidth(), style = TextStyle(fontWeight = FontWeight.Bold));
+                            Text(text = "No Avatar", textAlign = TextAlign.Center, modifier = Modifier.padding(5.dp).fillMaxWidth(), style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 8.sp));
                         }
                         
                     }
