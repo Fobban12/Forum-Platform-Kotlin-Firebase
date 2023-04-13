@@ -188,6 +188,12 @@ fun MainScreen(navController: NavController,
                         icon = Icons.Default.Home
                     ),
                     BottomNavItem(
+                        name = "Direct",
+                        route = "direct",
+                        icon = Icons.Default.MarkChatUnread,
+                        badgeCount = 0
+                    ),
+                    BottomNavItem(
                         name = "Chat",
                         route = "chat",
                         icon = Icons.Default.Chat,
@@ -203,6 +209,7 @@ fun MainScreen(navController: NavController,
                 navController = navController,
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
+                    if(it.name == "Direct"){ navController.navigate(Screens.ChatListScreen.name)}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
                 }
@@ -277,7 +284,7 @@ fun renderTopAppBar(
                 if (!checkUserIsNull) {
                     Text(text = "Welcome $username to Agora")
                 } else {
-                    Text(text = "Welcome to Agora (Not Logged In)")
+                    Text(text = "Welcome to Agora")
                 }
             }
         },

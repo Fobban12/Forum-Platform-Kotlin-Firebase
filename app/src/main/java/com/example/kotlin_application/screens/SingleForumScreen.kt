@@ -228,7 +228,7 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                             chatVIewModel.createOrUpdateRoom(userIds, context = context);
 
                             val navArgs = listOf(userIds.joinToString(","))
-                            Log.d("navArgs", "${navArgs}")
+                            Log.d("navArgs", "$navArgs")
 //                            navController.navigate(Screens.ContactScreen.name + "/1/null")
                             navController.navigate(Screens.ContactScreen.name + "/null/${navArgs}");
 //                            navController.navigate(Screens.ContactScreen.name + "/1/null")

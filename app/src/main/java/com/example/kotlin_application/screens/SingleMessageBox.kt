@@ -41,6 +41,8 @@ import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
 @Composable
 fun SingleMessageBox (navController: NavController, item: Chat?) {
@@ -101,7 +103,7 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
         LocalDensity.current) {screenWidth * 0f};
 
     //Set condition for the last message
-    val contentMessage = if (singleMessage.value?.content?.length ?:0 <= 5) singleMessage.value?.content else "${singleMessage.value?.content?.substring(0, 6)}...";
+    val contentMessage = if ((singleMessage.value?.content?.length ?: 0) <= 5) singleMessage.value?.content else "${singleMessage.value?.content?.substring(0, 6)}...";
 
 
     Card (
@@ -123,12 +125,12 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
         Row() {
             Column(modifier = Modifier.padding(10.dp)) {
                 Text(text = "Chat with: ${singleUserProfile.value?.username}", style = TextStyle(fontWeight = FontWeight.Bold))
-                Text(text = "Chat room created at: ${dateTime}", style = TextStyle(fontWeight = FontWeight.Bold))
+                Text(text = "Chat room created at: $dateTime", style = TextStyle(fontWeight = FontWeight.Bold))
                 Spacer(modifier = Modifier.height(5.dp))
                 Row() {
                     Text(text = if (uid == singleMessage.value?.senderId) "You sent: " else "${singleUserProfile.value?.username} sent: ")
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text(text = "${contentMessage}")
+                    Text(text = "$contentMessage")
                 }
             }
 
@@ -146,12 +148,11 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
                     ) {
 //
                         val painter: Painter =
-                            rememberImagePainter(
-                                data = singleUserProfile.value?.image,
-                                builder = {
-                                    crossfade(true)
-
-                                }
+                            rememberAsyncImagePainter(
+                                ImageRequest.Builder(LocalContext.current)
+                                    .data(data = singleUserProfile.value?.image).apply(block = fun ImageRequest.Builder.() {
+                                        crossfade(true)
+                                    }).build()
                             );
                         Image(
                             painter = painter,
