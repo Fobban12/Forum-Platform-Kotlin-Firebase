@@ -22,7 +22,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
@@ -31,9 +33,10 @@ import com.example.kotlin_application.viewmodel.ForumViewModel
 @Composable
 fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavController, uid : String?) {
 
+    val test = remember { mutableStateOf(item) }
+    val test2 = remember { mutableStateOf<Forum?>(null) }
     //Set state for alert dialog
     val showDialog = remember { mutableStateOf(false) };
-
     //Set local context for Toast
     val context = LocalContext.current;
 
@@ -42,10 +45,10 @@ fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavCon
             onDismissRequest = { showDialog.value = false },
             backgroundColor = Color.LightGray,
             title = {
-                Text(text = "Delete forum", style = androidx.compose.ui.text.TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 16.sp))
+                Text(text = "Delete forum", style = TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 16.sp))
             },
             text = {
-                Text(text = "Are you sure you want to delete your forum with title ${item.title} you created?", style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
+                Text(text = "Are you sure you want to delete your forum with title ${test.value?.title} you created?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
             },
             confirmButton = {
                 Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context )}, colors = ButtonDefaults.buttonColors(
@@ -71,7 +74,7 @@ fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavCon
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.onSurface)
             .padding(vertical = 20.dp, horizontal = 20.dp)
-            .fillMaxWidth()
+            .heightIn(180.dp)
 
     ) {
         Column() {
@@ -94,17 +97,16 @@ fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavCon
                     }
                 }
             }
-
-
             Spacer(modifier = Modifier.height(10.dp))
-
             Row(modifier = Modifier
                 .padding(2.dp)
                 .fillMaxHeight()) {
-                val painterState = rememberImagePainter(
-                    data = "${item.image}",
-                    builder = {})
+                val painterState = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current).data(data = "${test.value?.image}")
+                        .apply(block = fun ImageRequest.Builder.() {
 
+                        }).build()
+                )
 
                 Image(
                     painter = painterState,
@@ -114,11 +116,11 @@ fun SingleForum (item : Forum, viewModel: ForumViewModel, navController : NavCon
                 Column(modifier = Modifier
                     .padding(10.dp)
                     .fillMaxWidth()) {
-                    Text(text = "Title: ${item.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
+                    Text(text = "Title: ${test.value?.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Description : ${item.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
+                    Text(text = "Description : ${test.value?.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
                     ), modifier = Modifier.fillMaxWidth())
-                    Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${item.id}") }, modifier = Modifier
+                    Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${test.value?.id}") }, modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth(), colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.onBackground,
