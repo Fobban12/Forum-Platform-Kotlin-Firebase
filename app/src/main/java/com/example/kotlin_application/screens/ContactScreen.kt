@@ -2,7 +2,6 @@ package com.example.kotlin_application.screens
 
 import android.content.Context
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import android.util.Log
 import android.widget.Toast
@@ -12,15 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +41,8 @@ import com.example.kotlin_application.data.Message
 import com.example.kotlin_application.data.MessageInput
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @Composable
@@ -84,6 +84,9 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
 
     //Set controller for keyboard
     val keyboardController = LocalSoftwareKeyboardController.current;
+
+    val coroutineScope = rememberCoroutineScope();
+    val listState = rememberLazyListState();
 
 
     Scaffold(
@@ -192,7 +195,13 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
                     )
                 } else {
 
-                    LazyColumn(modifier = Modifier.padding(bottom = 50.dp)) {
+                    LaunchedEffect(room.messages) {
+                        coroutineScope.launch {
+                            listState.scrollToItem(room.messages.lastIndex)
+                        }
+                    }
+
+                    LazyColumn(modifier = Modifier.padding(bottom = 50.dp), state = listState) {
                         items(room.messages) {
                             item -> SingleMessage(messageId = "${item}")
                         }

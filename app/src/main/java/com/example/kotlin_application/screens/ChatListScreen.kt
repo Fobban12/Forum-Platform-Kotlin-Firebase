@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,11 +15,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,8 +34,11 @@ import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.ui.platform.LocalLayoutDirection
+
 
 @Composable
 fun ChatListScreen (navController: NavController) {
@@ -64,6 +68,11 @@ fun ChatListScreen (navController: NavController) {
     
     //Get state for all chats of user
     val allChats = chatVIewModel.allSingleChatsByUserId;
+
+    val coroutineScope = rememberCoroutineScope();
+    val listState = rememberLazyListState()
+
+
 
 
     Scaffold(
@@ -96,13 +105,26 @@ fun ChatListScreen (navController: NavController) {
             .fillMaxSize()
             .padding(vertical = 20.dp, horizontal = 10.dp)) {
             Column(modifier = Modifier.fillMaxSize()) {
-                LazyColumn() {
+
+
+
+
+                LazyColumn(
+                    state = listState,
+                ) {
                     items(allChats) {
                         item ->
                         SingleMessageBox(navController = navController, item = item)
                     }
+
+
+
+
+
+
                 }
             }
+
         }
     }
 }
