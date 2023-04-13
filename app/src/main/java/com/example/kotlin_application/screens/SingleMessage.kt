@@ -72,7 +72,7 @@ fun SingleMessage (messageId : String) {
 
     //Set width based on screen width
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val chatBoxWidth = with(LocalDensity.current) { screenWidth * 0.8f }
+    val chatBoxWidth = with(LocalDensity.current) { screenWidth * 0.65f }
 
     //Set width for avatar based on screen width
     val avatarWidth = if (singleUserProfile.value?.image != null || singleUserProfile.value?.image.toString().isNotEmpty()) with(LocalDensity.current) { screenWidth * 0.2f} else with(

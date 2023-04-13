@@ -167,11 +167,14 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
                 }
 
                 if (singleUserProfile.value?.image == null || singleUserProfile.value?.image.toString().isEmpty()) {
-                    Text(text = "No Avatar", textAlign = TextAlign.Center, modifier = Modifier.padding(5.dp).fillMaxWidth(), style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 8.sp));
+                    Text(text = "No Avatar", textAlign = TextAlign.Center, modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(), style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 8.sp));
                 }
             }
         }
 
 
     }
+    Spacer(modifier = Modifier.height(20.dp))
 }
