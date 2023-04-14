@@ -28,8 +28,9 @@ import androidx.navigation.NavController
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 
 @Composable
-fun UpdateUsernameScreen (navController: NavController, userProfileId : String, userProfileViewModel: UserProfileViewModel = viewModel()) {
-    
+fun UpdateUsernameScreen (navController: NavController, userProfileId : String) {
+    //Get user profile viewModel
+    val userProfileViewModel: UserProfileViewModel = viewModel()
     //Set effect to fetch single profile
     LaunchedEffect(userProfileId, userProfileViewModel) {
         userProfileViewModel.fetchSingleUserProfileByProfileId(userProfileId = userProfileId);

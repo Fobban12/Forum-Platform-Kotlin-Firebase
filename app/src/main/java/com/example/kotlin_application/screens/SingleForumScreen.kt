@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.kotlin_application.data.Forum
@@ -57,9 +58,14 @@ import com.google.firebase.firestore.QuerySnapshot
 
 @ExperimentalComposeUiApi
 @Composable
-fun SingleForumScreen (navController: NavController, forumId: String, viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), likeViewModel: LikeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), chatVIewModel: ChatVIewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun SingleForumScreen (navController: NavController, forumId: String) {
+    //Get Forum viewModel
+    val viewModel: ForumViewModel = viewModel()
+    //Get Like viewModel
+    val likeViewModel: LikeViewModel = viewModel()
+    //Get chat viewModel
+    val chatViewModel: ChatVIewModel = viewModel()
 
-    //Test with single forum screen based on dummy data
 
     //Set image height based on screen height
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -225,7 +231,7 @@ fun SingleForumScreen (navController: NavController, forumId: String, viewModel:
                                          val userIds = mutableListOf<String>();
                             userIds.add(uid.toString());
                             userIds.add(singleForum.value?.userId as String);
-                            chatVIewModel.createOrUpdateRoom(userIds, context = context);
+                            chatViewModel.createOrUpdateRoom(userIds, context = context);
 
                             val navArgs = listOf(userIds.joinToString(","))
                             Log.d("navArgs", "$navArgs")

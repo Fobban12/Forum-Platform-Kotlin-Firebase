@@ -35,8 +35,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalComposeUiApi
 @Composable
-fun UpdateCommentScreen (navController: NavController, commentId : String, commentViewModel: CommentViewModel = viewModel()) {
+fun UpdateCommentScreen (navController: NavController, commentId : String ) {
 
+    //Get comment viewModel
+    val commentViewModel: CommentViewModel = viewModel()
 
     //Set controller for keyboard
     val keyboardController = LocalFocusManager.current;

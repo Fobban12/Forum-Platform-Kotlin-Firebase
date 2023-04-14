@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
@@ -128,9 +129,10 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
 @Composable
 fun PostingForum(
     navController: NavController,
-    viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
+    //Get Forum ViewModel
+    val viewModel: ForumViewModel = viewModel()
    //For the Title Text field
     var title by remember { mutableStateOf("") }
     val titleIsValid = remember(title){title.trim().isNotEmpty()}

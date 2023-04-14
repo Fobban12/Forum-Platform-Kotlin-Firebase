@@ -30,7 +30,11 @@ import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalComposeUiApi
 @Composable
-fun CommentScreen (navController: NavController, forumId : String, commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun CommentScreen (navController: NavController, forumId : String) {
+
+    //Get view Model
+   val commentViewModel: CommentViewModel = viewModel()
+
     //Set effect to fetch list of comments
     LaunchedEffect(forumId, commentViewModel) {
         commentViewModel.fetchComments(forumId);

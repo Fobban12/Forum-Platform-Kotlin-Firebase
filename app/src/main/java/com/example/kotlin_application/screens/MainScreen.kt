@@ -1,5 +1,6 @@
 package com.example.kotlin_application.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,17 +30,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @ExperimentalCoilApi
 @ExperimentalComposeUiApi
 @Composable
-fun MainScreen(navController: NavController,
-               viewModel: ForumViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-               userProfileViewModel: UserProfileViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-
-) {
-
+fun MainScreen(navController: NavController) {
+    //Get user profile viewModel
+    val userProfileViewModel: UserProfileViewModel = viewModel()
+    //Get Forum viewModel
+   val viewModel: ForumViewModel = viewModel()
     //List of forum data
     val state = viewModel.forum;
 
@@ -56,7 +58,7 @@ fun MainScreen(navController: NavController,
     val uid = FirebaseAuth.getInstance().uid.toString();
 
 
-
+    val context = LocalContext.current;
 
     //Set effect to set username for title bar
     //Set effect to fetch single user id
@@ -187,6 +189,7 @@ fun MainScreen(navController: NavController,
                         route = "home",
                         icon = Icons.Default.Home
                     ),
+
                     BottomNavItem(
                         name = "Direct",
                         route = "direct",
@@ -209,7 +212,9 @@ fun MainScreen(navController: NavController,
                 navController = navController,
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
-                    if(it.name == "Direct"){ navController.navigate(Screens.ChatListScreen.name)}
+                    if(it.name == "Direct" || checkUserIsNull){ navController.navigate(Screens.ChatListScreen.name)}
+                    if (it.name == "Direct" || checkUserIsNull){
+                        Toast.makeText(context, "Not Logged in. Log in to use", Toast.LENGTH_LONG).show()}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}
                 }
@@ -226,7 +231,7 @@ fun MainScreen(navController: NavController,
             ) {
                 items(state) {
                         item ->
-                    SingleForum(item = item, viewModel = viewModel, navController = navController, uid = uid)
+                    SingleForum(item = item, navController = navController, uid = uid)
                     Spacer(modifier = Modifier.height(20.dp))
 
                 }

@@ -31,11 +31,9 @@ import com.example.kotlin_application.data.Constants
 @Composable
 fun ChatScreen(
     navController: NavController,
-    chatVIewModel: ChatVIewModel = viewModel(),
 ) {
-    //Scaffold
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+    //Get chat viewModel
+    val chatVIewModel: ChatVIewModel = viewModel()
 
     //Check user is logged in or not
     val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
@@ -60,6 +58,7 @@ fun ChatScreen(
                 })
         },
         bottomBar = {
+            if(!checkUserIsNull){
             OutlinedTextField(
                 value = message,
                 onValueChange = {
@@ -92,7 +91,7 @@ fun ChatScreen(
                     }
 
                 }
-            )
+            )}
 
         }
     ){it

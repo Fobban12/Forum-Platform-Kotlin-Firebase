@@ -34,8 +34,12 @@ import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalComposeUiApi
 @Composable
-fun SingleCommentScreen (navController : NavController,singleItem: Comment?, forumId: String,commentViewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(), likeForCommentModel: LikeForCommentModel = viewModel()) {
+fun SingleCommentScreen (navController : NavController,singleItem: Comment?, forumId: String ) {
 
+    //Get Comment viewModel
+    val commentViewModel: CommentViewModel = viewModel()
+    //Get viewModel for likes in comments
+    val likeForCommentModel: LikeForCommentModel = viewModel()
     //Get context for toast
     val context = LocalContext.current;
 

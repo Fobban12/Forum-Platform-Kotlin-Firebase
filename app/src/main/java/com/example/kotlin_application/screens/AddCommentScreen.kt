@@ -22,10 +22,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.CommentInput
 import com.example.kotlin_application.viewmodel.CommentViewModel
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,13 +36,11 @@ import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable
-fun AddCommentScreen (
-    navController: NavController,
-    forumId : String,
-    viewModel: CommentViewModel = androidx.lifecycle.viewmodel.compose.viewModel())
+fun AddCommentScreen (navController: NavController, forumId : String)
 {
 
-    //On testing progressing with comments
+    val viewModel:CommentViewModel = viewModel()
+
 
     //Set state for comment
     val comment = remember {
