@@ -143,6 +143,11 @@ fun ProfileScreen (navController: NavController) {
         //Set dialog boolean
         var showDialog = remember { mutableStateOf(false) }
 
+        //Set width based on screen width
+        val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+        val buttonModalWidth = with(LocalDensity.current) { screenWidth * 0.8f }
+
+
 
         //Set launch effect
         LaunchedEffect(imageUri, single_user.value?.id) {
@@ -306,21 +311,21 @@ fun ProfileScreen (navController: NavController) {
                                         .fillMaxWidth()
                                         .padding(horizontal = 12.dp),
                                         horizontalAlignment = Alignment.CenterHorizontally) {
-                                        Button(onClick = { showDialog.value = false }, colors = ButtonDefaults.buttonColors(
+                                        Button(onClick = { showDialog.value = false}, colors = ButtonDefaults.buttonColors(
                                                 backgroundColor = MaterialTheme.colors.onBackground,
-                                                contentColor = Color.White)) {
+                                                contentColor = Color.White), modifier = Modifier.width(buttonModalWidth)) {
                                                 Text(text = "Cancel", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold))
                                         }
                                         Button(onClick = { showDialog.value = false;  launcher.launch("image/*"); }, colors = ButtonDefaults.buttonColors(
                                                 backgroundColor = MaterialTheme.colors.onBackground,
-                                                contentColor = Color.White)) {
+                                                contentColor = Color.White), modifier = Modifier.width(buttonModalWidth)) {
                                                 Text(text = "Upload Image", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold))
                                         }
                                         Button(onClick = { showDialog.value = false;
                                                 navController.navigate(Screens.CameraScreen.name + "/${single_user.value?.id}")
                                                  }, colors = ButtonDefaults.buttonColors(
                                                 backgroundColor = MaterialTheme.colors.onBackground,
-                                                contentColor = Color.White)) {
+                                                contentColor = Color.White), modifier = Modifier.width(buttonModalWidth)) {
                                                 Text(text = "Take a photo", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold))
                                         }
                                 }
