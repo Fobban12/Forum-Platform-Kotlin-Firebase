@@ -38,7 +38,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 @ExperimentalComposeUiApi
-fun LoginScreen(
+fun LogScreen(
     navController: NavController,
     viewModel: AuthenticationViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     isRegister: String

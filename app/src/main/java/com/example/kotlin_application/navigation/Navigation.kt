@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.versionedparcelable.VersionedParcelize
 import com.example.kotlin_application.screens.*
-import com.example.kotlin_application.screens.authentication.LoginScreen
+import com.example.kotlin_application.screens.authentication.LogScreen
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.firebase.auth.FirebaseAuth
@@ -37,7 +37,7 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
             nullable = true
         })) { backStackEntry ->
             backStackEntry.arguments?.getString("isRegister").let {
-                LoginScreen(navController = navController, isRegister = it.toString())
+                LogScreen(navController = navController, isRegister = it.toString())
             }
         }
 //        composable(Screens.LoginScreen.name) {
