@@ -47,6 +47,7 @@ import coil.compose.rememberImagePainter
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.data.Like
 import com.example.kotlin_application.data.LikeInput
+import com.example.kotlin_application.data.UserProfile
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
@@ -65,6 +66,7 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
     val likeViewModel: LikeViewModel = viewModel()
     //Get chat viewModel
     val chatViewModel: ChatVIewModel = viewModel()
+    //Get username
 
 
     //Set image height based on screen height
@@ -88,6 +90,8 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
 
     //Single forum data
     val singleForum = viewModel.singleForum;
+
+    //Get username
     
     //Check user is logged in or not
     val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
@@ -121,7 +125,7 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
                     }
                 },
                 title = {
-                    Text(text = "Forum Name: ${singleForum.value?.title}")
+                    Text(text = "${singleForum.value?.title}")
                 },
                 backgroundColor = MaterialTheme.colors.onBackground,
                 contentColor = Color.White
@@ -164,7 +168,7 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
                                 RoundedCornerShape(16.dp)
                             )) {
                             Column() {
-                                Text(text = "Title of forum: ${singleForum.value?.title}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
+                                Text(text = "Title: ${singleForum.value?.title}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
                                 Text(text = "Description: ${singleForum.value?.description}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
                                 Text(text = "Created by: ${singleForum.value?.username}", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp))
 
@@ -225,7 +229,7 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
                 }
                 Spacer(modifier = Modifier.height(5.dp))
 
-                if (uid != singleForum.value?.userId) {
+                if (uid != singleForum.value?.userId && !checkUserIsNull) {
                     Row(horizontalArrangement = Arrangement.Start) {
                         Button(onClick = {
                                          val userIds = mutableListOf<String>();
