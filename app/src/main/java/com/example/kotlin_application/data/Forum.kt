@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp
 
 data class Forum(
     val id: String?,
+    val idImage: String?,
     val title: String?,
     val type: String?,
     val description: String?,

@@ -284,7 +284,7 @@ fun passwordInput(
     OutlinedTextField(
         value = passwordState.value, onValueChange = { passwordState.value = it }, label = {
             Text(
-                text = "$labelId",
+                text = labelId,
                 color = MaterialTheme.colors.onBackground
             )
         }, enabled = enabled, singleLine = isSingleLine,

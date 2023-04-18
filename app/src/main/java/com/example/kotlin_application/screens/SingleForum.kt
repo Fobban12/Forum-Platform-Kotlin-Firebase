@@ -55,7 +55,7 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                 Text(text = "Are you sure you want to delete your forum with title ${mutableItem.value?.title} you created?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
             },
             confirmButton = {
-                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context ); navController.navigate(Screens.MainScreen.name)}, colors = ButtonDefaults.buttonColors(
+                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context,  item?.username as String, item?.idImage as String ); navController.navigate(Screens.MainScreen.name)}, colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
                     Text(text = "Yes, sure")

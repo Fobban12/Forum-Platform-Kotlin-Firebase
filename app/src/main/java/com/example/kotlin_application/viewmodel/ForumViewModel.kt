@@ -49,7 +49,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener { documentSnapshot ->
 
                     if (documentSnapshot.exists()) {
-                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getTimestamp("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
+                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("idImage").toString(),documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getTimestamp("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
                         singleForum.value = forum;
                     }
 
@@ -69,7 +69,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener {
                     val forums = mutableListOf<Forum>()
                     it.documents.forEach { doc ->
-                        var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
+                        var forum = Forum(doc.id, doc.getString("idImage").toString(),doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
                         forums.add(forum)
                     }
                     forum.clear();
@@ -80,13 +80,21 @@ class ForumViewModel : ViewModel() {
     }
 
     //Delete forum
-    fun deleteForum (forumId: String, context: Context) {
-
+    fun deleteForum (forumId: String, context: Context, username: String, imageID: String) {
+        //Get storage reference
+        val ref: StorageReference = FirebaseStorage.getInstance().reference
+        //Get the exact location of the image
+        val getRef = ref.child("/users/$username/forum/$imageID/image")
+        //Get ID
         viewModelScope.launch {
             Firebase.firestore.collection("forum").document(forumId).delete();
-
+        //Remove Forum if the user ID is correct
             forum.removeIf { it.id == forumId };
-            Toast.makeText(context, "Remove forum successfully!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Forum successfully deleted", Toast.LENGTH_LONG).show()
+
+            //Delete Image from storage
+            getRef.delete()
+
 
             //Delete like of forum
             like.whereEqualTo("forumId", forumId).get().addOnSuccessListener { snapShot ->
@@ -133,7 +141,7 @@ class ForumViewModel : ViewModel() {
             FirebaseFirestore.getInstance().collection("forum").get().addOnSuccessListener {
                 val forums = mutableListOf<Forum>()
                 it.documents.forEach { doc ->
-                    var forum = Forum(doc.id, doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
+                    var forum = Forum(doc.id, doc.getString("idImage").toString(),doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
                     forums.add(forum)
                 }
 
