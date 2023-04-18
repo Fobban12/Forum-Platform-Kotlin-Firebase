@@ -261,6 +261,9 @@ fun PostingForum(
         else if (!descriptionIsValid || !descriptionLengthIsValid){
             Toast.makeText(context, "Description is invalid", Toast.LENGTH_LONG).show()
        }
+        else if (imageUri == null){
+            Toast.makeText(context, "No Picture, please add an Image", Toast.LENGTH_LONG).show()
+        }
         else {
              imageUri?.let {
                  var randomUID = UUID.randomUUID()

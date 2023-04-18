@@ -215,8 +215,8 @@ fun MainScreen(navController: NavController) {
                 navController = navController,
                 onItemClick = {
                     if(it.name == "Search"){ navController.navigate(Screens.SearchScreen.name)}
-                    if(it.name == "Direct" || checkUserIsNull){ navController.navigate(Screens.ChatListScreen.name)}
-                    if (it.name == "Direct" || checkUserIsNull){
+                    if(it.name == "Direct" && !checkUserIsNull){ navController.navigate(Screens.ChatListScreen.name)}
+                    if (it.name == "Direct" && checkUserIsNull){
                         Toast.makeText(context, "Not Logged in. Log in to use", Toast.LENGTH_LONG).show()}
                     if(it.name == "Chat"){ navController.navigate(Screens.ChatScreen.name)}
                     if(it.name == "Home"){ navController.navigate(Screens.MainScreen.name)}

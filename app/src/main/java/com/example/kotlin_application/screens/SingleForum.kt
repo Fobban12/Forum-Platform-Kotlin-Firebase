@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -54,7 +55,7 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                 Text(text = "Are you sure you want to delete your forum with title ${mutableItem.value?.title} you created?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
             },
             confirmButton = {
-                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context )}, colors = ButtonDefaults.buttonColors(
+                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context ); navController.navigate(Screens.MainScreen.name)}, colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
                     Text(text = "Yes, sure")
@@ -76,11 +77,12 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
         modifier = Modifier
             .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.onSurface)
-            .padding(vertical = 20.dp, horizontal = 20.dp)
-            .height(150.dp)
+            .padding(vertical = 5.dp, horizontal = 10.dp)
+            .height(IntrinsicSize.Min),
 
     ) {
-        Column() {
+        Column(verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
 
             if (uid == item.userId) {
                 Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
@@ -103,7 +105,10 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
             Spacer(modifier = Modifier.height(10.dp))
             Row(modifier = Modifier
                 .padding(2.dp)
-                .fillMaxHeight()) {
+                .fillMaxHeight(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+                 ) {
                 val painterState = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current).data(data = "${mutableItem.value?.image}")
                         .apply(block = fun ImageRequest.Builder.() {
@@ -116,15 +121,17 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                     contentDescription = "Image for forum",
                     modifier = Modifier.height(100.dp)
                 )
-                Column(modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth()) {
-                    Text(text = "Title: ${mutableItem.value?.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
+                Column(
+                    modifier = Modifier.padding(20.dp),
+
+
+                ) {
+                    Text(text = "Title: ${mutableItem.value?.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Left))
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Description : ${mutableItem.value?.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Center
-                    ), modifier = Modifier.fillMaxWidth())
+                    Text(text = "Description : ${mutableItem.value?.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Left
+                    ))
                     Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${mutableItem.value?.id}") }, modifier = Modifier
-                        .padding(10.dp)
+                        .padding(20.dp)
                         .fillMaxWidth(), colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.onBackground,
                         contentColor = Color.White

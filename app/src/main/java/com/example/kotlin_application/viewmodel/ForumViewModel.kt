@@ -64,7 +64,7 @@ class ForumViewModel : ViewModel() {
     }
 
     //Fetch all forums
-    fun getForum(){
+    private fun getForum(){
         viewModelScope.launch {
             Firebase.firestore.collection("forum")
                 .get()

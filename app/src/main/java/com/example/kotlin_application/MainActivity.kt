@@ -27,24 +27,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { // testing
+        setContent {
             KotlinApplicationTheme {
-//                val db = FirebaseFirestore.getInstance();
-//
-//                val user: MutableMap<String, Any> = HashMap();
-//
-//                user["firstName"] = "Thong"
-//                user["lastName"] = "Dang"
-//
-//                db.collection("users")
-//                    .add(user)
-//                    .addOnSuccessListener {
-//                        Log.d("FB", "onCreate: ${it.id}")
-//                    }
-//                    .addOnFailureListener {
-//                        Log.d("FB", "onCreate: $it")
-//                    }
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
@@ -83,7 +67,6 @@ fun Group10App() {
 
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
-@Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     KotlinApplicationTheme {
