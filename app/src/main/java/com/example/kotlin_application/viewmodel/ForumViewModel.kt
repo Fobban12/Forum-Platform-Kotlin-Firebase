@@ -1,6 +1,7 @@
 package com.example.kotlin_application.viewmodel
 
 import android.content.Context
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
@@ -16,6 +17,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.launch
 import java.lang.ref.Reference
 import java.util.*
+import java.util.logging.Handler
 
 
 class ForumViewModel : ViewModel() {
@@ -166,6 +168,8 @@ class ForumViewModel : ViewModel() {
                 .addOnFailureListener {
 
                 }
+
+
         }
     }
 
