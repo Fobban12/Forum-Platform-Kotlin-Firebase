@@ -2,11 +2,14 @@ package com.example.kotlin_application.viewmodel
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.UserProfileInput
+import com.example.kotlin_application.utils.CreateNotification
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.api.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -14,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
+@ExperimentalComposeUiApi
+@ExperimentalPermissionsApi
 class AuthenticationViewModel : ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
 
@@ -86,6 +91,7 @@ class AuthenticationViewModel : ViewModel() {
                             "${exception?.message}",
                             Toast.LENGTH_SHORT
                         ).show()
+
                     }
                 }
         } catch (ex: Exception) {

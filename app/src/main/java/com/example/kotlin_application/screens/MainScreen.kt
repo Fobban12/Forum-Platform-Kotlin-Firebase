@@ -32,9 +32,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kotlin_application.utils.CreateNotification
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 @ExperimentalCoilApi
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Composable
 fun MainScreen(navController: NavController) {
@@ -236,7 +239,6 @@ fun MainScreen(navController: NavController) {
 
                 }
             }
-        
 
 
 

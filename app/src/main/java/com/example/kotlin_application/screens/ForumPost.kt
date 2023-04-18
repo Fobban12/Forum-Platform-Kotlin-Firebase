@@ -1,5 +1,8 @@
 package com.example.kotlin_application.screens
 
+
+import android.app.NotificationChannel
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -40,9 +43,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.*
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.example.kotlin_application.utils.CreateNotification
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 //This is for the screen to make a forum post and push the data to the database.
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Composable
 fun ForumPost(
@@ -126,6 +137,8 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
 
 
 }//The function that is used to post the forum
+@ExperimentalPermissionsApi
+@ExperimentalComposeUiApi
 @Composable
 fun PostingForum(
     navController: NavController,
@@ -257,7 +270,11 @@ fun PostingForum(
                          val newForumPost = Forum(title = title.trim(), description = description.trim(), id = randomUID.toString(), type = "Marketplace", image = it.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
                          viewModel.createForum(newForumPost, context);
                          navController.navigate(Screens.MainScreen.name);
-                         Log.d("Success", "Success!") }
+                         Log.d("Success", "Success!")
+                         val createNotification = CreateNotification(context, "Post New Forum Succesfully", "You post new forum succesfully to Agora application")
+                         createNotification.showNotification()
+                     }
+
                     .addOnFailureListener {
                         Toast.makeText(context, "Fail to post forum", Toast.LENGTH_SHORT)
                             .show() }
@@ -274,5 +291,7 @@ fun PostingForum(
         Text(text = "Post", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
     }
 }
+
+
 
 
