@@ -21,7 +21,10 @@ along with Firebase authentication for login and register and finally their Clou
 
 Install the APK and use it. (After the App is done it will be here, !!!Remove this line after done!!!).
 If you want to use our code just put your own Firebase to it and use according to our models (if you want).
+
+```bash
 When cloning, please sync the project in your Android Studio.
+```
 
 ## What is the project goal?
 
