@@ -119,7 +119,7 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                 Image(
                     painter = painterState,
                     contentDescription = "Image for forum",
-                    modifier = Modifier.height(100.dp)
+                    modifier = Modifier.height(100.dp).width(100.dp)
                 )
                 Column(
                     modifier = Modifier.padding(20.dp),

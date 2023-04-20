@@ -33,16 +33,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.AuthenticationViewModel
 import androidx.compose.material.TextFieldDefaults
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.firebase.auth.FirebaseAuth
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @ExperimentalComposeUiApi
 fun LogScreen(
     navController: NavController,
-    viewModel: AuthenticationViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     isRegister: String
 ) {
+    //Get viewModel
+    val viewModel: AuthenticationViewModel = viewModel()
 
     //Check user is null
     val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {

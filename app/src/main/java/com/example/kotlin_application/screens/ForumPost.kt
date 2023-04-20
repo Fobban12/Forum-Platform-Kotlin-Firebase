@@ -1,6 +1,7 @@
 package com.example.kotlin_application.screens
 
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.content.Context
 import android.graphics.Bitmap
@@ -50,6 +51,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.kotlin_application.utils.CreateNotification
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 
 
 //This is for the screen to make a forum post and push the data to the database.
@@ -126,16 +130,6 @@ fun renderTopBar(navController: NavController, IconClick: () -> Unit)
         contentColor = MaterialTheme.colors.onSecondary
     )
 
-
-
-
-
-
-
-
-
-
-
 }//The function that is used to post the forum
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
@@ -170,6 +164,8 @@ fun PostingForum(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
+    val permissionStateStorage = rememberPermissionState(permission = Manifest.permission.READ_EXTERNAL_STORAGE)
+
     //Get storage reference
     val ref: StorageReference = FirebaseStorage.getInstance().reference
 
@@ -224,7 +220,6 @@ fun PostingForum(
     Column(
 
     ) {
-
          imageUri?.let {
             if (Build.VERSION.SDK_INT < 28) {
                 bitmap.value = MediaStore.Images
@@ -245,9 +240,15 @@ fun PostingForum(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Button(onClick = { launcher.launch("image/*");
+
+        Button(onClick = {
+
+
+                    launcher.launch("image/*")
+
+
         }) {
-            Text(text = "Pick Image")
+            Text(text = "Pick an Image")
         }
 
 
