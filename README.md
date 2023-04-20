@@ -34,7 +34,7 @@ This application's objective is to provide a common marketplace platform with no
 
 ## Project structure
 
-In this project, MVVM architecture (Model - View - View Model) architecture is used to structurize data handling implementations in connection with Firebase. 
+In this project, MVVM architecture (Model - View - View Model) architecture is used to structurize data handling implementations in connection with Firebase, Firestore. 
 
 ## Notable Configuration
 
