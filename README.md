@@ -2,11 +2,11 @@
 
 ## Members:
 
-**Bao Tran**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
+- **Bao Tran**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
 
-**Thong Dang**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
+- **Thong Dang**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
 
-**Jere Muikku**, DIN20SP (Full stack Kotlin Jetpack Compose + Firebase)
+- **Jere Muikku**, DIN20SP (Full stack Kotlin Jetpack Compose + Firebase)
 
 ## What is this project about?
 
@@ -39,3 +39,12 @@ In this project, MVVM architecture (Model - View - View Model) architecture is u
 ## Notable Configuration
 
 Camera X, Local Image Picker, Local Notification, Firebase Authentication, Firebase Storage, Firestore.
+
+## Technologies used in the project
+
+- Programming Language: **Kotlin Jetpack Compose**
+- Database: **Firebase + Firestore + Firebase Storage**
+- UI Design Tool: **Figma**
+- IDE: **Android Studio**
+- Database Planner:  **codeplanner.co**
+- Version Control: **Git and Github**
