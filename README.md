@@ -1,4 +1,6 @@
-**Members:**
+## Project Course: Mobile Development Project course (15 ECTS)
+
+## Members:
 
 **Bao Tran**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
 
