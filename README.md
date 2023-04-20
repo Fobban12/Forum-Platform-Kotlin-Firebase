@@ -22,3 +22,15 @@ along with Firebase authentication for login and register and finally their Clou
 Install the APK and use it. (After the App is done it will be here, !!!Remove this line after done!!!).
 If you want to use our code just put your own Firebase to it and use according to our models (if you want).
 When cloning, please sync the project in your Android Studio.
+
+## What is the project goal?
+
+This application's objective is to provide a common marketplace platform with no charges where people can contact and share second-hand items with each other. 
+
+## Project structure
+
+In this project, MVVM architecture (Model - View - View Model) architecture is used to structurize data handling implementations in connection with Firebase. 
+
+## Notable Configuration
+
+Camera X, Local Image Picker, Local Notification, Firebase Authentication, Firebase Storage, Firestore.
