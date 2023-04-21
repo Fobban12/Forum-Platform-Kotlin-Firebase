@@ -89,12 +89,28 @@ fun CameraMainView(navController: NavController, userProfileId: String) {
 
     //Get storage reference
     val ref: StorageReference = FirebaseStorage.getInstance().reference;
-
-    //Get username
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
-
+    
     //Get user profile view model
     val userProfileViewModel: UserProfileViewModel = viewModel();
+
+    //Get user UID
+    val uid = FirebaseAuth.getInstance().uid.toString();
+
+
+    //Check user is logged in or not
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    };
+
+    //Set effect to fetch single user id
+
+    LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+        userProfileViewModel.fetchSingleUserProfile(uid as String);
+    }
+
+    //Get state from user profile from view model
+    val singleUser = userProfileViewModel.singleUserProfile;
+
 
     if(imageUri == null){
         SideEffect {
@@ -120,10 +136,10 @@ fun CameraMainView(navController: NavController, userProfileId: String) {
             }
         } else {
             imageUri?.let {
-                ref.child("/users/$username/profile/profilePic/image")
+                ref.child("/users/${singleUser.value?.userId}}/profile/profilePic/image")
                     .putFile(it).addOnSuccessListener {
                         val urlDownload =
-                            ref.child("/users/$username/profile/profilePic/image").downloadUrl
+                            ref.child("/users/${singleUser.value?.userId}/profile/profilePic/image").downloadUrl
                         urlDownload.addOnSuccessListener {
 
                             userProfileViewModel.updateImage(
