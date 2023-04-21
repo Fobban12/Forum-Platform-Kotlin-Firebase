@@ -82,11 +82,11 @@ class ForumViewModel : ViewModel() {
     }
 
     //Delete forum
-    fun deleteForum (forumId: String, context: Context, username: String, imageID: String) {
+    fun deleteForum (forumId: String, context: Context, userId: String, imageID: String) {
         //Get storage reference
         val ref: StorageReference = FirebaseStorage.getInstance().reference
         //Get the exact location of the image
-        val getRef = ref.child("/users/$username/forum/$imageID/image")
+        val getRef = ref.child("/users/$userId/forum/$imageID/image")
         //Get ID
         viewModelScope.launch {
             Firebase.firestore.collection("forum").document(forumId).delete();

@@ -47,9 +47,12 @@ import java.util.*
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.kotlin_application.utils.CreateNotification
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
@@ -63,6 +66,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 fun ForumPost(
     navController: NavController,
 ) {
+
 
 //Top Bar
     Scaffold(
@@ -140,7 +144,10 @@ fun PostingForum(
 
     //Get Forum ViewModel
     val viewModel: ForumViewModel = viewModel()
-   //For the Title Text field
+    //Get user profile view model
+    val userProfileViewModel: UserProfileViewModel = viewModel();
+
+    //For the Title Text field
     var title by remember { mutableStateOf("") }
     val titleIsValid = remember(title){title.trim().isNotEmpty()}
     val titleLengthIsValid = remember(title){title.trim().length >= 6}
@@ -150,12 +157,28 @@ fun PostingForum(
     val descriptionIsValid = remember(title){title.trim().isNotEmpty()}
     val descriptionLengthIsValid = remember(title){title.trim().length >= 3}
 
-
+    //Context and keyboard controller
     val keyboardController = LocalFocusManager.current;
     val context = LocalContext.current;
 
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
+    //Get user UID
     val uid = FirebaseAuth.getInstance().uid.toString();
+
+
+    //Check user is logged in or not
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    };
+
+    //Set effect to fetch single user id
+
+    LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+        userProfileViewModel.fetchSingleUserProfile(uid as String);
+    }
+
+    //Get state from user profile from view model
+    val singleUser = userProfileViewModel.singleUserProfile;
+
 
     //Image stuff
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -164,7 +187,7 @@ fun PostingForum(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
-    val permissionStateStorage = rememberPermissionState(permission = Manifest.permission.READ_EXTERNAL_STORAGE)
+
 
     //Get storage reference
     val ref: StorageReference = FirebaseStorage.getInstance().reference
@@ -268,10 +291,10 @@ fun PostingForum(
         else {
              imageUri?.let {
                  var randomUID = UUID.randomUUID()
-                 ref.child("/users/$username/forum/$randomUID/image").putFile(it).addOnSuccessListener {
-                     val urlDownload = ref.child("/users/$username/forum/$randomUID/image").downloadUrl
+                 ref.child("/users/${singleUser.value?.userId}/forum/$randomUID/image").putFile(it).addOnSuccessListener {
+                     val urlDownload = ref.child("/users/${singleUser.value?.userId}/forum/$randomUID/image").downloadUrl
                      urlDownload.addOnSuccessListener {
-                         val newForumPost = Forum(title = title.trim(), description = description.trim(), id = null, idImage = randomUID.toString() ,type = "Marketplace", image = it.toString(), createdAt = Timestamp.now(), userId = uid, username = username)
+                         val newForumPost = Forum(title = title.trim(), description = description.trim(), id = null, idImage = randomUID.toString() ,type = "Marketplace", image = it.toString(), createdAt = Timestamp.now(), userId = uid, username = singleUser.value?.username)
                          viewModel.createForum(newForumPost, context);
                          navController.navigate(Screens.MainScreen.name);
                          Log.d("Success", "Success!")

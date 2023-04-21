@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.example.kotlin_application.data.CommentInput
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.CommentViewModel
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 
@@ -39,6 +40,8 @@ fun UpdateCommentScreen (navController: NavController, commentId : String ) {
 
     //Get comment viewModel
     val commentViewModel: CommentViewModel = viewModel()
+    //Get user profile view model
+    val userProfileViewModel: UserProfileViewModel = viewModel();
 
     //Set controller for keyboard
     val keyboardController = LocalFocusManager.current;

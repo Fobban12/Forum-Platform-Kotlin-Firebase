@@ -52,6 +52,7 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
         }
 
         composable(Screens.ForumPost.name) {
+
             ForumPost(navController = navController)
         }
         composable(Screens.SearchScreen.name) {

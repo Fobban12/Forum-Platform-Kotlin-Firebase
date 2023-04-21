@@ -104,7 +104,7 @@ fun UpdateUsernameScreen (navController: NavController, userProfileId : String) 
                     if (!newUsernameIsValid!! || !newUsernameLengthIsValid) {
                         Toast.makeText(context, "New username is invalid and it must include at least 5 characters", Toast.LENGTH_LONG).show()
                     } else {
-                        userProfileViewModel.updateUsername(user_profile?.id as String, newUsername.value as String, context = context);
+                        userProfileViewModel.updateUsername(user_profile?.id as String, newUsername.value as String, context = context, user_profile?.userId as String );
                         navController.popBackStack();
                         Log.d("Successfully", "Successfully!")
                     }
