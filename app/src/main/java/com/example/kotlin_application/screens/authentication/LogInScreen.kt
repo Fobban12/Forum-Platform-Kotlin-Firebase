@@ -298,7 +298,7 @@ fun LogScreen(
                     }
                 }
             }
-            
+            Text(text = "${FirebaseAuth.getInstance().uid}")
 //            SignInScreen(
 //                state = state,
 //            onSignInClick = {
