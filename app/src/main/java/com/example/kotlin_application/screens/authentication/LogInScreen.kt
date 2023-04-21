@@ -1,7 +1,12 @@
 package com.example.kotlin_application.screens.authentication
 
+import android.app.Activity
+import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -33,14 +38,26 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.AuthenticationViewModel
 import androidx.compose.material.TextFieldDefaults
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kotlin_application.screens.sign_in.GoogleAuthUiClient
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.identity.Identity
+import hilt_aggregated_deps._dagger_hilt_android_internal_modules_ApplicationContextModule
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+import androidx.lifecycle.LifecycleOwner
+import com.example.kotlin_application.screens.sign_in.SignInScreen
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @ExperimentalComposeUiApi
+
+
 fun LogScreen(
     navController: NavController,
     isRegister: String
@@ -60,6 +77,49 @@ fun LogScreen(
 
     //Set context for toast
     val context = LocalContext.current
+    val lifecycleOwner = LocalContext.current as LifecycleOwner
+
+
+    //google sign in state
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(context = context,
+        oneTapClient = Identity.getSignInClient(context))
+    }
+    
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = {result ->
+            if (result.resultCode == Activity.RESULT_OK){
+             lifecycleOwner.lifecycleScope.launch(){
+                 val signInResult = googleAuthUiClient.signInWithIntent(
+                     intent = result.data ?: return@launch
+                 )
+                 viewModel.onSignInResult(signInResult)
+
+             }
+
+            }
+
+        })
+
+    //set launch effect redirect to main screen for google sign in
+    LaunchedEffect(key1 = Unit) {
+        if(googleAuthUiClient.getSignedInUser() != null) {
+            navController.navigate(Screens.MainScreen.name)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isSignInSuccessful){
+        if (state.isSignInSuccessful){
+            Toast.makeText(
+                context,"sign in successful",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
 
     //Set effect to check user is logged in and now allowed to access log in page
@@ -158,6 +218,21 @@ fun LogScreen(
             }
             Spacer(modifier = Modifier.height(50.dp))
             Text(text = "Go To Main Page", modifier = Modifier.clickable { navController.navigate(Screens.MainScreen.name)}, style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold))
+            
+            //Google Sign-In 
+            
+            SignInScreen(
+                state = state,
+            onSignInClick = {
+                lifecycleOwner.lifecycleScope.launch {
+                    val signInIntentSender = googleAuthUiClient.signIn()
+                    launcher.launch(
+                        IntentSenderRequest.Builder(
+                            signInIntentSender ?: return@launch
+                        ).build()
+                    )
+                }
+            })
         }
     }
 }

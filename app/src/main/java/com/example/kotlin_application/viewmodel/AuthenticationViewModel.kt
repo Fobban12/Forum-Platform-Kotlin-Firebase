@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.UserProfileInput
+import com.example.kotlin_application.screens.sign_in.SignInResult
+import com.example.kotlin_application.screens.sign_in.SignInState
 import com.example.kotlin_application.utils.CreateNotification
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.api.Context
@@ -15,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
@@ -27,6 +32,24 @@ class AuthenticationViewModel : ViewModel() {
 
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
+
+    //google sign_in viewmodel from here
+
+    private val _state = MutableStateFlow(SignInState())
+    val state = _state.asStateFlow()
+
+    fun onSignInResult(result: SignInResult) {
+        _state.update { it.copy(
+            isSignInSuccessful = result.data != null,
+            signInError = result.errorMessage
+        ) }
+    }
+
+    fun resetState() {
+        _state.update { SignInState() }
+    }
+
+    //end
 
     fun createUserWithEmailAndPassword(
         email: String,
