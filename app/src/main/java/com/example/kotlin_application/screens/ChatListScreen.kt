@@ -69,7 +69,7 @@ fun ChatListScreen (navController: NavController) {
     //Get state for all chats of user
     val allChats = chatVIewModel.allSingleChatsByUserId;
 
-    val coroutineScope = rememberCoroutineScope();
+
     val listState = rememberLazyListState()
 
 
@@ -105,8 +105,6 @@ fun ChatListScreen (navController: NavController) {
             .fillMaxSize()
             .padding(vertical = 20.dp, horizontal = 10.dp)) {
             Column(modifier = Modifier.fillMaxSize()) {
-
-
 
 
                 LazyColumn(
