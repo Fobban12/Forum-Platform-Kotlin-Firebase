@@ -135,7 +135,7 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
                 Text(text = "Chat room created at: $dateTime", style = TextStyle(fontWeight = FontWeight.Bold))
                 Spacer(modifier = Modifier.height(5.dp))
                 Row() {
-                    Text(text = if (uid == singleMessage.value?.senderId) "You sent: " else "${singleUserProfile.value?.username} sent: ")
+                    Text(text = if (singleMessage.value == null) "" else if (uid == singleMessage.value?.senderId) "You sent: " else "${singleUserProfile.value?.username} sent: ")
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = "$contentMessage")
                 }
