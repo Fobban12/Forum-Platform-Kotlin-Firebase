@@ -82,7 +82,7 @@ class GoogleAuthUiClient(
                 GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(context.getString(R.string.web_client_id))
+                    .setServerClientId("238469616694-2j8867nva9juo8s1gprhdrgvs1o0ugbg.apps.googleusercontent.com")
                     .build()
             )
             .setAutoSelectEnabled(true)
