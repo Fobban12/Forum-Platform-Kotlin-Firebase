@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.kotlin_application.navigation.Screens
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
 
 @ExperimentalComposeUiApi
@@ -75,22 +76,23 @@ class AuthenticationViewModel : ViewModel() {
             privateAuth.signInWithCredential(credential).addOnSuccessListener { it ->
                 navController.navigate(Screens.MainScreen.name)
                 Toast.makeText(context, "Log In With Google successfully!", Toast.LENGTH_LONG).show();
+                updateUserProfileForGoogleAccount(it);
             }
         }
     }
 
+    //Update user profile for google account
+    fun updateUserProfileForGoogleAccount (it : AuthResult) {
 
-
-//    fun signInWithGoogle (context: android.content.Context) {
-//        val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestEmail()
-//            .requestIdToken("238469616694-jmekh4cuc38gmgjsdk7cved09ejstviq.apps.googleusercontent.com")
-//            .build()
-//
-//        val googleSingInClient = GoogleSignIn.getClient(context, gso)
-//
-//        launcher.launch(googleSingInClient.signInIntent)
-//    }
+        userProfileDB.whereEqualTo("userId", it.user?.uid).get().addOnSuccessListener { querySnapshot ->
+            if (querySnapshot.documents.isEmpty()) {
+                val userProfile = UserProfileInput(it.user?.displayName, null,it.user?.uid);
+                userProfileDB.add(userProfile).addOnSuccessListener { it ->
+                Log.d("Update new user profile for Google", "Create new user profile for Google successfully!")
+                }.addOnFailureListener { it -> Log.d("Update new user profile for Google", "Create new user profile for Google fail!") }
+            }
+        }
+    }
 
     //end
 

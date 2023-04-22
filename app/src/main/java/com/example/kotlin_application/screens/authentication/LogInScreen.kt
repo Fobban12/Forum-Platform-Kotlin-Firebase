@@ -256,49 +256,51 @@ fun LogScreen(
             Text(text = "Go To Main Page", modifier = Modifier.clickable { navController.navigate(Screens.MainScreen.name)}, style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold))
             
             //Google Sign-In
+            if (isLoginForm.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(onClick = {
+                        val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(context.getString(R.string.web_client_id))
+                            .requestEmail()
+                            .build()
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Button(onClick = {
-                    val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(context.getString(R.string.web_client_id))
-                        .requestEmail()
-                        .build()
+                        val googleSingInClient = GoogleSignIn.getClient(context, gso)
 
-                    val googleSingInClient = GoogleSignIn.getClient(context, gso)
-
-                    launcher.launch(googleSingInClient.signInIntent)
-
-
+                        launcher.launch(googleSingInClient.signInIntent)
 
 
-                                 }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(backgroundColor = goldYellowHex), border = BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(2.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                        Image(
-                            modifier = Modifier
-                                .padding(start = 15.dp)
-                                .size(32.dp)
-                                .padding(0.dp)
-                                .align(Alignment.CenterVertically),
-                            painter = painterResource(id = R.drawable.ic_google_logo),
-                            contentDescription = "google_logo"
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 20.dp)
-                                .align(Alignment.CenterVertically),
-                            text = "Sign In With Google",
-                            fontSize = MaterialTheme.typography.h6.fontSize,
-                            fontWeight = FontWeight.Bold
-                        )
+
+
+                    }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(backgroundColor = goldYellowHex), border = BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(2.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(start = 15.dp)
+                                    .size(32.dp)
+                                    .padding(0.dp)
+                                    .align(Alignment.CenterVertically),
+                                painter = painterResource(id = R.drawable.ic_google_logo),
+                                contentDescription = "google_logo"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .padding(start = 20.dp)
+                                    .align(Alignment.CenterVertically),
+                                text = "Sign In With Google",
+                                fontSize = MaterialTheme.typography.h6.fontSize,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
+
             }
-            Text(text = "${FirebaseAuth.getInstance().uid}")
+
 //            SignInScreen(
 //                state = state,
 //            onSignInClick = {
