@@ -42,9 +42,9 @@ Camera X, Local Image Picker, Local Notification, Firebase Authentication, Fireb
 
 ## Technologies used in the project
 
-- Programming Language: **Kotlin Jetpack Compose**
-- Database: **Firebase + Firestore + Firebase Storage**
-- UI Design Tool(s): **Figma and Axure**
-- IDE: **Android Studio**
+- Programming Language: **Kotlin Jetpack Compose** <img src="https://skillicons.dev/icons?i=kotlin" />
+- Database: **Firebase + Firestore + Firebase Storage** <img src="https://skillicons.dev/icons?i=firebase" />
+- UI Design Tool(s): **Figma and Axure** <img src="https://skillicons.dev/icons?i=figma" />
+- IDE: **Android Studio**  <img src="https://skillicons.dev/icons?i=androidstudio" />
 - Database Planner:  **codeplanner.co**
-- Version Control: **Git and Github**
+- Version Control: **Git and Github**  <img src="https://skillicons.dev/icons?i=git,github" />
