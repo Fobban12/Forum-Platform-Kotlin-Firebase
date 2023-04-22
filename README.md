@@ -17,7 +17,7 @@ or not.
 ## What we used for the project.
 
 We used Kotlin as a base with Jetpack Compose and Firebase for our App. Firebase storage for the Images and Firebase database for our data,
-along with Firebase authentication for login and register and finally their Cloud storage service for real time commenting.
+along with Firebase authentication for login and register, Firebase Google Sign-In authentication, and finally their Cloud storage service for real time commenting.
 
 ## How to use?
 
@@ -38,13 +38,14 @@ In this project, MVVM architecture (Model - View - View Model) architecture is u
 
 ## Notable Configuration
 
-Camera X, Local Image Picker, Local Notification, Firebase Authentication, Firebase Storage, Firestore.
+Camera X, Local Image Picker, Local Notification, Firebase Authentication, Firebase Storage, Firestore, Google Sign-In Authentication.
 
 ## Technologies used in the project
 
-- Programming Language: **Kotlin Jetpack Compose**
-- Database: **Firebase + Firestore + Firebase Storage**
-- UI Design Tool(s): **Figma and Axure**
-- IDE: **Android Studio**
+- Programming Language: **Kotlin Jetpack Compose** 
+- Database: **Firebase + Firestore + Firebase Storage** 
+- UI Design Tool(s): **Figma and Axure** 
+- IDE: **Android Studio**  
 - Database Planner:  **codeplanner.co**
-- Version Control: **Git and Github**
+- Version Control: **Git and Github** 
+<img src="https://skillicons.dev/icons?i=kotlin,firebase,figma,androidstudio,git,github" />

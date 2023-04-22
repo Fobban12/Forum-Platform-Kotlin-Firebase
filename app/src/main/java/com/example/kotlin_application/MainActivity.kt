@@ -25,6 +25,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

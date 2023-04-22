@@ -16,7 +16,8 @@ enum class Screens {
     ContactScreen,
     ChatListScreen,
     CameraScreen,
-    ChatScreen;
+    ChatScreen,
+    SignInScreen;
 
 
 
@@ -38,6 +39,7 @@ enum class Screens {
                 ContactScreen.name -> ContactScreen
                 ChatListScreen.name -> ChatListScreen
                 CameraScreen.name -> CameraScreen
+                SignInScreen.name -> SignInScreen
                 else -> throw java.lang.IllegalArgumentException("Route $route is not recognized")
             }
     }
