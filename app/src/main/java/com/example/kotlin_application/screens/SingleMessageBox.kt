@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,7 +70,8 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
     //Filter info of another user info in the chat room
     val anotherUserId = item?.userIds?.filter { it -> it != uid }?.firstOrNull();
 
-    //Filter the last message in that chat room
+
+ //    //Filter the last message in that chat room
     val lastMessageId = item?.messages?.lastOrNull();
 
     //Set effect to fetch user profile of that person created the message
@@ -80,21 +82,26 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
         }
     };
 
+    
+//
     //Set context for Toast
     val context = LocalContext.current;
 
     //Set effect to fetch the last message for that chat room
     LaunchedEffect(lastMessageId) {
-        chatViewModel.fetchSingleMessage(lastMessageId as String, context = context).let { it ->
-            singleMessage.value = it;
-        };
+        if (lastMessageId != null) {
+            chatViewModel.fetchSingleMessage(lastMessageId as String, context = context).let { it ->
+                singleMessage.value = it;
+            };
+        }
+
     };
 
     //Set width based on screen width
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val chatBoxWidth = with(LocalDensity.current) { screenWidth * 0.8f }
 
-    //Set width for avatar based on screen width
+//    Set width for avatar based on screen width
     val avatarWidth = if (singleUserProfile.value?.image != null || singleUserProfile.value?.image.toString().isNotEmpty()) with(
         LocalDensity.current) { screenWidth * 0.1f} else with(
         LocalDensity.current) {screenWidth * 0f};
@@ -102,8 +109,8 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
         LocalDensity.current) { screenWidth * 0.1f} else with(
         LocalDensity.current) {screenWidth * 0f};
 
-    //Set condition for the last message
-    val contentMessage = if ((singleMessage.value?.content?.length ?: 0) <= 5) singleMessage.value?.content else "${singleMessage.value?.content?.substring(0, 6)}...";
+//    Set condition for the last message
+    val contentMessage = if (singleMessage.value == null) "No message created yet!" else if ((singleMessage.value?.content?.length ?: 0) <= 5) singleMessage.value?.content else "${singleMessage.value?.content?.substring(0, 6)}...";
 
 
     Card (
@@ -128,7 +135,7 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
                 Text(text = "Chat room created at: $dateTime", style = TextStyle(fontWeight = FontWeight.Bold))
                 Spacer(modifier = Modifier.height(5.dp))
                 Row() {
-                    Text(text = if (uid == singleMessage.value?.senderId) "You sent: " else "${singleUserProfile.value?.username} sent: ")
+                    Text(text = if (singleMessage.value == null) "" else if (uid == singleMessage.value?.senderId) "You sent: " else "${singleUserProfile.value?.username} sent: ")
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = "$contentMessage")
                 }

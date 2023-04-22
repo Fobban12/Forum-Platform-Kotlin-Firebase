@@ -50,10 +50,7 @@ import com.example.kotlin_application.data.LikeInput
 import com.example.kotlin_application.data.UserProfile
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
-import com.example.kotlin_application.viewmodel.ChatVIewModel
-import com.example.kotlin_application.viewmodel.CommentViewModel
-import com.example.kotlin_application.viewmodel.ForumViewModel
-import com.example.kotlin_application.viewmodel.LikeViewModel
+import com.example.kotlin_application.viewmodel.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -66,7 +63,8 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
     val likeViewModel: LikeViewModel = viewModel()
     //Get chat viewModel
     val chatViewModel: ChatVIewModel = viewModel()
-    //Get username
+    //Get user profile view model
+    val userProfileViewModel: UserProfileViewModel = viewModel();
 
 
     //Set image height based on screen height
@@ -101,9 +99,16 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
     //Get uid from firebase
     val uid = FirebaseAuth.getInstance()?.uid;
 
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance()?.currentUser?.email?.split("@")?.get(0);
-    
+
+    //Set effect to fetch single user id
+    if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+        userProfileViewModel.fetchSingleUserProfile(uid as String);
+    }}
+
+
+    //Get state from user profile from view model
+    val singleUser = userProfileViewModel.singleUserProfile;
+
     //Get like from like view model
     val likes = likeViewModel.likes;
     
@@ -182,18 +187,18 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
 
                 Row(horizontalArrangement = Arrangement.Center) {
                     if (likes.size == 0) {
-                        Text(text = "0 like for this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.padding(12.dp))
+                        Text(text = "0 likes for this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.padding(12.dp))
                     } else if (likes?.size == 1 && !likeOrDislike) {
                         Text(text = "${likes.size} person likes for this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
                     } else if (likes?.size == 1 && likeOrDislike) {
-                        Text(text = "You like for this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
+                        Text(text = "You like this forum post", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
                     } else {
                         Text(text = if (!likeOrDislike) "${likes.size} people like this forum" else "You and other ${likes.size -1} people like this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))
                     if (!likeOrDislike && !checkUserIsNull) {
-                    Button(onClick = { likeViewModel.saveLike(LikeInput(forumId = forumId, userId = uid, username = username), context = context) }, colors = ButtonDefaults.buttonColors(
+                    Button(onClick = { likeViewModel.saveLike(LikeInput(forumId = forumId, userId = uid, username = singleUser.value?.username), context = context) }, colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.onBackground,
                         contentColor = Color.White)) {
                         Row(horizontalArrangement = Arrangement.Center) {

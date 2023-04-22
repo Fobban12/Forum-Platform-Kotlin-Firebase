@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 
 @Composable
@@ -104,8 +105,8 @@ fun UpdateUsernameScreen (navController: NavController, userProfileId : String) 
                     if (!newUsernameIsValid!! || !newUsernameLengthIsValid) {
                         Toast.makeText(context, "New username is invalid and it must include at least 5 characters", Toast.LENGTH_LONG).show()
                     } else {
-                        userProfileViewModel.updateUsername(user_profile?.id as String, newUsername.value as String, context = context);
-                        navController.popBackStack();
+                        userProfileViewModel.updateUsername(user_profile?.id as String, newUsername.value as String, context = context, user_profile?.userId as String );
+                        navController.navigate(Screens.ProfileScreen.name)
                         Log.d("Successfully", "Successfully!")
                     }
                     keyboardController.clearFocus()

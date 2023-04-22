@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -40,6 +41,8 @@ fun AddCommentScreen (navController: NavController, forumId : String)
 {
 
     val viewModel:CommentViewModel = viewModel()
+    //Get user profile view model
+    val userProfileViewModel: UserProfileViewModel = viewModel();
 
 
     //Set state for comment
@@ -61,11 +64,24 @@ fun AddCommentScreen (navController: NavController, forumId : String)
     //Set context for toast
     val context = LocalContext.current;
 
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
-
     //Get uid from firebase
     val uid = FirebaseAuth.getInstance().uid.toString();
+
+    //Check user is null
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    }
+
+
+
+    //Set effect to fetch single user id
+    if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+        userProfileViewModel.fetchSingleUserProfile(uid as String);
+    }
+    }
+
+    //Get state from user profile from view model
+    val singleUser = userProfileViewModel.singleUserProfile;
 
     Scaffold(
         topBar = {
@@ -120,7 +136,7 @@ fun AddCommentScreen (navController: NavController, forumId : String)
                     if (!commentIsValid || !commentLengthIsValid) {
                         Toast.makeText(context, "Comment is invalid and it must include at least 5 characters", Toast.LENGTH_LONG).show()
                     } else {
-                        val newComment = CommentInput(comment = comment.value.trim(), createdAt = Timestamp.now(), forumId = forumId, userId = uid, username = username)
+                        val newComment = CommentInput(comment = comment.value.trim(), createdAt = Timestamp.now(), forumId = forumId, userId = uid, username = singleUser.value?.username)
                         viewModel.saveComment(newComment, context);
                         navController.popBackStack();
                         Log.d("Successfully", "Successfully!")

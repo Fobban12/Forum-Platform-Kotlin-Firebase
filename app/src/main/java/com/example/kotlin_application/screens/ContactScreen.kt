@@ -1,6 +1,5 @@
 package com.example.kotlin_application.screens
 
-import android.content.Context
 import androidx.compose.material.Text
 import androidx.navigation.NavController
 import android.util.Log
@@ -21,9 +20,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,17 +28,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kotlin_application.data.Chat
-import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
 import androidx.compose.ui.unit.sp
-import com.example.kotlin_application.data.ChatObject
-import com.example.kotlin_application.data.Message
-import com.example.kotlin_application.data.MessageInput
+import com.example.kotlin_application.data.*
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
@@ -74,7 +67,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
             chatViewModel.fetchRoomWithRoomId(chatId as String);
         } else {
             chatViewModel.fetchRoomBasedOnUserIds(userIds as List<String>, context);
-            Log.d("user ids::", "${userIds}")
+            Log.d("user ids::", "$userIds")
         }
     };
     
@@ -87,6 +80,9 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
 
     val coroutineScope = rememberCoroutineScope();
     val listState = rememberLazyListState();
+
+
+
 
 
     Scaffold(
@@ -184,7 +180,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
             single_chat_room?.let { room ->
                 if (room.messages?.isEmpty() as Boolean) {
                     Text(
-                        text = "There are no messages yet",
+                        text = "No messages",
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
                             color = MaterialTheme.colors.onBackground,
@@ -203,7 +199,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
 
                     LazyColumn(modifier = Modifier.padding(bottom = 50.dp), state = listState) {
                         items(room.messages) {
-                            item -> SingleMessage(messageId = "${item}")
+                            item -> SingleMessage(messageId = item)
                         }
                     }
                 }

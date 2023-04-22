@@ -152,10 +152,10 @@ fun ProfileScreen (navController: NavController) {
         //Set launch effect
         LaunchedEffect(imageUri, single_user.value?.id) {
                 imageUri?.let { it ->
-                        ref.child("/users/$username/profile/profilePic/image")
+                        ref.child("/users/${single_user.value?.userId}/profile/profilePic/image")
                                 .putFile(it).addOnSuccessListener {
                                         val urlDownload =
-                                                ref.child("/users/$username/profile/profilePic/image").downloadUrl
+                                                ref.child("/users/${single_user.value?.userId}/profile/profilePic/image").downloadUrl
                                         urlDownload.addOnSuccessListener {
 
                                                 userProfileViewModel.updateImage(

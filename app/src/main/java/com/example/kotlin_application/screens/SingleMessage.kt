@@ -1,16 +1,12 @@
 package com.example.kotlin_application.screens
 
-import android.widget.Space
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,18 +21,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_application.data.Message
 import com.example.kotlin_application.viewmodel.ChatVIewModel
-import com.google.firebase.Timestamp
-import kotlinx.coroutines.launch
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -46,10 +37,7 @@ import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import com.google.maps.android.compose.Circle
 import androidx.compose.ui.res.*;
-import androidx.compose.ui.unit.sp;
 
 
 @OptIn(ExperimentalCoilApi::class)
@@ -130,7 +118,7 @@ fun SingleMessage (messageId : String) {
                     Column() {
                         Text(text =  "${singleMessage.value?.content}", modifier = Modifier.padding(10.dp),style = TextStyle(color = Color.Black,fontSize = 16.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = if (uid == singleMessage.value?.senderId) "Your message created at ${dateTime}" else "${singleUserProfile.value?.username}'s message created at ${dateTime}", modifier = Modifier.padding(10.dp), textAlign = TextAlign.Start)
+                        Text(text = if (uid == singleMessage.value?.senderId) "Created at ${dateTime}" else "${singleUserProfile.value?.username}'s message created at ${dateTime}", modifier = Modifier.padding(10.dp), textAlign = TextAlign.Start)
                         Spacer(modifier = Modifier.height(8.dp))
                         Column(modifier = Modifier
                             .padding(5.dp)

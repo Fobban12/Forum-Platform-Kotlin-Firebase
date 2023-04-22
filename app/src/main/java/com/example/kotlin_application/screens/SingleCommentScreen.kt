@@ -30,6 +30,7 @@ import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.CommentViewModel
 import com.example.kotlin_application.viewmodel.LikeForCommentModel
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalComposeUiApi
@@ -40,6 +41,9 @@ fun SingleCommentScreen (navController : NavController,singleItem: Comment?, for
     val commentViewModel: CommentViewModel = viewModel()
     //Get viewModel for likes in comments
     val likeForCommentModel: LikeForCommentModel = viewModel()
+    //Get user profile view model
+    val userProfileViewModel: UserProfileViewModel = viewModel();
+
     //Get context for toast
     val context = LocalContext.current;
 
@@ -51,8 +55,15 @@ fun SingleCommentScreen (navController : NavController,singleItem: Comment?, for
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     }
 
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance()?.currentUser?.email?.split("@")?.get(0);
+
+
+    //Set effect to fetch single user id
+    if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+        userProfileViewModel.fetchSingleUserProfile(uid as String);
+    }}
+
+    //Get state from user profile from view model
+    val singleUser = userProfileViewModel.singleUserProfile;
 
     //Fetch likes for comment
     LaunchedEffect(forumId, singleItem?.id) {
@@ -92,7 +103,7 @@ fun SingleCommentScreen (navController : NavController,singleItem: Comment?, for
 
                 Spacer(modifier = Modifier.width(10.dp))
                 if (!likeOrDislike && !checkUserIsNull) {
-                    Button(onClick = { likeForCommentModel.saveLikeToComment(LikeForCommentInput(userId = uid, username = username, forumId = forumId, commentId = singleItem?.id as String), context = context) }, colors = ButtonDefaults.buttonColors(
+                    Button(onClick = { likeForCommentModel.saveLikeToComment(LikeForCommentInput(userId = uid, username = singleUser.value?.username, forumId = forumId, commentId = singleItem?.id as String), context = context) }, colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.onBackground,
                         contentColor = Color.White)) {
                         Row(horizontalArrangement = Arrangement.Center) {
