@@ -38,7 +38,7 @@ In this project, MVVM architecture (Model - View - View Model) architecture is u
 
 ## Notable Configuration
 
-Camera X, Local Image Picker, Local Notification, Firebase Authentication, Firebase Storage, Firestore.
+Camera X, Local Image Picker, Local Notification, Firebase Authentication, Firebase Storage, Firestore, Google Sign-In Authentication.
 
 ## Technologies used in the project
 
