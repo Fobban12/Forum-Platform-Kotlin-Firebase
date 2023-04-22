@@ -83,13 +83,14 @@ class AuthenticationViewModel : ViewModel() {
 
     //Update user profile for google account
     fun updateUserProfileForGoogleAccount (it : AuthResult) {
-
-        userProfileDB.whereEqualTo("userId", it.user?.uid).get().addOnSuccessListener { querySnapshot ->
-            if (querySnapshot.documents.isEmpty()) {
-                val userProfile = UserProfileInput(it.user?.displayName, null,it.user?.uid);
-                userProfileDB.add(userProfile).addOnSuccessListener { it ->
-                Log.d("Update new user profile for Google", "Create new user profile for Google successfully!")
-                }.addOnFailureListener { it -> Log.d("Update new user profile for Google", "Create new user profile for Google fail!") }
+        viewModelScope.launch {
+            userProfileDB.whereEqualTo("userId", it.user?.uid).get().addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.documents.isEmpty()) {
+                    val userProfile = UserProfileInput(it.user?.displayName, null,it.user?.uid);
+                    userProfileDB.add(userProfile).addOnSuccessListener { it ->
+                        Log.d("Update new user profile for Google", "Create new user profile for Google successfully!")
+                    }.addOnFailureListener { it -> Log.d("Update new user profile for Google", "Create new user profile for Google fail!") }
+                }
             }
         }
     }
