@@ -1,10 +1,17 @@
 package com.example.kotlin_application.screens.authentication
 
+import android.app.Activity
+import android.content.Intent
+import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -33,20 +40,45 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.AuthenticationViewModel
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kotlin_application.screens.sign_in.GoogleAuthUiClient
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.identity.Identity
+import hilt_aggregated_deps._dagger_hilt_android_internal_modules_ApplicationContextModule
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import com.example.kotlin_application.R
+
+import androidx.lifecycle.LifecycleOwner
+import com.example.kotlin_application.screens.sign_in.SignInScreen
+import com.example.kotlin_application.ui.theme.goldYellowHex
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
+import com.stevdzasan.onetap.OneTapSignInWithGoogle
+import com.stevdzasan.onetap.rememberOneTapSignInState
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.tasks.await
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @ExperimentalComposeUiApi
+
+
 fun LogScreen(
     navController: NavController,
     isRegister: String
 ) {
     //Get viewModel
-    val viewModel: AuthenticationViewModel = viewModel()
+    val viewModel: AuthenticationViewModel = viewModel();
+
 
     //Check user is null
     val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
@@ -60,6 +92,70 @@ fun LogScreen(
 
     //Set context for toast
     val context = LocalContext.current
+
+
+
+    //google sign in state
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(context = context,
+        oneTapClient = Identity.getSignInClient(context))
+    }
+//
+//    val launcher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.StartIntentSenderForResult(),
+//        onResult = {result ->
+//            if (result.resultCode == Activity.RESULT_OK){
+//             lifecycleOwner.lifecycleScope.launch(){
+//                 val signInResult = googleAuthUiClient.signInWithIntent(
+//                     intent = result.data ?: return@launch
+//                 )
+////                 viewModel.onSignInResult(signInResult)
+//                    Toast.makeText(context, "Successfully: ${signInResult.data!!.userId}", Toast.LENGTH_LONG).show()
+//             }
+//
+//            }
+//
+//        })
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { it ->
+
+            val task =
+                try {
+                    val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                        .getResult(ApiException::class.java)
+                    val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                    viewModel.googleSignIn(credential, context, navController)
+                    Log.w("TAG", "Success")
+
+                }
+                catch (e: ApiException) {
+                    Log.w("TAG", "GoogleSign in Failed", e)
+                }
+
+        }
+
+
+
+
+    //set launch effect redirect to main screen for google sign in
+//    LaunchedEffect(key1 = Unit) {
+//        if(googleAuthUiClient.getSignedInUser() != null) {
+//            navController.navigate(Screens.MainScreen.name)
+//        }
+//    }
+//
+//    LaunchedEffect(key1 = state.isSignInSuccessful){
+//        if (state.isSignInSuccessful){
+//            Toast.makeText(
+//                context,"sign in successful",
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
+//    }
+//
 
 
     //Set effect to check user is logged in and now allowed to access log in page
@@ -158,6 +254,66 @@ fun LogScreen(
             }
             Spacer(modifier = Modifier.height(50.dp))
             Text(text = "Go To Main Page", modifier = Modifier.clickable { navController.navigate(Screens.MainScreen.name)}, style = androidx.compose.ui.text.TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold))
+            
+            //Google Sign-In
+            if (isLoginForm.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(onClick = {
+                        val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(context.getString(R.string.web_client_id))
+                            .requestEmail()
+                            .build()
+
+                        val googleSingInClient = GoogleSignIn.getClient(context, gso)
+
+                        launcher.launch(googleSingInClient.signInIntent)
+
+
+
+
+                    }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(backgroundColor = goldYellowHex), border = BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(2.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(start = 15.dp)
+                                    .size(32.dp)
+                                    .padding(0.dp)
+                                    .align(Alignment.CenterVertically),
+                                painter = painterResource(id = R.drawable.ic_google_logo),
+                                contentDescription = "google_logo"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .padding(start = 20.dp)
+                                    .align(Alignment.CenterVertically),
+                                text = "Sign In With Google",
+                                fontSize = MaterialTheme.typography.h6.fontSize,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+
+            }
+
+//            SignInScreen(
+//                state = state,
+//            onSignInClick = {
+////                lifecycleOwner.lifecycleScope.launch {
+////                    val signInIntentSender = googleAuthUiClient.signIn()
+////                    launcher.launch(
+////                        IntentSenderRequest.Builder(
+////                            signInIntentSender ?: return@launch
+////                        ).build()
+////                    )
+////                }
+//
+//            })
         }
     }
 }

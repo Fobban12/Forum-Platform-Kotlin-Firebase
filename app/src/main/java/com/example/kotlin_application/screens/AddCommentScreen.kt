@@ -142,7 +142,7 @@ fun AddCommentScreen (navController: NavController, forumId : String)
                         Log.d("Successfully", "Successfully!")
                     }
                     keyboardController.clearFocus()
-                },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground) ) {
+                },  colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground)) {
                     Text(text = "Add Comment", style = androidx.compose.ui.text.TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
                 }
             }
