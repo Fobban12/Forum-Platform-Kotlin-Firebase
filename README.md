@@ -17,7 +17,7 @@ or not.
 ## What we used for the project.
 
 We used Kotlin as a base with Jetpack Compose and Firebase for our App. Firebase storage for the Images and Firebase database for our data,
-along with Firebase authentication for login and register and finally their Cloud storage service for real time commenting.
+along with Firebase authentication for login and register, Firebase Google Sign-In authentication, and finally their Cloud storage service for real time commenting.
 
 ## How to use?
 
