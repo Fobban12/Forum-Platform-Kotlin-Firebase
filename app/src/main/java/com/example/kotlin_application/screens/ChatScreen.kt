@@ -41,8 +41,6 @@ fun ChatScreen(
     }
 
 
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0);
 
     val message: String by chatVIewModel.message.observeAsState(initial = "")
     val messages: List<Map<String, Any>> by chatVIewModel.messages.observeAsState(
@@ -125,7 +123,6 @@ fun ChatScreen(
 @Composable
 fun ChatScreenTopBar(navController: NavController, IconClick: () -> Unit)
 {
-    val scaffoldState = rememberScaffoldState();
 
     TopAppBar(
         navigationIcon = {

@@ -100,13 +100,13 @@ fun ProfileScreen (navController: NavController) {
 
         //Get uid and username from firebase
         val uid = FirebaseAuth.getInstance().uid;
-        val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
 
+        //Get current user
+        val user = FirebaseAuth.getInstance().currentUser
         //Set current for Toast
         val context = LocalContext.current;
 
-        //Set config for screen
-        val configuration = LocalConfiguration.current
+
 
         //Expanded for top bar drop down
         var expanded = remember {
@@ -122,13 +122,14 @@ fun ProfileScreen (navController: NavController) {
 
 
         //Set effect to fetch single user id
-
-        LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
-                userProfileViewModel.fetchSingleUserProfile(uid as String);
+        if(!checkUserIsNull) {
+                LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+                        userProfileViewModel.fetchSingleUserProfile(uid as String);
+                }
         }
-
         //Get state from user profile from view model
         val single_user = userProfileViewModel.singleUserProfile;
+        val user_Id = single_user.value?.userId
 
         //Image stuff
         var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -142,6 +143,8 @@ fun ProfileScreen (navController: NavController) {
 
         //Set dialog boolean
         var showDialog = remember { mutableStateOf(false) }
+
+        var showDialogDelete = remember { mutableStateOf(false) }
 
         //Set width based on screen width
         val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -297,6 +300,9 @@ fun ProfileScreen (navController: NavController) {
                         Button(onClick = { navController.navigate(Screens.ChatListScreen.name) }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground)) {
                                 Text(text = "Click to move to chat list!", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold, fontSize = 18.sp))
                         }
+                        Button(onClick = { showDialogDelete.value = true }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground)) {
+                                Text(text = "Delete account", style = TextStyle(color = goldYellowHex, fontWeight = FontWeight.Bold, fontSize = 18.sp))
+                        }
 
                 }
         }
@@ -334,6 +340,45 @@ fun ProfileScreen (navController: NavController) {
                 )
         }
 
+        if (showDialogDelete.value) {
+                AlertDialog(
+                        onDismissRequest = { showDialogDelete.value = false },
+                        backgroundColor = Color.LightGray,
+                        title = {
+                                Text(text = "Delete account", style = TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 16.sp))
+                        },
+                        text = {
+                                Text(text = "Are you sure you want to delete your account? This choice will be permanent", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
+                        },
+                        confirmButton = {
+                                Button(onClick = { showDialogDelete.value = false; user?.delete()?.addOnCompleteListener { task -> if(task.isSuccessful)
+                                {
+                                        userProfileViewModel.deleteUser(user_Id as String)
+                                        Toast.makeText(context, "Account deleted", Toast.LENGTH_LONG).show()
+                                        navController.navigate(Screens.MainScreen.name)
+                                }
+                                        else {
+                                        Toast.makeText(context, "Too long since last Login, please Login and try once again.", Toast.LENGTH_LONG).show()
+                                        }
+
+                                }
+
+                                }, colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = MaterialTheme.colors.onBackground,
+                                        contentColor = Color.White)) {
+                                        Text(text = "Yes (This choice is permanent)")
+                                }
+                        },
+                        dismissButton = {
+                                Button(onClick = { showDialogDelete.value = false }, colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = MaterialTheme.colors.onBackground,
+                                        contentColor = Color.White)) {
+                                        Text(text = "No")
+                                }
+                        }
+                )
+
+        }
 
 }
 

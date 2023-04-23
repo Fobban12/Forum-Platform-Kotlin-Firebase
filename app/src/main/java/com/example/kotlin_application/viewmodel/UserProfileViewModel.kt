@@ -1,11 +1,13 @@
 package com.example.kotlin_application.viewmodel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.data.Message
@@ -23,9 +25,17 @@ import java.util.concurrent.Flow
 
 
 class UserProfileViewModel : ViewModel() {
+    //Database for user documents from Firestore
+    val userChat =           FirebaseFirestore.getInstance().collection("chat");
+    val userComment =        FirebaseFirestore.getInstance().collection("comment");
+    val userForum =          FirebaseFirestore.getInstance().collection("forum");
+    val userLike =           FirebaseFirestore.getInstance().collection("like");
+    val userLikeComment =    FirebaseFirestore.getInstance().collection("like_for_comment");
+    val userMessagesInChat = FirebaseFirestore.getInstance().collection("message_in_chat");
+    val userMessages =       FirebaseFirestore.getInstance().collection("messages");
+    val userProfileDB =      FirebaseFirestore.getInstance().collection("user_profile");
 
-    //Database for user profile from firestore
-    val userProfileDB = FirebaseFirestore.getInstance().collection("user_profile");
+
     private val _singleUserProfile = MutableLiveData<UserProfile?>(null);
     val singleUserProfile: MutableLiveData<UserProfile?> = _singleUserProfile;
 
@@ -131,6 +141,99 @@ class UserProfileViewModel : ViewModel() {
     }
 
 
+    fun deleteUser (userId:String)
+    {
+        viewModelScope.launch {
+            //For Storage deletion for images
+            val ref: StorageReference = FirebaseStorage.getInstance().reference
+            val getRef = ref.child("/users/$userId/")
 
+
+            userChat.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+                for (document in snapShot.documents) {
+                    document.reference.delete().addOnSuccessListener {
+                        Log.d("Delete chat", "Delete comment of forum successfully!")
+                    }
+                        .addOnFailureListener {
+                            Log.d("Delete comment of forum", "Delete fail")
+                        }
+                }
+            }
+
+        userComment.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+            for (document in snapShot.documents) {
+                document.reference.delete().addOnSuccessListener {
+                    Log.d("Delete comment of forum", "Delete comment of forum successfully!")
+                }
+                    .addOnFailureListener {
+                        Log.d("Delete comment of forum", "Delete fail")
+                    }
+            }
+        }
+        userForum.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+            for (document in snapShot.documents) {
+                getRef.child("forum/${document.getString("idImage")}/image").delete()
+                document.reference.delete().addOnSuccessListener {
+                    Log.d("Delete Forum", "Delete comment of forum successfully!")
+                }
+                    .addOnFailureListener {
+                        Log.d("Delete Forum", "Delete fail")
+                    }
+            }
+        }
+        userLike.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+            for (document in snapShot.documents) {
+                document.reference.delete().addOnSuccessListener {
+                    Log.d("Delete Likes", "Delete comment of forum successfully!")
+                }
+                    .addOnFailureListener {
+                        Log.d("Delete Like", "Delete fail")
+                    }
+            }
+        }
+        userLikeComment.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+            for (document in snapShot.documents) {
+                document.reference.delete().addOnSuccessListener {
+                    Log.d("Delete Comment Like", "Delete comment of forum successfully!")
+                }
+                    .addOnFailureListener {
+                        Log.d("Delete Comment Like", "Delete fail")
+                    }
+            }
+        }
+            userMessagesInChat.whereEqualTo("senderId", userId).get().addOnSuccessListener { snapShot ->
+                for (document in snapShot.documents) {
+                    document.reference.delete().addOnSuccessListener {
+                        Log.d("Delete user Messages", "Delete comment of forum successfully!")
+                    }
+                        .addOnFailureListener {
+                            Log.d("Delete user Message", "Delete fail")
+                        }
+                }
+            }
+        userMessages.whereEqualTo("sent_by", userId).get().addOnSuccessListener { snapShot ->
+            for (document in snapShot.documents) {
+                document.reference.delete().addOnSuccessListener {
+                    Log.d("Delete user Message", "Delete comment of forum successfully!")
+                }
+                    .addOnFailureListener {
+                        Log.d("Delete user Message", "Delete fail")
+                    }
+            }
+        }
+        userProfileDB.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+            for (document in snapShot.documents) {
+                getRef.child("profile/profilePic/image").delete()
+                document.reference.delete().addOnSuccessListener {
+                    Log.d("Delete profile", "Delete comment of forum successfully!")
+                }
+                    .addOnFailureListener {
+                        Log.d("Delete profile", "Delete fail")
+                    }
+            }
+        }
+
+    }
+    }
 
 }

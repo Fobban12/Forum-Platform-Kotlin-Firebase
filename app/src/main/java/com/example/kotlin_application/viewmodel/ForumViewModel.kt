@@ -97,7 +97,6 @@ class ForumViewModel : ViewModel() {
             //Delete Image from storage
             getRef.delete()
 
-
             //Delete like of forum
             like.whereEqualTo("forumId", forumId).get().addOnSuccessListener { snapShot ->
                 for (document in snapShot.documents) {
