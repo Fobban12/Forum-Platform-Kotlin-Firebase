@@ -148,7 +148,7 @@ class UserProfileViewModel : ViewModel() {
             val getRef = ref.child("/users/$userId/")
 
 
-            userChat.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
+            userChat.whereArrayContains("userIds", userId).get().addOnSuccessListener { snapShot ->
                 for (document in snapShot.documents) {
                     document.reference.delete().addOnSuccessListener {
                         Log.d("Delete chat", "Delete comment of forum successfully!")
@@ -171,11 +171,6 @@ class UserProfileViewModel : ViewModel() {
         }
         userForum.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
             for (document in snapShot.documents) {
-                userComment.whereEqualTo("forumId", document.id).get().addOnSuccessListener {
-                    for(message in it.documents){
-                        message.reference.delete()
-                    }
-                }
                 getRef.child("forum/${document.getString("idImage")}/image").delete()
                 document.reference.delete().addOnSuccessListener {
                     Log.d("Delete Forum", "Delete comment of forum successfully!")
