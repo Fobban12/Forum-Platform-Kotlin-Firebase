@@ -90,7 +90,7 @@ fun SingleMessageBox (navController: NavController, item: Chat?) {
     //Set effect to fetch the last message for that chat room
     LaunchedEffect(lastMessageId) {
         if (lastMessageId != null) {
-            chatViewModel.fetchSingleMessage(lastMessageId as String, context = context).let { it ->
+            chatViewModel.fetchSingleMessage(lastMessageId, context = context).let {
                 singleMessage.value = it;
             };
         }

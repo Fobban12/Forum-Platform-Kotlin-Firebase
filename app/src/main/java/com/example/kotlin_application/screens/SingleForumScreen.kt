@@ -1,58 +1,43 @@
 package com.example.kotlin_application.screens
 
 import android.util.Log
-import android.widget.GridLayout.Alignment
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import com.example.kotlin_application.data.Forum
-import com.example.kotlin_application.data.Like
+import coil.request.ImageRequest
 import com.example.kotlin_application.data.LikeInput
-import com.example.kotlin_application.data.UserProfile
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.QuerySnapshot
+
 
 @ExperimentalComposeUiApi
 @Composable
@@ -66,59 +51,54 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
     //Get user profile view model
     val userProfileViewModel: UserProfileViewModel = viewModel();
 
-
-    //Set image height based on screen height
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val imageHeight = with(LocalDensity.current) { screenHeight * 0.3f }
-
-    //Set effect to fetch single forum screen
-    LaunchedEffect(forumId, viewModel) {
-        viewModel.getSingleForum(forumId);
-    }
-
-    //Set effect to fetch likes
-    LaunchedEffect(forumId, likeViewModel ) {
-        likeViewModel.fetchLikes(forumId);
-    }
-
-    //Set image height based on screen height
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val buttonWidth = with(LocalDensity.current) { screenHeight * 0.3f }
-
-
     //Single forum data
     val singleForum = viewModel.singleForum;
-
-    //Get username
-    
-    //Check user is logged in or not
-    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
-        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
-    }
-
-    //Get uid from firebase
-    val uid = FirebaseAuth.getInstance()?.uid;
-
-
-    //Set effect to fetch single user id
-    if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
-        userProfileViewModel.fetchSingleUserProfile(uid as String);
-    }}
-
 
     //Get state from user profile from view model
     val singleUser = userProfileViewModel.singleUserProfile;
 
     //Get like from like view model
     val likes = likeViewModel.likes;
-    
+
+    //Set effect to fetch single forum screen
+    LaunchedEffect(forumId, viewModel) {
+        viewModel.getSingleForum(forumId);
+    }
+    //Set effect to fetch likes
+    LaunchedEffect(forumId, likeViewModel ) {
+        likeViewModel.fetchLikes(forumId);
+    }
+
+    //Set image height based on screen height
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val imageHeight = with(LocalDensity.current) { screenHeight * 0.3f }
+
+    //Set image height based on screen height
+    val buttonWidth = with(LocalDensity.current) { screenHeight * 0.3f }
+
+
+    //Check user is logged in or not
+    val checkUserIsNull = remember(FirebaseAuth.getInstance().currentUser?.email) {
+        FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
+    }
+    //Get uid from firebase
+    val uid = FirebaseAuth.getInstance()?.uid;
+
+    //Set effect to fetch single user id
+    if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
+        userProfileViewModel.fetchSingleUserProfile(uid as String);
+    }}
+
     //Check like or dislike by user
     val likeOrDislike = likes.any { it?.userId == uid && it?.forumId == forumId }
 
     //Get context for Toast
     val context = LocalContext.current;
 
-    //Get like by forum id and userid
+    //Expanded for top bar drop down
+    var expanded = remember {
+        mutableStateOf(false)
+    };
     
     Scaffold(
         topBar = {
@@ -131,7 +111,27 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
                 },
                 title = {
                     Text(text = "${singleForum.value?.title}")
+
                 },
+                actions = {
+                          IconButton(onClick = { expanded.value = !expanded.value }) {
+                              Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null) }
+
+                          DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false })
+                          {
+                              DropdownMenuItem(onClick = { expanded.value =
+                                  false; navController.navigate(
+                                  Screens.UpdateForum.name + "/$forumId"
+                              ) }) {
+                                  Text("Edit forum")
+                              }
+
+
+                          }
+
+
+
+                          },
                 backgroundColor = MaterialTheme.colors.onBackground,
                 contentColor = Color.White
             )
@@ -148,9 +148,12 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
             modifier = Modifier.fillMaxSize()
         ) {
             Column (modifier = Modifier.fillMaxWidth()){
-                val painterState = rememberImagePainter(
-                    data = "${singleForum.value?.image}",
-                    builder = {})
+                val painterState = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = "${singleForum.value?.image}").apply(block = fun ImageRequest.Builder.() {
+
+                        }).build()
+                )
                 Spacer(modifier = Modifier.height(20.dp))
                 Image(
                     painter = painterState,
@@ -227,7 +230,7 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Comments: ", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(3.dp))
                 Spacer(modifier = Modifier.height(5.dp))
-                Button(onClick = { navController.navigate(Screens.CommentScreen.name + "/${forumId}") }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(
+                Button(onClick = { navController.navigate(Screens.CommentScreen.name + "/$forumId") }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
                     Text(text = "Click to see comments", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp), modifier = Modifier.padding(10.dp), textAlign = TextAlign.Center)
@@ -244,9 +247,7 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
 
                             val navArgs = listOf(userIds.joinToString(","))
                             Log.d("navArgs", "$navArgs")
-//                            navController.navigate(Screens.ContactScreen.name + "/1/null")
                             navController.navigate(Screens.ContactScreen.name + "/null/${navArgs}");
-//                            navController.navigate(Screens.ContactScreen.name + "/1/null")
                         }, modifier = Modifier.width(buttonWidth), colors = ButtonDefaults.buttonColors(
                             backgroundColor = MaterialTheme.colors.onBackground,
                             contentColor = Color.White)) {
@@ -266,8 +267,6 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
 
 
 }
-
-
 
 @Composable
 fun renderFloatingButtonActionToAddComment (navController: NavController, forumId: String) {

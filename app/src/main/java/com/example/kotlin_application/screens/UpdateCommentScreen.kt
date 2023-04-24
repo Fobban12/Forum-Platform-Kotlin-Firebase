@@ -40,20 +40,12 @@ fun UpdateCommentScreen (navController: NavController, commentId : String ) {
 
     //Get comment viewModel
     val commentViewModel: CommentViewModel = viewModel()
-    //Get user profile view model
-    val userProfileViewModel: UserProfileViewModel = viewModel();
 
     //Set controller for keyboard
     val keyboardController = LocalFocusManager.current;
 
     //Set context for toast
     val context = LocalContext.current;
-
-    //Get username from firebase
-    val username = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)
-
-    //Get uid from firebase
-    val uid = FirebaseAuth.getInstance().uid.toString();
 
     //Set effect to get single comment
     LaunchedEffect(commentId, commentViewModel) {

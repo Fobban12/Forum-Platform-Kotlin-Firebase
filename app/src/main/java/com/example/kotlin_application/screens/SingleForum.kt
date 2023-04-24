@@ -73,10 +73,10 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                 Text(text = "Delete forum", style = TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 16.sp))
             },
             text = {
-                Text(text = "Are you sure you want to delete your forum with title ${mutableItem.value?.title} you created?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
+                Text(text = "Are you sure you want to delete your forum with title ${mutableItem.value.title} you created?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
             },
             confirmButton = {
-                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item?.id as String, context = context,  singleUser.value?.userId as String, item?.idImage as String ); navController.navigate(Screens.MainScreen.name)}, colors = ButtonDefaults.buttonColors(
+                Button(onClick = { showDialog.value = false; viewModel.deleteForum(item.id as String, context = context,  singleUser.value?.userId as String, item.idImage as String ); navController.navigate(Screens.MainScreen.name)}, colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
                     Text(text = "Yes, sure")
@@ -131,7 +131,7 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                 verticalAlignment = Alignment.CenterVertically
                  ) {
                 val painterState = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current).data(data = "${mutableItem.value?.image}")
+                    ImageRequest.Builder(LocalContext.current).data(data = "${mutableItem.value.image}")
                         .apply(block = fun ImageRequest.Builder.() {
 
                         }).build()
@@ -147,11 +147,11 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
 
 
                 ) {
-                    Text(text = "Title: ${mutableItem.value?.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Left))
+                    Text(text = "Title: ${mutableItem.value.title}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 18.sp, textAlign = TextAlign.Left))
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Description : ${mutableItem.value?.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Left
+                    Text(text = "Description : ${mutableItem.value.description}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 12.sp, textAlign = TextAlign.Left
                     ))
-                    Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${mutableItem.value?.id}") }, modifier = Modifier
+                    Button(onClick = { navController.navigate(Screens.SingleForumScreen.name + "/${mutableItem.value.id}") }, modifier = Modifier
                         .padding(20.dp)
                         .fillMaxWidth(), colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.onBackground,

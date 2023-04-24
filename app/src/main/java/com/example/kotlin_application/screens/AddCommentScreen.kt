@@ -76,7 +76,7 @@ fun AddCommentScreen (navController: NavController, forumId : String)
 
     //Set effect to fetch single user id
     if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
-        userProfileViewModel.fetchSingleUserProfile(uid as String);
+        userProfileViewModel.fetchSingleUserProfile(uid);
     }
     }
 

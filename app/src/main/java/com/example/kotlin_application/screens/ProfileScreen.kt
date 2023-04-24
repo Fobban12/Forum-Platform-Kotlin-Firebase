@@ -133,7 +133,6 @@ fun ProfileScreen (navController: NavController) {
 
         //Image stuff
         var imageUri by remember { mutableStateOf<Uri?>(null) }
-        val bitmap = remember { mutableStateOf<Bitmap?>(null) }
         val launcher =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
                         imageUri = uri

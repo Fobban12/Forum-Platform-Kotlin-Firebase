@@ -1,19 +1,15 @@
 package com.example.kotlin_application.navigation
 
-import android.net.Uri
-import android.os.Parcelable
-import android.util.Log
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.versionedparcelable.VersionedParcelize
 import com.example.kotlin_application.screens.*
 import com.example.kotlin_application.screens.authentication.LogScreen
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
@@ -128,6 +124,14 @@ fun Navigation(userProfileViewModel: UserProfileViewModel = viewModel()) {
         })) { backStackEntry ->  
             backStackEntry.arguments?.getString("forumId").let { 
                 SingleForumScreen(navController = navController, forumId = it.toString())
+            }
+        }
+        val updateForum = Screens.UpdateForum.name
+        composable("$updateForum/{forumId}", arguments = listOf(navArgument("forumId") {
+            type = NavType.StringType
+        })) { NavBackStackEntry ->
+            NavBackStackEntry.arguments?.getString("forumId").let {
+                Updateforum(navController = navController, forumId = it as String)
             }
         }
     

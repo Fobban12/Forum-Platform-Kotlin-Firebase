@@ -1,5 +1,6 @@
 package com.example.kotlin_application.viewmodel
 
+import android.content.ClipDescription
 import android.content.Context
 import android.os.Looper
 import android.util.Log
@@ -8,7 +9,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.Forum
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,6 +19,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.launch
 import java.lang.ref.Reference
+import java.sql.Time
 import java.util.*
 import java.util.logging.Handler
 
@@ -154,7 +158,7 @@ class ForumViewModel : ViewModel() {
                     var check : Boolean = false;
 
                     subKeywords.forEach { item ->
-                        if (it?.title?.trim()?.toLowerCase()?.contains(item.toString().trim().toLowerCase()) as Boolean || it?.description?.trim()?.toLowerCase()?.contains(item.toString().trim().toLowerCase()) as Boolean) {
+                        if (it?.title?.trim()?.lowercase()?.contains(item.trim().lowercase()) as Boolean || it?.description?.trim()?.lowercase()?.contains(item.toString().trim().lowercase()) as Boolean) {
                             check = true;
                         }}
                     check;
@@ -185,6 +189,33 @@ class ForumViewModel : ViewModel() {
                 Toast.makeText(context, "Failed to make a Forum!", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    fun editForum(forumId: String, inputImage:String, inputTitle:String, inputDescription: String)
+    {
+      viewModelScope.launch {
+          forumDB.document(forumId).get().addOnSuccessListener {
+              var updateForum = Forum(
+                  it.id,
+                  it.getString("idImage").toString(),
+                  inputTitle,
+                  it.getString("type").toString(),
+                  inputDescription,
+                  inputImage,
+                  Timestamp.now(),
+                  it.getString("userId").toString(),
+                  it.getString("username").toString()
+
+              );
+
+
+              forumDB.document(forumId).set(updateForum).addOnSuccessListener {  Log.d("Updated Forum", "Updated Forum successfully!") }.addOnFailureListener {
+                  Log.d("Update Forum", "Forum update failed")
+              }
+          }
+
+      }
+
     }
 
     }
