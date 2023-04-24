@@ -150,16 +150,11 @@ fun UpdateForumView(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
             imageUri.value = it
         }
-
-    val firstImage = rememberAsyncImagePainter(
-        ImageRequest.Builder(LocalContext.current).data(data = "${singleForum.value?.image}")
-            .apply(block = fun ImageRequest.Builder.() {
-
-            }).build()
-    )
-
     //Get storage reference
     val ref: StorageReference = FirebaseStorage.getInstance().reference
+
+
+
 
     //Title Text field
 
@@ -214,6 +209,14 @@ fun UpdateForumView(
     Column(
 
     ) {
+        //Get the current Forum image
+        val firstImage = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current).data(data = "${singleForum.value?.image}")
+                .apply(block = fun ImageRequest.Builder.() {
+
+                }).build()
+        )
+
         Spacer(modifier = Modifier.height(12.dp))
         Text("Current image of the Forum")
         Spacer(modifier = Modifier.height(12.dp))

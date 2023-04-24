@@ -113,18 +113,20 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
                     Text(text = "${singleForum.value?.title}")
 
                 },
+
                 actions = {
                           IconButton(onClick = { expanded.value = !expanded.value }) {
                               Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null) }
 
                           DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false })
                           {
-                              DropdownMenuItem(onClick = { expanded.value =
+                              if(singleForum.value?.userId == singleUser.value?.userId){ DropdownMenuItem(onClick = { expanded.value =
                                   false; navController.navigate(
                                   Screens.UpdateForum.name + "/$forumId"
                               ) }) {
                                   Text("Edit forum")
-                              }
+                              }}
+
 
 
                           }
