@@ -58,7 +58,6 @@ class UserProfileViewModel : ViewModel() {
 
     //Fetch single user profile with promise yield
      suspend fun fetchSingleUserProfileWithPromiseYield (userId: String) : UserProfile ?= withContext(Dispatchers.IO) {
-        var singleUserProfile: UserProfile? = null // initialize singleUserProfile to null
         val querySnapshot = userProfileDB.whereEqualTo("userId", userId).get().await()
         querySnapshot.documents.mapNotNull { documentSnapshot ->
             UserProfile(
@@ -172,6 +171,11 @@ class UserProfileViewModel : ViewModel() {
         }
         userForum.whereEqualTo("userId", userId).get().addOnSuccessListener { snapShot ->
             for (document in snapShot.documents) {
+                userComment.whereEqualTo("forumId", document.id).get().addOnSuccessListener {
+                    for(message in it.documents){
+                        message.reference.delete()
+                    }
+                }
                 getRef.child("forum/${document.getString("idImage")}/image").delete()
                 document.reference.delete().addOnSuccessListener {
                     Log.d("Delete Forum", "Delete comment of forum successfully!")
