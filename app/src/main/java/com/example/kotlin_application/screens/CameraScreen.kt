@@ -136,7 +136,7 @@ fun CameraMainView(navController: NavController, userProfileId: String) {
             }
         } else {
             imageUri?.let {
-                ref.child("/users/${singleUser.value?.userId}}/profile/profilePic/image")
+                ref.child("/users/${singleUser.value?.userId}/profile/profilePic/image")
                     .putFile(it).addOnSuccessListener {
                         val urlDownload =
                             ref.child("/users/${singleUser.value?.userId}/profile/profilePic/image").downloadUrl
