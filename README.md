@@ -2,11 +2,11 @@
 
 ## Members:
 
-- **Bao Tran**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
+- **Bao Tran**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase + Firestore)
 
-- **Thong Dang**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase)
+- **Thong Dang**, DIN21SP (Full stack Kotlin Jetpack Compose + Firebase + Firestore)
 
-- **Jere Muikku**, DIN20SP (Full stack Kotlin Jetpack Compose + Firebase)
+- **Jere Muikku**, DIN20SP (Full stack Kotlin Jetpack Compose + Firebase + Firestore)
 
 ## What is this project about?
 
