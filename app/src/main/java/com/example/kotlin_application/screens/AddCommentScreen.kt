@@ -25,15 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.CommentInput
 import com.example.kotlin_application.viewmodel.CommentViewModel
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import java.time.format.TextStyle
 
 @ExperimentalComposeUiApi
 @Composable

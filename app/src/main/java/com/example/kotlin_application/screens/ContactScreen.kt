@@ -1,7 +1,5 @@
 package com.example.kotlin_application.screens
 
-import androidx.compose.material.Text
-import androidx.navigation.NavController
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -27,12 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.kotlin_application.data.Chat
+import com.example.kotlin_application.data.MessageInput
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.ChatVIewModel
-import androidx.compose.ui.unit.sp
-import com.example.kotlin_application.data.*
-import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch

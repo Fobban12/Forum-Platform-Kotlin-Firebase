@@ -13,7 +13,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,12 +33,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.kotlin_application.data.LikeInput
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
-import com.example.kotlin_application.viewmodel.*
+import com.example.kotlin_application.viewmodel.ChatVIewModel
+import com.example.kotlin_application.viewmodel.ForumViewModel
+import com.example.kotlin_application.viewmodel.LikeViewModel
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -192,13 +197,13 @@ fun SingleForumScreen (navController: NavController, forumId: String) {
 
                 Row(horizontalArrangement = Arrangement.Center) {
                     if (likes.size == 0) {
-                        Text(text = "0 likes for this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.padding(12.dp))
+                        Text(text = "0 likes", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.padding(12.dp))
                     } else if (likes?.size == 1 && !likeOrDislike) {
-                        Text(text = "${likes.size} person likes for this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
+                        Text(text = "${likes.size} likes", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
                     } else if (likes?.size == 1 && likeOrDislike) {
-                        Text(text = "You like this forum post", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
+                        Text(text = "Liked", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
                     } else {
-                        Text(text = if (!likeOrDislike) "${likes.size} people like this forum" else "You and other ${likes.size -1} people like this forum", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
+                        Text(text = if (!likeOrDislike) "${likes.size} liked" else "You and other ${likes.size -1} like this", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(12.dp))
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))

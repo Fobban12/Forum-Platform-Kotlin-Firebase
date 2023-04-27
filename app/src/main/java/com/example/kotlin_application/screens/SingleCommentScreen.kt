@@ -22,10 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.LikeForCommentInput
-import com.example.kotlin_application.data.LikeInput
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.ui.theme.goldYellowHex
 import com.example.kotlin_application.viewmodel.CommentViewModel
@@ -92,13 +90,13 @@ fun SingleCommentScreen (navController : NavController,singleItem: Comment?, for
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 if (likes.size == 0) {
-                    Text(text = "0 like for this comment", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.padding(vertical = 12.dp))
+                    Text(text = "0 likes", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.padding(vertical = 12.dp))
                 } else if (likes?.size == 1 && !likeOrDislike) {
-                    Text(text = "${likes.size} person likes for this comment", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(vertical = 12.dp))
+                    Text(text = "${likes.size} likes", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(vertical = 12.dp))
                 } else if (likes?.size == 1 && likeOrDislike) {
-                    Text(text = "You like for this comment", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(vertical = 12.dp))
+                    Text(text = "Liked", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(vertical = 12.dp))
                 } else {
-                    Text(text = if (!likeOrDislike) "${likes.size} people like this comment" else "You and other ${likes.size -1} people like this comment", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(vertical = 12.dp))
+                    Text(text = if (!likeOrDislike) "${likes.size} likes" else "You and other ${likes.size -1} like this comment", style = TextStyle(color = MaterialTheme.colors.onBackground, fontWeight = FontWeight.Bold, fontSize = 13.sp), modifier = Modifier.padding(vertical = 12.dp))
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))
@@ -129,7 +127,7 @@ fun SingleCommentScreen (navController : NavController,singleItem: Comment?, for
             }
             Spacer(modifier = Modifier.height(20.dp))
             Column() {
-                Text(text = "Comment Content: ${singleItem?.comment}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.fillMaxWidth())
+                Text(text = "${singleItem?.comment}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 16.sp), modifier = Modifier.fillMaxWidth())
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = if (singleItem?.userId == uid) "Created by: You" else "Created by: ${singleItem?.username}", style = TextStyle(color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold, fontSize = 16.sp))
             }

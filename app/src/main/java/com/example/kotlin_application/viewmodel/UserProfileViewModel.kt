@@ -3,25 +3,19 @@ package com.example.kotlin_application.viewmodel
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.Forum
-import com.example.kotlin_application.data.Message
 import com.example.kotlin_application.data.UserProfile
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.util.concurrent.Flow
 
 
 class UserProfileViewModel : ViewModel() {

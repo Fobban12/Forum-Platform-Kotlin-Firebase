@@ -66,11 +66,4 @@ fun Group10App() {
     }
 }
 
-@ExperimentalPermissionsApi
-@ExperimentalComposeUiApi
-@Composable
-fun DefaultPreview() {
-    KotlinApplicationTheme {
-        Group10App()
-    }
-}
+

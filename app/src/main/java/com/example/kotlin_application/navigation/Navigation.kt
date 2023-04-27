@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import coil.annotation.ExperimentalCoilApi
 import com.example.kotlin_application.screens.*
 import com.example.kotlin_application.screens.authentication.LogScreen
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 
+@OptIn(ExperimentalCoilApi::class)
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @Composable

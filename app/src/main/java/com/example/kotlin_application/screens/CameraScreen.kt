@@ -6,7 +6,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
@@ -15,11 +14,8 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -36,7 +32,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.UserProfileViewModel
 import com.google.accompanist.permissions.*
@@ -198,24 +193,7 @@ fun CameraPreview(
     }
 }
 
-@Composable
-fun ShowImageView(imageUri: Uri?, takeImage: () -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(model = imageUri) ,
-            contentDescription = "image",
-            modifier = Modifier.border(2.dp, Color.Black)
-        )
-        Button(onClick = { takeImage() }) {
-            Text(text = "Take another photo")
-        }
-    }
-}
+
 
 fun takePhoto(
     context: Context,

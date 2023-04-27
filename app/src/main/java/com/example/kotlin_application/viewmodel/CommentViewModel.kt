@@ -4,18 +4,13 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.CommentInput
-import com.example.kotlin_application.data.Forum
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class CommentViewModel : ViewModel() {
 

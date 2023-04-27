@@ -8,13 +8,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
 import com.example.kotlin_application.data.BottomNavItem
 import com.example.kotlin_application.data.MenuItem
 import com.example.kotlin_application.navigation.BottomNavigationBar
@@ -22,18 +27,10 @@ import com.example.kotlin_application.navigation.Drawer
 import com.example.kotlin_application.navigation.DrawerBody
 import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.viewmodel.ForumViewModel
+import com.example.kotlin_application.viewmodel.UserProfileViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-import coil.annotation.ExperimentalCoilApi
-import com.example.kotlin_application.viewmodel.UserProfileViewModel
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kotlin_application.utils.CreateNotification
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 @ExperimentalCoilApi
@@ -247,9 +244,6 @@ fun MainScreen(navController: NavController) {
 
 }
 
-//Right now this is just used for the ForumPost screen right now. Later this button should give you an option of choosing marketplace or general
-//Marketplace is done but Forum template still needs to be done.
-//Two buttons will be done when the other template is.
 @ExperimentalComposeUiApi
 @Composable
 fun renderFloatingButtonAction(navController: NavController) {

@@ -1,15 +1,12 @@
 package com.example.kotlin_application.viewmodel
 
-import android.content.ClipDescription
 import android.content.Context
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kotlin_application.data.Comment
 import com.example.kotlin_application.data.Forum
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,10 +15,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.launch
-import java.lang.ref.Reference
-import java.sql.Time
-import java.util.*
-import java.util.logging.Handler
 
 
 class ForumViewModel : ViewModel() {
@@ -55,7 +48,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener { documentSnapshot ->
 
                     if (documentSnapshot.exists()) {
-                        var forum = Forum(documentSnapshot.id, documentSnapshot.getString("idImage").toString(),documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getTimestamp("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
+                        val forum = Forum(documentSnapshot.id, documentSnapshot.getString("idImage").toString(),documentSnapshot.getString("title").toString(), documentSnapshot.getString("type").toString(), documentSnapshot.getString("description").toString(), documentSnapshot.getString("image").toString(),documentSnapshot.getTimestamp("createdAt"), documentSnapshot.getString("userId"), documentSnapshot.getString("username"));
                         singleForum.value = forum;
                     }
 
@@ -75,7 +68,7 @@ class ForumViewModel : ViewModel() {
                 .addOnSuccessListener {
                     val forums = mutableListOf<Forum>()
                     it.documents.forEach { doc ->
-                        var forum = Forum(doc.id, doc.getString("idImage").toString(),doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
+                        val forum = Forum(doc.id, doc.getString("idImage").toString(),doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
                         forums.add(forum)
                     }
                     forum.clear();
@@ -146,7 +139,7 @@ class ForumViewModel : ViewModel() {
             FirebaseFirestore.getInstance().collection("forum").get().addOnSuccessListener {
                 val forums = mutableListOf<Forum>()
                 it.documents.forEach { doc ->
-                    var forum = Forum(doc.id, doc.getString("idImage").toString(),doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
+                    val forum = Forum(doc.id, doc.getString("idImage").toString(),doc.getString("title").toString(), doc.getString("type").toString(), doc.getString("description").toString(), doc.getString("image").toString(),doc.getTimestamp("createdAt"), doc.getString("userId"), doc.getString("username"))
                     forums.add(forum)
                 }
 
@@ -195,7 +188,7 @@ class ForumViewModel : ViewModel() {
     {
       viewModelScope.launch {
           forumDB.document(forumId).get().addOnSuccessListener {
-              var updateForum = Forum(
+              val updateForum = Forum(
                   it.id,
                   it.getString("idImage").toString(),
                   inputTitle,

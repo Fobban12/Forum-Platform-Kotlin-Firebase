@@ -9,7 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.kotlin_application.data.Forum
 import com.example.kotlin_application.navigation.Screens
@@ -54,7 +56,6 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
         FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()
     };
 
-    //Set effect to fetch single user id
 
     //Set effect to fetch single user id
     if(!checkUserIsNull){ LaunchedEffect(uid, checkUserIsNull, userProfileViewModel) {
@@ -73,13 +74,13 @@ fun SingleForum (item : Forum, navController : NavController, uid : String?) {
                 Text(text = "Delete forum", style = TextStyle(textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 16.sp))
             },
             text = {
-                Text(text = "Are you sure you want to delete your forum with title ${mutableItem.value.title} you created?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
+                Text(text = "Are you sure you want to delete this forum: ${mutableItem.value.title}?", style = TextStyle(color = MaterialTheme.colors.onBackground,textAlign = TextAlign.Left, fontWeight = FontWeight.Bold, fontSize = 14.sp))
             },
             confirmButton = {
                 Button(onClick = { showDialog.value = false; viewModel.deleteForum(item.id as String, context = context,  singleUser.value?.userId as String, item.idImage as String ); navController.navigate(Screens.MainScreen.name)}, colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onBackground,
                     contentColor = Color.White)) {
-                    Text(text = "Yes, sure")
+                    Text(text = "Yes, I am sure")
                 }
             },
             dismissButton = {

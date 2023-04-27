@@ -11,21 +11,20 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.kotlin_application.navigation.Screens
-import com.example.kotlin_application.viewmodel.ChatVIewModel
-import com.google.firebase.auth.FirebaseAuth
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.kotlin_application.data.Constants
+import com.example.kotlin_application.navigation.Screens
+import com.example.kotlin_application.viewmodel.ChatVIewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalComposeUiApi
 @Composable
@@ -96,8 +95,6 @@ fun ChatScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth(),
-                //error : cannot import ColumnInstance.
-               // .weight(weight = 0.85f,fill = true ),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
             reverseLayout = true

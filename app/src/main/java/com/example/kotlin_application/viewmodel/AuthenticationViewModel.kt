@@ -1,25 +1,20 @@
 package com.example.kotlin_application.viewmodel
 
-import android.app.Activity
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.kotlin_application.data.UserProfileInput
+import com.example.kotlin_application.navigation.Screens
 import com.example.kotlin_application.screens.sign_in.SignInResult
 import com.example.kotlin_application.screens.sign_in.SignInState
-import com.example.kotlin_application.utils.CreateNotification
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.api.Context
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,15 +23,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import androidx.lifecycle.LifecycleOwner
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import com.example.kotlin_application.navigation.Screens
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.GoogleAuthProvider
 
 @ExperimentalComposeUiApi
 @ExperimentalPermissionsApi
@@ -56,7 +42,6 @@ class AuthenticationViewModel : ViewModel() {
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-//    private val _googleLogInState = mutableStateOf<Boolean>();
 
     fun onSignInResult(result: SignInResult) {
         _state.update { it.copy(
