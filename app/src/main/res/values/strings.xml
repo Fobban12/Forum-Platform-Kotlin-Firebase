@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Group10App</string>
+    <string name="app_name">Kotlin-Application</string>
+    <string name="web_client_id">238469616694-jmekh4cuc38gmgjsdk7cved09ejstviq.apps.googleusercontent.com</string>
 </resources>
