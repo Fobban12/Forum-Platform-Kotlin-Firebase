@@ -14,7 +14,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/update_newlogo_foreground"
+        android:icon="@mipmap/update_newlogo"
         android:label="@string/app_name_agora"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinApplication"
