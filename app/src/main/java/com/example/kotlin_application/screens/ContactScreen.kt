@@ -80,7 +80,7 @@ fun ContactScreen (navController: NavController, userIds: List<String>?, chatId 
     val coroutineScope = rememberCoroutineScope();
     val listState = rememberLazyListState();
 
-
+    Log.d("Chat Room Id: ", "${single_chat_room?.id}")
 
 
 
